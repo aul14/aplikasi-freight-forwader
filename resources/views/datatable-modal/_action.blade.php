@@ -1,5 +1,5 @@
 <div class="dropdown">
-    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu" data-toggle="dropdown"
+    <button class="btn btn-xs btn-primary dropdown-toggle" type="button" id="dropdownMenu" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false">
         <i class="fa fa-bars"></i>
     </button>

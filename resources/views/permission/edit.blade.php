@@ -1,8 +1,8 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
-    @include('layouts.navbars.auth.topnav', ['title' => 'Permission'])
-    <div class="row mt-4 mx-4 py-5">
+    @include('layouts.navbars.auth.topnav', ['title' => 'Permission', 'title_2' => 'Settings'])
+    <div class="row mt-1 px-1">
         <div class="col-12">
             @if (session()->has('error'))
                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -10,7 +10,7 @@
                     <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
-            <div class="card mb-4">
+            <div class="card">
                 <div class="card-header pb-0">
                     <h6>Form Edit Permission</h6>
                 </div>
@@ -23,8 +23,8 @@
                                 <div class="form-group">
                                     <label for="name">Key Permission <span style="color: red;">*</span></label>
                                     <input type="text" value="{{ old('name', $permission->name) }}"
-                                        class="form-control @error('name') is-invalid @enderror" autocomplete="off" required
-                                        name="name" id="name">
+                                        class="form-control @error('name') is-invalid @enderror" autocomplete="off" readonly
+                                        required name="name" id="name">
                                     @error('name')
                                         <div class="invalid-feedback">
                                             {{ $message }}

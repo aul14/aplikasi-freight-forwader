@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Models\User;
+use App\Models\History;
 use App\Models\RoleUser;
 use Laratrust\Laratrust;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class UserController extends Controller
 {
@@ -33,8 +35,32 @@ class UserController extends Controller
                             'can_delete' => 'delete-user'
                         ]);
                     })
+                    ->editColumn('last_login', function ($user) {
+                        return !empty($user->last_login) ? date("d-M-Y H:i", strtotime($user->last_login)) : "-";
+                    })
+                    ->rawColumns(['last_login', 'action'])
                     ->addIndexColumn()
                     ->make(true);
+            }
+
+            $count =  History::where('user_id', auth()->user()->id)->count();
+            if ($count == 3) {
+                History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+                History::insert([
+                    'user_id'   => auth()->user()->id,
+                    'menu'      => 'User Management',
+                    'url_menu'  => route('users.index'),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            } else {
+                History::insert([
+                    'user_id'   => auth()->user()->id,
+                    'menu'      => 'User Management',
+                    'url_menu'  => route('users.index'),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
             }
 
             return view('user.index');
@@ -66,11 +92,12 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+
         if (Auth::user()->hasPermission('create-user')) {
             $request->validate([
                 'username'     => 'required|min:3|unique:users,username',
                 'email'      => 'required|unique:users,email|email',
-                'password'   => 'required|min:6',
+                'password'   => 'required|min:4',
                 'role_id' => 'required'
             ]);
 

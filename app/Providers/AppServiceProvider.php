@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use Carbon\Carbon;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,6 +27,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        config(['app.locale' => 'id']);
+        config(['database.default' => Cache::get('db-connection', 'wfreight')]);
+        Carbon::setLocale('id');
+        date_default_timezone_set('Asia/Jakarta');
+        Paginator::useBootstrap();
     }
 }

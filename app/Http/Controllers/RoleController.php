@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Models\Module;
+use App\Models\History;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Auth;
@@ -47,6 +48,26 @@ class RoleController extends Controller
                     ->rawColumns(['permission_role', 'action'])
                     ->addIndexColumn()
                     ->make(true);
+            }
+
+            $count =  History::where('user_id', auth()->user()->id)->count();
+            if ($count == 3) {
+                History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+                History::insert([
+                    'user_id'   => auth()->user()->id,
+                    'menu'      => 'Roles',
+                    'url_menu'  => route('roles.index'),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            } else {
+                History::insert([
+                    'user_id'   => auth()->user()->id,
+                    'menu'      => 'Roles',
+                    'url_menu'  => route('roles.index'),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
             }
 
             return view('role.index');
@@ -169,7 +190,7 @@ class RoleController extends Controller
         if (Auth::user()->hasPermission('manage-role-access')) {
             $module = Module::with([
                 'permission'
-            ])->whereHas('permission')->get();
+            ])->whereHas('permission')->filter(request(['search']))->paginate(10)->withQueryString();
             // dd(count($module));
             $role = Role::find($id);
 

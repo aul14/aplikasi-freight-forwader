@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Models\Module;
+use App\Models\History;
 use App\Models\Permission;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -33,6 +34,26 @@ class PermissionController extends Controller
                     })
                     ->addIndexColumn()
                     ->make(true);
+            }
+
+            $count =  History::where('user_id', auth()->user()->id)->count();
+            if ($count == 3) {
+                History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+                History::insert([
+                    'user_id'   => auth()->user()->id,
+                    'menu'      => 'Permissions',
+                    'url_menu'  => route('permissions.index'),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            } else {
+                History::insert([
+                    'user_id'   => auth()->user()->id,
+                    'menu'      => 'Permissions',
+                    'url_menu'  => route('permissions.index'),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
             }
 
             return view('permission.index');

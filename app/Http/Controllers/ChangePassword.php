@@ -28,7 +28,7 @@ class ChangePassword extends Controller
     {
         $attributes = $request->validate([
             'email' => ['required'],
-            'password' => ['required', 'min:5'],
+            'password' => ['required', 'min:6'],
             'confirm-password' => ['same:password']
         ]);
 

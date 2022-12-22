@@ -2,18 +2,18 @@
 
 @section('content')
     @include('layouts.navbars.auth.topnav', ['title' => 'User Management'])
-    <div class="row mt-4 mx-4">
+    <div class="row mt-1 px-1">
         <div class="col-12">
             <div class="alert bg-white" role="alert">
-                <button type="button" class="btn btn-primary">Tambah</button>
+                <button type="button" class="btn btn-primary">Add</button>
             </div>
             <div class="card mb-4">
                 <div class="card-header pb-0">
                     <h6>Users</h6>
                 </div>
-                <div class="card-body px-0 pt-0 pb-2">
+                <div class="card-body px-0 pt-0 pb-0">
                     <div class="table-responsive p-0">
-                        <table class="table align-items-center mb-0">
+                        <table class="my-table1 table my-tableview my-table-striped table-hover w-100">
                             <thead>
                                 <tr>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name

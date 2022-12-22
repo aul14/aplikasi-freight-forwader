@@ -609,7 +609,7 @@
                         </div>
                         <div class="card-body p-0 pb-2">
                             <div class="table-responsive">
-                                <table class="table align-items-center mb-0">
+                                <table class="my-table1 table my-tableview my-table-striped table-hover w-100">
                                     <thead>
                                         <tr>
                                             <th
@@ -1096,7 +1096,7 @@
     </div>
 @endsection
 
-@push('js')
+@section('script')
     <script src="../assets/js/plugins/chartjs.min.js"></script>
     <script>
         var ctx1 = document.getElementById("chart-line").getContext("2d");
@@ -1181,4 +1181,4 @@
             },
         });
     </script>
-@endpush
+@endsection

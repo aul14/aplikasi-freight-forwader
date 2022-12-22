@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Module;
+use App\Models\History;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Auth;
@@ -33,6 +34,26 @@ class ModuleController extends Controller
                     ->make(true);
             }
 
+            $count =  History::where('user_id', auth()->user()->id)->count();
+            if ($count == 3) {
+                History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+                History::insert([
+                    'user_id'   => auth()->user()->id,
+                    'menu'      => 'Modules',
+                    'url_menu'  => route('modules.index'),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            } else {
+                History::insert([
+                    'user_id'   => auth()->user()->id,
+                    'menu'      => 'Modules',
+                    'url_menu'  => route('modules.index'),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+
             return view('module.index');
         } else {
             abort(403);
@@ -46,7 +67,7 @@ class ModuleController extends Controller
      */
     public function create()
     {
-        if (Auth::user()->hasPermission('manage-module')) {
+        if (Auth::user()->hasPermission('create-module')) {
             return view('module.create');
         } else {
             abort(403);

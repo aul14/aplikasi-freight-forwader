@@ -1,8 +1,8 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
-    @include('layouts.navbars.auth.topnav', ['title' => 'Role'])
-    <div class="row mt-4 mx-4 py-5 justi">
+    @include('layouts.navbars.auth.topnav', ['title' => 'Role', 'title_2' => 'Settings'])
+    <div class="row mt-1 px-1">
         <div class="col-12">
             @if (session()->has('error'))
                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -10,13 +10,27 @@
                     <button type="button" class="btn btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
-            <div class="card mb-4">
+            <div class="card">
                 <div class="card-body">
                     <h4 class="mt-0 header-title">Role Access {{ $role->display_name }}</h4>
                     <p class="sub-title">Please Select Role Modules To Set Permissions!</p>
                     @php
                         $accordion = 0;
                     @endphp
+                    <div class="row mb-3 justify-content-center">
+                        <div class="col-sm-6">
+                            <form action="{{ route('roles.access', $role->id) }}" method="get">
+                                <div class="input-group">
+                                    <input type="text" name="search" class="form-control" placeholder="Search..."
+                                        value="{{ request('search') }}">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-primary" type="submit">Search</button>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
                     <div class="row">
                         @foreach ($module as $item)
                             <div class="col-md-6">
@@ -74,7 +88,10 @@
                         @endforeach
                     </div>
                     <div class="row mt-4">
-                        <div class="col-md-12">
+                        <div class="col-md-12 d-flex justify-content-end">
+                            {{ $module->links() }}
+                        </div>
+                        <div class="col-md-12 ">
                             <a href="{{ route('roles.index') }}" class="btn btn-danger">Back</a>
                         </div>
                     </div>
@@ -91,8 +108,10 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+            $("input[name=search]").keyup(function(e) {
+                let val = $(this).val();
+            });
             $(document).on('click', 'input[type=checkbox]', function(e) {
-                console.log($(this).data('permission'))
                 if ($(this).is(':checked')) {
                     console.log("Checked")
                     $.ajax({

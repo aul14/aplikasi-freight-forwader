@@ -4,37 +4,54 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-icon.png">
-    <link rel="icon" type="image/png" href="/img/favicon.png">
+    {{-- <link rel="apple-touch-icon" sizes="76x76" href="/img/apple-icon.png"> --}}
+    {{-- <link rel="icon" type="image/png" href="/img/favicon.png"> --}}
+    <link rel="icon"
+        href="{{ App\Models\Company::where('id', 1)->first()->image_company != null ? asset('storage/' . App\Models\Company::where('id', 1)->first()->image_company) : asset('img/favicon.png') }}">
     <title>
-        Laravel
+        WFreight
     </title>
     <!--     Fonts and icons     -->
-    <link rel="stylesheet" href="{{ asset('assets/css/font-google.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/font-google.css?v=1.0.0') }}">
     <!-- Nucleo Icons -->
-    <link href="{{ asset('assets/css/nucleo-icons.css') }}" rel="stylesheet" />
-    <link href="{{ asset('assets/css/nucleo-svg.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('assets/css/nucleo-icons.css?v=1.0.0') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/nucleo-svg.css?v=1.0.0') }}" />
     <!-- Font Awesome Icons -->
-    <script src="{{ asset('assets/js/fontawesome-42d5adcbca.js') }}"></script>
-    <link href="{{ asset('assets/css/nucleo-svg.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('assets/css/all.min.css?v=1.0.0') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/fontawesome.min.css?v=1.0.0') }}">
+    <link href="{{ asset('assets/css/nucleo-svg.css?v=1.0.0') }}" rel="stylesheet" />
     <!-- CSS Files -->
-    <link id="pagestyle" href="{{ asset('assets/css/argon-dashboard.css') }}" rel="stylesheet" />
-    <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/plugins/jquery.toast.min.css') }}">
-
-    <link rel="stylesheet" href="{{ asset('assets/chosen/component-chosen.css') }}">
+    <link id="pagestyle" rel="stylesheet" href="{{ asset('assets/css/argon-dashboard.css?v=1.1.2') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/styles.css?v=1.2.2') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css?v=1.0.0') }}">
+    <link rel="stylesheet" href="{{ asset('assets/plugins/jquery.toast.min.css?v=1.0.0') }}">
+    {{-- Bootstrap Select --}}
+    <link rel="stylesheet" href="{{ asset('assets/css/select2.min.css?v=1.0.0') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap4-toggle.min.css?v=1.0.0') }}">
+    <link rel="stylesheet" href="{{ asset('assets/chosen/component-chosen.css?v=1.0.0') }}">
     {{-- Datatable --}}
-    <link href="{{ asset('assets/plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet"
+    <link rel="stylesheet"
+        href="{{ asset('assets/plugins/bootstrap-datatable/css/dataTables.bootstrap4.min.css?v=1.0.0') }}"
         type="text/css">
-    <link href="{{ asset('assets/plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css') }}" rel="stylesheet"
+    <link rel="stylesheet"
+        href="{{ asset('assets/plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css?v=1.0.0') }}"
         type="text/css">
+    {{-- Datepicker --}}
+    <link rel="stylesheet" href="{{ asset('assets/css/datepicker.min.css?v=1.0.0') }}">
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script>
+        let MAX_FIELD = 99999;
+    </script>
 </head>
+{{-- "g-sidenav-show dark-version bg-gray-600" --}}
+@php
+    $side_template = App\Models\WebTemplate::where('user_id', auth()->user() == null ? 0 : auth()->user()->id)->first() == null ? (object) ['sidebar_color' => '', 'sidebar_type' => '', 'mode' => ''] : App\Models\WebTemplate::where('user_id', auth()->user() == null ? 0 : auth()->user()->id)->first();
+@endphp
 
-<body class="{{ $class ?? '' }}">
-
+<body
+    class="{{ $side_template->mode == '' || $side_template->mode == 'light' ? $class : ($side_template->mode == 'dark' ? 'g-sidenav-show dark-version bg-gray-600' : '') }}">
     @guest
         @yield('content')
     @endguest
@@ -49,6 +66,7 @@
             <main class="main-content border-radius-lg">
                 @yield('content')
             </main>
+            @include('layouts.footers.auth.footer')
             @include('components.fixed-plugin')
         @endif
     @endauth
@@ -59,10 +77,15 @@
     <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('assets/js/toastr.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/jquery.toast.min.js') }}"></script>
-
+    {{-- Scrollbar --}}
     <script src="{{ asset('assets/js/plugins/perfect-scrollbar.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/smooth-scrollbar.min.js') }}"></script>
+    {{-- Bootstrap Select --}}
+    <script src="{{ asset('assets/js/select2.min.js') }}"></script>
     <script src="{{ asset('assets/chosen/chosen.jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap4-toggle.min.js') }}"></script>
+    {{-- Datepicker --}}
+    <script src="{{ asset('assets/js/bootstrap-datepicker.min.js') }}"></script>
     <script>
         var win = navigator.platform.indexOf('Win') > -1;
         if (win && document.querySelector('#sidenav-scrollbar')) {
@@ -79,6 +102,12 @@
         $(document).ready(function() {
             $(".chosen-select").chosen({
                 width: "100%"
+            });
+
+            $('.date-picker').datepicker({
+                format: 'dd/mm/yyyy',
+                autoclose: true,
+                todayHighlight: true
             });
             // setting dropdown di table responsive
             // hold onto the drop down menu                                             
@@ -109,9 +138,13 @@
                 $(e.target).append(dropdownMenu.detach());
                 dropdownMenu.hide();
             });
+
+            // uppercase in textarea
+            $("textarea").keyup(function() {
+                $(this).val($(this).val().toUpperCase());
+            });
         });
     </script>
-    @stack('js');
     @yield('script')
 </body>
 

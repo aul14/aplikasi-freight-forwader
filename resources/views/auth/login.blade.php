@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
     <main class="main-content  mt-0">
@@ -18,7 +18,8 @@
                                         @method('post')
                                         <div class="flex flex-col mb-3">
                                             <input type="email" name="email" class="form-control form-control-lg"
-                                                value="{{ old('email') }}" placeholder="...." aria-label="Email">
+                                                value="{{ old('email') }}" placeholder="example@gmail.com"
+                                                aria-label="Email">
                                             @error('email')
                                                 <p class="text-danger text-xs pt-1"> {{ $message }} </p>
                                             @enderror
@@ -30,18 +31,42 @@
                                                 <p class="text-danger text-xs pt-1"> {{ $message }} </p>
                                             @enderror
                                         </div>
+                                        <div class="flex flex-col mb-3">
+                                            <select name="datname" id="datname" required
+                                                class="form-control chosen-select datname-select">
+                                                <option value=""></option>
+                                                @foreach ($list_db as $item)
+                                                    <option value="{{ $item->datname }}">{{ strtoupper($item->datname) }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('password')
+                                                <p class="text-danger text-xs pt-1"> {{ $message }} </p>
+                                            @enderror
+                                        </div>
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" name="remember" type="checkbox" id="rememberMe">
+                                            <label class="form-check-label" for="rememberMe">Remember me</label>
+                                        </div>
                                         <div class="text-center">
                                             <button type="submit"
                                                 class="btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0">Sign in</button>
                                         </div>
                                     </form>
                                 </div>
+                                <div class="card-footer text-center pt-0 px-lg-2 px-1">
+                                    <p class="mb-1 text-sm mx-auto">
+                                        Forgot you password? Reset your password
+                                        <a href="{{ route('reset-password') }}"
+                                            class="text-primary text-gradient font-weight-bold">here</a>
+                                    </p>
+                                </div>
                             </div>
                         </div>
                         <div
                             class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
                             <div class="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center overflow-hidden"
-                                style="background-image: url('https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/signin-ill.jpg');
+                                style="background-image: url({{ asset('img/signin-ill.jpg') }});
               background-size: cover;">
                                 <span class="mask bg-gradient-primary opacity-6"></span>
                                 <h4 class="mt-5 text-white font-weight-bolder position-relative">"Attention is the new
@@ -55,4 +80,30 @@
             </div>
         </section>
     </main>
+@endsection
+
+@section('script')
+    <script>
+        $(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $(".datname-select").change(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    type: "post",
+                    url: '{{ route('change_db') }}',
+                    data: {
+                        connection: $(this).val()
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        // console.log(response);
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

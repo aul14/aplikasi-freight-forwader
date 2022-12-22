@@ -2367,6 +2367,8 @@ window.sidebarColor = function (a) {
   var sidebar = document.querySelector('.sidenav');
   sidebar.setAttribute("data-color", color);
 
+  document.getElementById("sidebar_color").value = `data-color="${color}"`;
+
   if (document.querySelector('#sidenavCard')) {
     var _sidenavCard$classLis;
 
@@ -2403,6 +2405,8 @@ window.sidebarType = function (a) {
   for (var i = 0; i < colors.length; i++) {
     sidebar.classList.remove(colors[i]);
   }
+
+  document.getElementById("sidebar_type").value = color;
 
   sidebar.classList.add(color); // Remove text-white/text-dark classes
 
@@ -2635,13 +2639,18 @@ if (iconSidenav) {
 function toggleSidenav() {
   if (body.classList.contains(className)) {
     body.classList.remove(className);
-    setTimeout(function () {
-      sidenav.classList.remove('bg-white');
-    }, 100);
+    // setTimeout(function () {
+    //   sidenav.classList.remove('bg-white');
+    // }, 100);
     sidenav.classList.remove('bg-transparent');
   } else {
     body.classList.add(className);
-    sidenav.classList.add('bg-white');
+
+
+    if (body.classList.contains('bg-default') && !body.classList.contains('bg-white')) {
+      sidenav.classList.add('bg-white');
+    }
+    
     sidenav.classList.remove('bg-transparent');
     iconSidenav.classList.remove('d-none');
   }
@@ -2658,16 +2667,16 @@ var referenceButtons = document.querySelector('[data-class]');
 window.addEventListener("resize", navbarColorOnResize);
 
 function navbarColorOnResize() {
-  if (window.innerWidth > 1200) {
-    if (referenceButtons.classList.contains('active') && referenceButtons.getAttribute('data-class') === 'bg-transparent') {
-      sidenav.classList.remove('bg-white');
-    } else {
-      sidenav.classList.add('bg-white');
-    }
-  } else {
-    sidenav.classList.add('bg-white');
-    sidenav.classList.remove('bg-transparent');
-  }
+  // if (window.innerWidth > 1200) {
+  //   if (referenceButtons.classList.contains('active') && referenceButtons.getAttribute('data-class') === 'bg-transparent') {
+  //     sidenav.classList.remove('bg-white');
+  //   } else {
+  //     sidenav.classList.add('bg-white');
+  //   }
+  // } else {
+  //   sidenav.classList.add('bg-white');
+  //   sidenav.classList.remove('bg-transparent');
+  // }
 } // Deactivate sidenav type buttons on resize and small screens
 
 
@@ -2825,7 +2834,6 @@ window.darkMode = function (el) {
 
   if (!el.getAttribute("checked")) {
     body.classList.add('dark-version');
-
     if (navbarBrandImg.includes('logo-ct-dark.png')) {
       var navbarBrandImgNew = navbarBrandImg.replace("logo-ct-dark", "logo-ct");
       navbarBrand.src = navbarBrandImgNew;
@@ -2924,6 +2932,10 @@ window.darkMode = function (el) {
   } else {
     body.classList.remove('dark-version');
     sidebar.classList.add('bg-white');
+
+    if (sidebar.classList.contains('bg-default')) {
+      sidebar.classList.remove('bg-white');
+    }
 
     if (navbarBrandImg.includes('logo-ct.png')) {
       var navbarBrandImgNew = navbarBrandImg.replace("logo-ct", "logo-ct-dark");

@@ -113,7 +113,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
             $('.port-select').select2({
@@ -135,7 +135,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 

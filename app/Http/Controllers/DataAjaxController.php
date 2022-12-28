@@ -16,6 +16,7 @@ use App\Models\Currency;
 use App\Models\Customer;
 use App\Models\Salesman;
 use App\Models\ChargeCode;
+use App\Models\Container;
 use App\Models\VendorType;
 use App\Models\PaymentTerm;
 use App\Models\CustomerType;
@@ -83,6 +84,22 @@ class DataAjaxController extends Controller
                 $jobs = Currency::orderby('id', 'asc')->limit(10)->get();
             } else {
                 $jobs = Currency::orderby('id', 'asc')->where('code', 'like', "%$search%")->orWhere('description', 'like', "%$search%")->limit(10)->get();
+            }
+        }
+
+        return response()->json($jobs);
+    }
+
+    public function ajax_get_container(Request $request)
+    {
+        $search = strtoupper($request->q);
+
+        $jobs = [];
+        if ($request->ajax()) {
+            if ($search == '') {
+                $jobs = Container::orderby('id', 'asc')->limit(10)->get();
+            } else {
+                $jobs = Container::orderby('id', 'asc')->where('type', 'like', "%$search%")->orWhere('description', 'like', "%$search%")->limit(10)->get();
             }
         }
 

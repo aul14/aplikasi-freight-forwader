@@ -105,12 +105,12 @@
 
             {{-- MENU MASTER --}}
             <li class="nav-item ">
-                <a aria-expanded="{{ Request::is('country*') || Request::is('city*') || Request::is('port*') || Request::is('commodity*') || Request::is('container*') || Request::is('job_type*') || Request::is('currency*') || Request::is('vat_code*') || Request::is('uom*') || Request::is('charge_code*') || Request::is('wt_code*') || Request::is('party_type*') || Request::is('pay_term*') || Request::is('salesman*') || Request::is('bisnis_party*') || Request::is('airport*') || Request::is('airline*') || Request::is('shipline*') || Request::is('vessel*') || Request::is('incoterms*') ? 'true' : 'false' }}"
+                <a aria-expanded="{{ Request::is('country*') || Request::is('cost_table*') || Request::is('charge_table*') || Request::is('city*') || Request::is('port*') || Request::is('commodity*') || Request::is('container*') || Request::is('job_type*') || Request::is('currency*') || Request::is('vat_code*') || Request::is('uom*') || Request::is('charge_code*') || Request::is('wt_code*') || Request::is('party_type*') || Request::is('pay_term*') || Request::is('salesman*') || Request::is('bisnis_party*') || Request::is('airport*') || Request::is('airline*') || Request::is('shipline*') || Request::is('vessel*') || Request::is('incoterms*') ? 'true' : 'false' }}"
                     data-toggle="collapse" data-target="#collapseShow3" class="sidebar-menu-item nav-link ">
                     <div><span class="nav-link-text text-uppercase text-xs font-weight-bolder">Master <b
                                 class="caret"></b></span></div>
                 </a>
-                <div class="collapse {{ Request::is('country*') || Request::is('city*') || Request::is('port*') || Request::is('commodity*') || Request::is('container*') || Request::is('job_type*') || Request::is('currency*') || Request::is('vat_code*') || Request::is('uom*') || Request::is('charge_code*') || Request::is('wt_code*') || Request::is('party_type*') || Request::is('pay_term*') || Request::is('salesman*') || Request::is('bisnis_party*') || Request::is('airport*') || Request::is('airline*') || Request::is('shipline*') || Request::is('vessel*') || Request::is('incoterms*') ? 'show' : '' }}"
+                <div class="collapse {{ Request::is('country*') || Request::is('cost_table*') || Request::is('charge_table*') || Request::is('city*') || Request::is('port*') || Request::is('commodity*') || Request::is('container*') || Request::is('job_type*') || Request::is('currency*') || Request::is('vat_code*') || Request::is('uom*') || Request::is('charge_code*') || Request::is('wt_code*') || Request::is('party_type*') || Request::is('pay_term*') || Request::is('salesman*') || Request::is('bisnis_party*') || Request::is('airport*') || Request::is('airline*') || Request::is('shipline*') || Request::is('vessel*') || Request::is('incoterms*') ? 'show' : '' }}"
                     id="collapseShow3">
                     <ul class="nav nav-sm flex-column">
                         @permission('manage-airline')
@@ -244,6 +244,36 @@
                                     <i class="fa fa-c text-primary text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Charge Code</span>
+                                    </div>
+                                </a>
+                                <ul class="navbar-nav"></ul>
+                            </li>
+                        @endpermission
+                        @permission('manage-charge_table')
+                            <li class="nav-item">
+                                <!---->
+                                <div class="collapse ">
+                                    <ul class="nav nav-sm flex-column"></ul>
+                                </div> <a href="{{ route('charge_table.index') }}"
+                                    class="nav-link {{ Request::is('charge_table*') ? 'active' : '' }}">
+                                    <i class="fa fa-c text-primary text-sm opacity-10"></i>
+                                    <div>
+                                        <span class="nav-link-text">Charge Table</span>
+                                    </div>
+                                </a>
+                                <ul class="navbar-nav"></ul>
+                            </li>
+                        @endpermission
+                        @permission('manage-cost_table')
+                            <li class="nav-item">
+                                <!---->
+                                <div class="collapse ">
+                                    <ul class="nav nav-sm flex-column"></ul>
+                                </div> <a href="{{ route('cost_table.index') }}"
+                                    class="nav-link {{ Request::is('cost_table*') ? 'active' : '' }}">
+                                    <i class="fa fa-c text-primary text-sm opacity-10"></i>
+                                    <div>
+                                        <span class="nav-link-text">Cost Table</span>
                                     </div>
                                 </a>
                                 <ul class="navbar-nav"></ul>

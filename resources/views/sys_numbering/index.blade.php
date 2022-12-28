@@ -31,9 +31,10 @@
 
                                         <tr>
                                             <th class="text-center th-action" style="min-width: 120px;"> Action </th>
+                                            <th class="text-center" style="min-width: 200px;"> Module <span
+                                                    style="color: red;">*</span> </th>
                                             <th class="text-center" style="min-width: 200px;"> Cycle </th>
                                             <th class="text-center" style="min-width: 200px;"> Description </th>
-                                            <th class="text-center" style="min-width: 200px;"> Module </th>
                                             <th class="text-center" style="min-width: 200px;"> Job Type </th>
                                             <th class="text-center" style="min-width: 200px;"> Next Number </th>
                                             <th class="text-center" style="min-width: 200px;"> Length Number </th>
@@ -62,6 +63,17 @@
 
                                                     <td>
                                                         <div class="form-group">
+                                                            <select name="module_id[]" required
+                                                                id="module-{{ $key + 1 }}" class="module">
+                                                                <option value="{{ $item->module_id }}">
+                                                                    {{ !empty($item->module_id) ? $item->module->name : '' }}
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </td>
+
+                                                    <td>
+                                                        <div class="form-group">
                                                             <select name="cycle[]" id="cycle-{{ $key + 1 }}"
                                                                 class="cycle">
                                                                 <option value=""></option>
@@ -78,17 +90,6 @@
                                                             <input type="text" name="description[]" autocomplete="off"
                                                                 value="{{ $item->description }}" id="description"
                                                                 class="form-control">
-                                                        </div>
-                                                    </td>
-
-                                                    <td>
-                                                        <div class="form-group">
-                                                            <select name="module_id[]" id="module-{{ $key + 1 }}"
-                                                                class="module">
-                                                                <option value="{{ $item->module_id }}">
-                                                                    {{ !empty($item->module_id) ? $item->module->name : '' }}
-                                                                </option>
-                                                            </select>
                                                         </div>
                                                     </td>
 
@@ -117,9 +118,9 @@
 
                                                     <td>
                                                         <div class="form-group">
-                                                            <input type="text" class="form-control" autocomplete="off"
-                                                                data-type='currency' value="{{ $item->length_number }}"
-                                                                name="length_number[]">
+                                                            <input type="number" min="1" max="12"
+                                                                class="form-control" autocomplete="off" data-type='currency'
+                                                                value="{{ $item->length_number }}" name="length_number[]">
                                                         </div>
                                                     </td>
 
@@ -148,6 +149,15 @@
                                                         class="count_hide" value="1">
                                                 </td>
 
+
+                                                <td>
+                                                    <div class="form-group">
+                                                        <select name="module_id[]" id="module-1" class="module">
+                                                            <option value=""></option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
                                                 <td>
                                                     <div class="form-group">
                                                         <select name="cycle[]" id="cycle-1" class="cycle">
@@ -162,14 +172,6 @@
                                                     <div class="form-group">
                                                         <input type="text" name="description[]" id="description"
                                                             class="form-control">
-                                                    </div>
-                                                </td>
-
-                                                <td>
-                                                    <div class="form-group">
-                                                        <select name="module_id[]" id="module-1" class="module">
-                                                            <option value=""></option>
-                                                        </select>
                                                     </div>
                                                 </td>
 
@@ -213,17 +215,22 @@
                         <div class="row my-2">
                             <div class="col-md-12">
                                 <h6>Important!</h6>
-                                <p class="text-monospace text-justify">If you want to use the year and month format for the
+                                <p class="text-monospace text-justify">
+                                    - If you want to use the year and month format for the
                                     previous
                                     <strong>Prefix Column</strong>, <br> use a comma "," and square brackets "[]". Example:
-                                    FWPC-FBKA,[YYYY],[MM]. <br>The available year and month formats for the prefix column
+                                    FWPC-FBKA,[YYYY],[MM],TEST. <br>The available year and month formats for the prefix
+                                    column
                                     are examples:
                                     <br>
                                     {{-- <ul class="text-monospace"> --}}
-                                    1. [YYYY] = 2022 (Year) <br>
-                                    2. [YY]&nbsp;&nbsp; = 22 (Year) <br>
-                                    3. [MM]&nbsp;&nbsp; = 01 (Month)
+                                    1. [YYYY] = 2022 (Year). <br>
+                                    2. [YY]&nbsp;&nbsp; = 22 (Year). <br>
+                                    3. [MM]&nbsp;&nbsp; = 01 (Month). <br>
                                     {{-- </ul> --}}
+                                    - If you want to add a new module, please contact the IT team first, to match the code
+                                    with the module. <br>
+                                    - Value for colomn length number yaitu, Minimum = 0, & Maximal = 12
                                 </p>
 
                             </div>
@@ -285,7 +292,7 @@
                                 })
                             };
                         },
-                        cache: true
+                        cache: false
                     }
                 });
                 field.find('.module').attr("id", "module-" + count).select2({
@@ -307,7 +314,7 @@
                                 })
                             };
                         },
-                        cache: true
+                        cache: false
                     }
                 });
                 field.children("label").text("Field " + count);
@@ -343,7 +350,7 @@
                                 })
                             };
                         },
-                        cache: true
+                        cache: false
                     }
                 });
 
@@ -366,7 +373,7 @@
                                 })
                             };
                         },
-                        cache: true
+                        cache: false
                     }
                 });
 
@@ -389,7 +396,7 @@
                                 })
                             };
                         },
-                        cache: true
+                        cache: false
                     }
                 });
 
@@ -412,7 +419,7 @@
                                 })
                             };
                         },
-                        cache: true
+                        cache: false
                     }
                 });
 
@@ -495,7 +502,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
@@ -518,7 +525,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
@@ -542,7 +549,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
@@ -565,7 +572,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
         });

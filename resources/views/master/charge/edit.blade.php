@@ -592,9 +592,9 @@
                                         </tr>
                                     </thead>
 
-                                    @if (count($c_detail) > 0)
-                                        @foreach ($c_detail as $key => $item)
-                                            <tbody id="tbody-condition">
+                                    <tbody id="tbody-condition">
+                                        @if (count($c_detail) > 0)
+                                            @foreach ($c_detail as $key => $item)
                                                 <tr class="dynamic-field" id="dynamic-field-{{ $key + 1 }}">
                                                     <td class="text-center">
                                                         <button type="button" onclick="addNewField(this)"
@@ -674,10 +674,8 @@
 
 
                                                 </tr>
-                                            </tbody>
-                                        @endforeach
-                                    @else
-                                        <tbody id="tbody-condition">
+                                            @endforeach
+                                        @else
                                             <tr class="dynamic-field" id="dynamic-field-1">
                                                 <td class="text-center">
                                                     <button type="button" onclick="addNewField(this)" id="add-button"
@@ -747,8 +745,9 @@
 
 
                                             </tr>
-                                        </tbody>
-                                    @endif
+                                        @endif
+                                    </tbody>
+
 
                                 </table>
                             </div>
@@ -802,7 +801,7 @@
                                 })
                             };
                         },
-                        cache: true
+                        cache: false
                     }
                 });
                 field.find('.job-select').attr("id", "job-select-" + count).select2({
@@ -824,7 +823,7 @@
                                 })
                             };
                         },
-                        cache: true
+                        cache: false
                     }
                 });
                 field.children("label").text("Field " + count);
@@ -853,7 +852,7 @@
                                 })
                             };
                         },
-                        cache: true
+                        cache: false
                     }
                 });
 
@@ -876,7 +875,7 @@
                                 })
                             };
                         },
-                        cache: true
+                        cache: false
                     }
                 });
 
@@ -899,7 +898,7 @@
                                 })
                             };
                         },
-                        cache: true
+                        cache: false
                     }
                 });
                 $(`#module-detail-select-${count}`).select2({
@@ -921,7 +920,7 @@
                                 })
                             };
                         },
-                        cache: true
+                        cache: false
                     }
                 });
 
@@ -1153,7 +1152,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
@@ -1176,7 +1175,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
@@ -1199,7 +1198,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
@@ -1222,7 +1221,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
@@ -1246,7 +1245,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
@@ -1270,7 +1269,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
@@ -1294,7 +1293,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
@@ -1317,7 +1316,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
@@ -1343,7 +1342,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
@@ -1367,7 +1366,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
@@ -1391,7 +1390,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 

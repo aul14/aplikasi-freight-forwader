@@ -231,7 +231,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 

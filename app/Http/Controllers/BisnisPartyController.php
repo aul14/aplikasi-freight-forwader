@@ -414,6 +414,7 @@ class BisnisPartyController extends Controller
     {
         $format = $search;
         $data_customer = BisnisParty::select('customer_code')->where('customer_code', 'like', "%$format%")->count() + 1;
+        dd(strlen($data_customer));
 
         if (strlen($data_customer) <= 1) {
             $format .= "00{$data_customer}";

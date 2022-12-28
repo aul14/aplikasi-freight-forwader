@@ -672,7 +672,7 @@
                                 })
                             };
                         },
-                        cache: true
+                        cache: false
                     }
                 });
                 field.find('.job-select').attr("id", "job-select-" + count).select2({
@@ -694,7 +694,7 @@
                                 })
                             };
                         },
-                        cache: true
+                        cache: false
                     }
                 });
                 field.children("label").text("Field " + count);
@@ -721,7 +721,7 @@
                                 })
                             };
                         },
-                        cache: true
+                        cache: false
                     }
                 });
 
@@ -744,7 +744,7 @@
                                 })
                             };
                         },
-                        cache: true
+                        cache: false
                     }
                 });
 
@@ -767,7 +767,7 @@
                                 })
                             };
                         },
-                        cache: true
+                        cache: false
                     }
                 });
                 $(`#module-detail-select-${count}`).select2({
@@ -789,7 +789,7 @@
                                 })
                             };
                         },
-                        cache: true
+                        cache: false
                     }
                 });
 
@@ -1021,7 +1021,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
@@ -1044,7 +1044,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
@@ -1067,7 +1067,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
@@ -1090,7 +1090,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
@@ -1114,7 +1114,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
@@ -1138,7 +1138,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
@@ -1162,7 +1162,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
@@ -1185,7 +1185,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
@@ -1209,7 +1209,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
@@ -1233,7 +1233,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
@@ -1257,7 +1257,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 

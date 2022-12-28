@@ -40,7 +40,7 @@ class SystemNumberingController extends Controller
                 ]);
             }
 
-            $sys_num = SystemNumbering::all();
+            $sys_num = SystemNumbering::all()->sortByDesc("id");
             return view('sys_numbering.index', compact('sys_num'));
         } else {
             abort(403);
@@ -70,17 +70,17 @@ class SystemNumberingController extends Controller
             try {
                 SystemNumbering::truncate();
                 $result = [];
-                if ($request->cycle[0] != null) {
-                    foreach ($request->cycle as $key => $val) {
+                if ($request->module_id != null) {
+                    foreach ($request->module_id as $key => $val) {
                         $count_hide = (int)$request->count_hide[$key];
                         $result[] = [
-                            'cycle'      => $val,
+                            'cycle'      => $request->cycle[$key],
                             'description'   => $request->description[$key],
                             'job_type'   => !empty($request->input("job_type_{$count_hide}")) ? implode(",", $request->input("job_type_{$count_hide}")) : "",
                             'next_number'   => $request->next_number[$key],
                             'length_number'   => $request->length_number[$key],
                             'prefix'   => $request->prefix[$key],
-                            'module_id'   => $request->module_id[$key],
+                            'module_id'   => $val,
                             'created_at' => now(),
                             'updated_at' => now(),
                         ];

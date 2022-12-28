@@ -337,7 +337,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
@@ -362,7 +362,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
             $(".country-select").change(function(e) {
@@ -371,6 +371,8 @@
                 let country_name = $(this).select2('data')[0].country_name;
 
                 $("input[name=country_desc]").val(country_name);
+                $("input[name=telp_idd]").val(idd_name);
+                $("input[name=fax_idd]").val(idd_name);
             });
 
             $('.city-select').select2({
@@ -397,7 +399,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 

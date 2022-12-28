@@ -297,7 +297,7 @@
                                 })
                             };
                         },
-                        cache: true
+                        cache: false
                     }
                 });
                 field.children("label").text("Field " + count);
@@ -327,7 +327,7 @@
                                 })
                             };
                         },
-                        cache: true
+                        cache: false
                     }
                 });
                 $(`#city-select-${count}`).select2({
@@ -351,7 +351,7 @@
                                 })
                             };
                         },
-                        cache: true
+                        cache: false
                     }
                 });
 
@@ -410,7 +410,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
@@ -434,7 +434,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
             $('.port-select').select2({
@@ -456,7 +456,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 

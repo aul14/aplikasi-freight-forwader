@@ -141,7 +141,7 @@ class IncotermsController extends Controller
             $validateData = $request->validate(
                 [
                     'code'         => 'required|max:3|unique:incoterms,code,' . $id,
-                    'description'  => 'required|max:50',
+                    'description'  => 'required|max:50'
                 ],
             );
 

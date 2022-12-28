@@ -111,7 +111,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
             $(".country-select").change(function(e) {

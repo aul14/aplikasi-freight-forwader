@@ -163,7 +163,7 @@ class ChargeCodeController extends Controller
                 $charge_code->save();
 
                 $result = [];
-                if ($request->module != null) {
+                if ($request->module[0] != null) {
                     foreach ($request->module as $key => $val) {
                         $result[] = [
                             'charge_code_id' => $charge_code->id,

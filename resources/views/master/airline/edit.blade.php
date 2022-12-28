@@ -607,7 +607,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 
@@ -632,7 +632,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
             $(".country-select").change(function(e) {
@@ -667,7 +667,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 

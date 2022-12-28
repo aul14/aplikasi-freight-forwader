@@ -229,7 +229,7 @@
                             })
                         };
                     },
-                    cache: true
+                    cache: false
                 }
             });
 

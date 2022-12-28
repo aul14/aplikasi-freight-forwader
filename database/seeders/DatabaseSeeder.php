@@ -22,6 +22,7 @@ use App\Models\PaymentTerm;
 use App\Models\CustomerType;
 use Illuminate\Database\Seeder;
 use App\Models\CompanyDetailSatu;
+use App\Models\SystemNumbering;
 use Illuminate\Support\Facades\DB;
 use Database\Seeders\CcpSeederTable;
 use Database\Seeders\AdminSeederTable;
@@ -47,6 +48,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CustomerSeeder::class);
         $this->call(ShippingLineSeeder::class);
         $this->call(VesselSeeder::class);
+        $this->call(CompanySeeder::class);
 
         Airline::insert([
             [
@@ -345,17 +347,6 @@ class DatabaseSeeder extends Seeder
             ],
         ]);
 
-        Company::insert([
-            [
-                'name'      => 'PT. WINDU PERSADA CARGO',
-                'branch_name'   => 'WPCJKT',
-                'currency_id'   => 1,
-                'web_site'      => 'http://www.wpclogistics.com',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]
-        ]);
-
         VendorType::insert([
             [
                 'type'      => 'SHP',
@@ -489,34 +480,22 @@ class DatabaseSeeder extends Seeder
             ],
         ]);
 
-        CompanyDetailSatu::insert([
+        SystemNumbering::insert([
             [
-                'company_id'    => 1,
-                'type'      => 'Head Office',
+                'module_id'    => 19,
+                'cycle'         => 'Y',
+                'next_number'   => 1,
+                'length_number'   => 2,
+                'prefix'   => 'S,[YY],[MM]',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'company_id'    => 1,
-                'type'      => 'Air',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'company_id'    => 1,
-                'type'      => 'Sea',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'company_id'    => 1,
-                'type'      => 'Warehouse',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'company_id'    => 1,
-                'type'      => 'Transport',
+                'module_id'    => 20,
+                'cycle'         => 'Y',
+                'next_number'   => 1,
+                'length_number'   => 2,
+                'prefix'   => 'C,[YY],[MM]',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

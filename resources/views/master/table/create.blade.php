@@ -42,9 +42,9 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="job_type_id">Job Type / Module </label>
+                                    <label for="job_type_id">Job Type </label>
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <select name="job_type_id"
                                                 class="job-type @error('job_type_id') is-invalid @enderror">
                                                 <option value="">Search</option>
@@ -55,12 +55,34 @@
                                                 </div>
                                             @enderror
                                         </div>
-                                        <div class="col-md-6">
-                                            <select name="module_code"
-                                                class="module-code @error('module_code') is-invalid @enderror">
-                                                <option value="">Search</option>
-                                            </select>
-                                            @error('module_code')
+
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="effective_date">Effective Date <span
+                                                    style="color: red;">*</span></label>
+                                            <input type="text" value="{{ old('effective_date', date('d/m/Y')) }}"
+                                                autocomplete="off"
+                                                class="form-control @error('effective_date') is-invalid @enderror date-picker"
+                                                name="effective_date" id="effective_date">
+                                            @error('effective_date')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="exp_date">Expiry Date </label>
+                                            <input type="text" value="{{ old('exp_date', date('31/12/9999')) }}"
+                                                autocomplete="off"
+                                                class="form-control @error('exp_date') is-invalid @enderror date-picker"
+                                                name="exp_date" id="exp_date">
+                                            @error('exp_date')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
                                                 </div>
@@ -68,12 +90,58 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="via_port_code">Via Port </label>
+                                            <select class="viaport-select" name="via_port_code">
+                                                <option value=""></option>
+                                            </select>
+
+                                            @error('via_port_code')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label for="via_port_name"> </label>
+                                            <input type="text" value="{{ old('via_port_name') }}" readonly
+                                                class="form-control" name="via_port_name" id="via_port_name">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="second_port_code">Second Via Port </label>
+                                            <select class="secondport-select" name="second_port_code">
+                                                <option value=""></option>
+                                            </select>
+
+                                            @error('second_port_code')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="form-group">
+                                            <label for="second_port_name"> </label>
+                                            <input type="text" value="{{ old('second_port_name') }}" readonly
+                                                class="form-control" name="second_port_name" id="second_port_name">
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <label for="transit_time">Est Transit Time (Day (s))</label>
                                     <input type="text" maxlength="5" data-type='currency0'
                                         value="{{ old('transit_time') }}"
-                                        class="form-control @error('transit_time') is-invalid @enderror" name="transit_time"
-                                        id="transit_time">
+                                        class="form-control @error('transit_time') is-invalid @enderror"
+                                        name="transit_time" id="transit_time">
                                     @error('transit_time')
                                         <div class="invalid-feedback">
                                             {{ $message }}
@@ -91,73 +159,39 @@
                                         </div>
                                     @enderror
                                 </div>
-                                <div class="form-group">
-                                    <label for="valid_flag">Valid Flag </label>
-                                    <div class="col-md-6">
-                                        <input type="checkbox" name="valid_flag" @checked(old('valid_flag') == 'yes') value="yes"
-                                            data-toggle="toggle" data-on="Yes" data-off="No" data-onstyle="primary"
-                                            data-offstyle="danger">
-                                        @error('valid_flag')
-                                            <div class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="standard_flag">Standard Charge Flag </label>
-                                    <div class="col-md-6">
-                                        <input type="checkbox" name="standard_flag" @checked(old('standard_flag') == 'yes')
-                                            value="yes" data-toggle="toggle" data-on="Yes" data-off="No"
-                                            data-onstyle="primary" data-offstyle="danger">
-                                        @error('standard_flag')
-                                            <div class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="frt_collect">Frt Collect </label>
-                                    <div class="col-md-6">
-                                        <input type="checkbox" name="frt_collect" @checked(old('frt_collect') == 'yes')
-                                            value="yes" data-toggle="toggle" data-on="Yes" data-off="No"
-                                            data-onstyle="primary" data-offstyle="danger">
-                                        @error('frt_collect')
-                                            <div class="invalid-feedback">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="row mt-3">
+                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="effective_date">Effective Date </label>
-                                            <input type="text" value="{{ old('effective_date') }}" autocomplete="off"
-                                                class="form-control @error('effective_date') is-invalid @enderror date-picker"
-                                                name="effective_date" id="effective_date">
-                                            @error('effective_date')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
+                                            <label for="valid_flag">Valid Flag </label>
+                                            <div class="col-md-6">
+                                                <input type="checkbox" name="valid_flag" @checked(old('valid_flag') == 'yes')
+                                                    value="yes" data-toggle="toggle" data-on="Yes" data-off="No"
+                                                    data-onstyle="primary" data-offstyle="danger">
+                                                @error('valid_flag')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="exp_date">Expiry Date </label>
-                                            <input type="text" value="{{ old('exp_date') }}" autocomplete="off"
-                                                class="form-control @error('exp_date') is-invalid @enderror date-picker"
-                                                name="exp_date" id="exp_date">
-                                            @error('exp_date')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
+                                            <label for="standard_flag">Standard Charge Flag </label>
+                                            <div class="col-md-6">
+                                                <input type="checkbox" name="standard_flag" @checked(old('standard_flag') == 'yes')
+                                                    value="yes" data-toggle="toggle" data-on="Yes" data-off="No"
+                                                    data-onstyle="primary" data-offstyle="danger">
+                                                @error('standard_flag')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                             <div class="col-md-6">
                                 <div class="row ">
@@ -266,7 +300,7 @@
 
                                 <div class="form-group">
                                     <label for="note">Note </label>
-                                    <textarea name="note" id="note" cols="30" rows="6"
+                                    <textarea name="note" id="note" cols="30" rows="8"
                                         class="form-control @error('note') is-invalid @enderror">{{ old('note') }}</textarea>
                                     @error('note')
                                         <div class="invalid-feedback">
@@ -274,50 +308,18 @@
                                         </div>
                                     @enderror
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="via_port_code">Via Port </label>
-                                            <select class="viaport-select" name="via_port_code">
-                                                <option value=""></option>
-                                            </select>
 
-                                            @error('via_port_code')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="form-group">
-                                            <label for="via_port_name"> </label>
-                                            <input type="text" value="{{ old('via_port_name') }}" readonly
-                                                class="form-control" name="via_port_name" id="via_port_name">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="second_port_code">Second Via Port </label>
-                                            <select class="secondport-select" name="second_port_code">
-                                                <option value=""></option>
-                                            </select>
-
-                                            @error('second_port_code')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="form-group">
-                                            <label for="second_port_name"> </label>
-                                            <input type="text" value="{{ old('second_port_name') }}" readonly
-                                                class="form-control" name="second_port_name" id="second_port_name">
-                                        </div>
+                                <div class="form-group">
+                                    <label for="frt_collect">Frt Collect </label>
+                                    <div class="col-md-6">
+                                        <input type="checkbox" name="frt_collect" @checked(old('frt_collect') == 'yes')
+                                            value="yes" data-toggle="toggle" data-on="Yes" data-off="No"
+                                            data-onstyle="primary" data-offstyle="danger">
+                                        @error('frt_collect')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
                                     </div>
                                 </div>
 
@@ -332,6 +334,7 @@
                                             <th class="text-center th-action" style="min-width: 120px;"> Action </th>
                                             <th class="text-center" style="min-width: 200px;"> Item Code </th>
                                             <th class="text-center" style="min-width: 200px;"> Description </th>
+                                            <th class="text-center" style="min-width: 200px;"> Charge Unit </th>
                                             <th class="text-center" style="min-width: 200px;"> Qty </th>
                                             <th class="text-center" style="min-width: 200px;"> Cargo </th>
                                             <th class="text-center" style="min-width: 200px;"> DG </th>
@@ -339,14 +342,11 @@
                                             <th class="text-center" style="min-width: 200px;"> Charge </th>
                                             <th class="text-center" style="min-width: 200px;"> Vat </th>
                                             <th class="text-center" style="min-width: 200px;"> P/C </th>
-                                            <th class="text-center" style="min-width: 200px;"> Charge Unit </th>
                                             <th class="text-center" style="min-width: 200px;"> Container </th>
                                             <th class="text-center" style="min-width: 200px;"> Rate </th>
                                             <th class="text-center" style="min-width: 200px;"> Currency </th>
                                             <th class="text-center" style="min-width: 200px;"> Min Amount </th>
                                             <th class="text-center" style="min-width: 200px;"> Amount </th>
-                                            <th class="text-center" style="min-width: 200px;"> Cost </th>
-                                            <th class="text-center" style="min-width: 200px;"> % </th>
                                         </tr>
                                     </thead>
 
@@ -383,8 +383,25 @@
 
                                             <td>
                                                 <div class="form-group">
-                                                    <input type="text" class="form-control" autocomplete="off"
-                                                        data-type='currency4' name="qty[]">
+                                                    <select name="chg_unit[]" id="chgunit-select-1"
+                                                        class="chgunit-select">
+                                                        <option value="">Search</option>
+                                                        <option value="CONTAINER">CONTAINER</option>
+                                                        <option value="REV TON">REV TON</option>
+                                                        <option value="SHIPMENT">SHIPMENT</option>
+                                                        <option value="HOUSE">HOUSE</option>
+                                                        <option value="VOLUME">VOLUME</option>
+                                                        <option value="WEIGHT">WEIGHT</option>
+                                                        <option value="PCS">PCS</option>
+                                                    </select>
+                                                </div>
+                                            </td>
+
+                                            <td>
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control qty-input"
+                                                        autocomplete="off" data-type='currency4' name="qty[]"
+                                                        id="qty-input-1">
                                                 </div>
                                             </td>
 
@@ -447,29 +464,6 @@
 
                                             <td>
                                                 <div class="form-group">
-                                                    <select name="chg_unit[]" id="chgunit-select-1"
-                                                        class="chgunit-select">
-                                                        <option value="">Search</option>
-                                                        <option value="CONTAINER">CONTAINER</option>
-                                                        <option value="REV TON">REV TON</option>
-                                                        <option value="REV TON RND UP">REV TON RND UP</option>
-                                                        <option value="REV TON CUSTOM">REV TON CUSTOM</option>
-                                                        <option value="SHIPMENT">SHIPMENT</option>
-                                                        <option value="HOUSE">HOUSE</option>
-                                                        <option value="SUBHOUSE B/L">SUBHOUSE B/L</option>
-                                                        <option value="VOLUME">VOLUME</option>
-                                                        <option value="WEIGHT">WEIGHT</option>
-                                                        <option value="PCS">PCS</option>
-                                                        <option value="BLOCK OF 4 M3">BLOCK OF 4 M3</option>
-                                                        <option value="BLOCK OF 3 M3">BLOCK OF 3 M3</option>
-                                                        <option value="INVOICE CHARGE WEIGHT">INVOICE CHARGE WEIGHT
-                                                        </option>
-                                                    </select>
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <div class="form-group">
                                                     <select name="container_id[]" id="container-select-1"
                                                         class="container-select">
                                                         <option value="">Search</option>
@@ -512,20 +506,6 @@
                                                 </div>
                                             </td>
 
-                                            <td>
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control" autocomplete="off"
-                                                        data-type='currency' name="cost[]">
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control" autocomplete="off"
-                                                        data-type='currency' name="percent[]">
-                                                </div>
-                                            </td>
-
                                         </tr>
                                     </tbody>
                                 </table>
@@ -562,6 +542,7 @@
         let uom = ".uom-select";
         let vat = ".vat-select";
         let container = ".container-select";
+        let qty_input = ".qty-input";
         let maxFields = MAX_FIELD;
 
         function totalFields() {
@@ -583,6 +564,7 @@
                 field.find(currency).empty();
                 field.find(uom).empty();
                 field.find(vat).empty();
+                field.find(qty_input).attr("id", "qty-input-" + count);
                 field.find(charge_code).attr("id", "charge-code-select-" + count).select2({
                     placeholder: 'Search item code',
                     width: "100%",
@@ -732,6 +714,7 @@
                 });
                 field.children("label").text("Field " + count);
                 field.find("input").val("");
+                field.find(".select2-container").remove();
                 field.find(".select2-container").empty();
                 $(className + ":last").after($(field));
 
@@ -1087,6 +1070,53 @@
                     }
                 });
 
+                $(`.chgunit-select`).change(function(e) {
+                    e.preventDefault();
+                    let val = $(this).val();
+                    if (val == "REV TON") {
+                        $(`#chg-select-${count}`).attr(`disabled`, true).attr('required', false);
+                        $(`#pc-select-${count}`).attr(`disabled`, true).attr('required', false);
+                        $(`#container-select-${count}`).attr(`disabled`, true).attr('required', false);
+                        $(`#qty-input-${count}`).attr(`disabled`, false).attr('required', true);
+                        $(`#cargo-select-${count}`).attr(`disabled`, false).attr('required', true);
+                        $(`#dg-select-${count}`).attr(`disabled`, false);
+                        $(`#uom-select-${count}`).attr(`disabled`, false).attr('required', true);
+                    } else if (val == `SHIPMENT`) {
+                        $(`#qty-input-${count}`).attr(`disabled`, true).attr('required', false);
+                        $(`#cargo-select-${count}`).attr(`disabled`, true).attr('required', false);
+                        $(`#dg-select-${count}`).attr(`disabled`, true);
+                        $(`#uom-select-${count}`).attr(`disabled`, true).attr('required', false);
+                        $(`#container-select-${count}`).attr(`disabled`, true).attr('required', false);
+                        $(`#chg-select-${count}`).attr(`disabled`, false).attr('required', true);
+                        $(`#pc-select-${count}`).attr(`disabled`, false).attr('required', true);
+                    } else if (val == `VOLUME` || val == `WEIGHT` || val == `PCS`) {
+                        $(`#container-select-${count}`).attr(`disabled`, true).attr('required', false);
+                        $(`#qty-input-${count}`).attr(`disabled`, false).attr('required', true);
+                        $(`#cargo-select-${count}`).attr(`disabled`, false).attr('required', true);
+                        $(`#dg-select-${count}`).attr(`disabled`, false);
+                        $(`#uom-select-${count}`).attr(`disabled`, false).attr('required', true);
+                        $(`#chg-select-${count}`).attr(`disabled`, false).attr('required', true);
+                        $(`#pc-select-${count}`).attr(`disabled`, false).attr('required', true);
+                    } else {
+                        $(`#container-select-${count}`).attr(`disabled`, false).attr('required', true);
+                        $(`#qty-input-${count}`).attr(`disabled`, false).attr('required', true);
+                        $(`#cargo-select-${count}`).attr(`disabled`, false).attr('required', true);
+                        $(`#dg-select-${count}`).attr(`disabled`, false);
+                        $(`#uom-select-${count}`).attr(`disabled`, false).attr('required', true);
+                        $(`#chg-select-${count}`).attr(`disabled`, false).attr('required', true);
+                        $(`#pc-select-${count}`).attr(`disabled`, false).attr('required', true);
+                    }
+                });
+
+
+                $(`#container-select-${count}`).attr("disabled", false);
+                $(`#qty-input-${count}`).attr("disabled", false);
+                $(`#cargo-select-${count}`).attr("disabled", false);
+                $(`#dg-select-${count}`).attr("disabled", false);
+                $(`#uom-select-${count}`).attr("disabled", false);
+                $(`#chg-select-${count}`).attr("disabled", false);
+                $(`#pc-select-${count}`).attr("disabled", false);
+
             } else {
                 alert(`Maximum ${maxFields} line`);
             }
@@ -1391,6 +1421,44 @@
                 },
             });
 
+            $(`.chgunit-select`).change(function(e) {
+                e.preventDefault();
+                let val = $(this).val();
+                if (val == "REV TON") {
+                    $(`#chg-select-1`).attr(`disabled`, true).attr('required', false);
+                    $(`#pc-select-1`).attr(`disabled`, true).attr('required', false);
+                    $(`#container-select-1`).attr(`disabled`, true).attr('required', false);
+                    $(`#qty-input-1`).attr(`disabled`, false).attr('required', true);
+                    $(`#cargo-select-1`).attr(`disabled`, false).attr('required', true);
+                    $(`#dg-select-1`).attr(`disabled`, false).attr('required', true);
+                    $(`#uom-select-1`).attr(`disabled`, false).attr('required', true);
+                } else if (val == `SHIPMENT`) {
+                    $(`#qty-input-1`).attr(`disabled`, true).attr('required', false);
+                    $(`#cargo-select-1`).attr(`disabled`, true).attr('required', false);
+                    $(`#dg-select-1`).attr(`disabled`, true).attr('required', false);
+                    $(`#uom-select-1`).attr(`disabled`, true).attr('required', false);
+                    $(`#container-select-1`).attr(`disabled`, true).attr('required', false);
+                    $(`#chg-select-1`).attr(`disabled`, false).attr('required', true);
+                    $(`#pc-select-1`).attr(`disabled`, false).attr('required', true);
+                } else if (val == `VOLUME` || val == `WEIGHT` || val == `PCS`) {
+                    $(`#container-select-1`).attr(`disabled`, true).attr('required', false);
+                    $(`#qty-input-1`).attr(`disabled`, false).attr('required', true);
+                    $(`#cargo-select-1`).attr(`disabled`, false).attr('required', true);
+                    $(`#dg-select-1`).attr(`disabled`, false).attr('required', true);
+                    $(`#uom-select-1`).attr(`disabled`, false).attr('required', true);
+                    $(`#chg-select-1`).attr(`disabled`, false).attr('required', true);
+                    $(`#pc-select-1`).attr(`disabled`, false).attr('required', true);
+                } else {
+                    $(`#container-select-1`).attr(`disabled`, false).attr('required', true);
+                    $(`#qty-input-1`).attr(`disabled`, false).attr('required', true);
+                    $(`#cargo-select-1`).attr(`disabled`, false).attr('required', true);
+                    $(`#dg-select-1`).attr(`disabled`, false).attr('required', true);
+                    $(`#uom-select-1`).attr(`disabled`, false).attr('required', true);
+                    $(`#chg-select-1`).attr(`disabled`, false).attr('required', true);
+                    $(`#pc-select-1`).attr(`disabled`, false).attr('required', true);
+                }
+            });
+
             $('.chgunit-select').select2({
                 placeholder: 'Search chg unit',
                 width: "100%",
@@ -1663,29 +1731,6 @@
                 e.preventDefault();
                 let desc = $(this).select2('data')[0].custom_attribute;
                 $("input[name=second_port_name]").val(desc);
-            });
-
-            $(`.module-code`).select2({
-                placeholder: 'Search module',
-                width: "100%",
-                allowClear: true,
-                ajax: {
-                    url: '{{ route('charge.job') }}',
-                    dataType: 'json',
-                    type: 'POST',
-                    delay: 0,
-                    processResults: function(data) {
-                        return {
-                            results: $.map(data, function(item) {
-                                return {
-                                    text: `${item.module_code}`,
-                                    id: item.module_code,
-                                }
-                            })
-                        };
-                    },
-                    cache: false
-                }
             });
 
             $(`.job-type`).select2({

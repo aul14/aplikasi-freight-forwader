@@ -21,7 +21,7 @@ class VatCodeController extends Controller
     {
         if (Auth::user()->hasPermission('manage-vat')) {
             if ($request->ajax()) {
-                $vat = VatCode::all()->sortByDesc("id");
+                $vat = VatCode::select('*');
                 return DataTables::of($vat)
                     ->addColumn('action', function ($vat) {
                         return view('datatable-modal._action', [
@@ -41,8 +41,13 @@ class VatCodeController extends Controller
             }
 
             $count =  History::where('user_id', auth()->user()->id)->count();
-            if ($count == 3) {
-                History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+            if ($count >= 3) {
+                $cek_double = History::where('user_id', auth()->user()->id)->where('menu', 'VAT Code')->count();
+                if ($cek_double > 1) {
+                    History::where('user_id', auth()->user()->id)->where('menu', 'VAT Code')->limit(1)->delete();
+                } else {
+                    History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+                }
                 History::insert([
                     'user_id'   => auth()->user()->id,
                     'menu'      => 'VAT Code',
@@ -109,13 +114,9 @@ class VatCodeController extends Controller
                 $vat_code->sales_cost = $request->sales_cost;
                 $vat_code->inclusice = $request->inclusice;
                 $vat_code->input_ta_code = $request->input_ta_code;
-                $vat_code->input_ta_desc = $request->input_ta_desc;
                 $vat_code->output_ta_code = $request->output_ta_code;
-                $vat_code->output_ta_desc = $request->output_ta_desc;
                 $vat_code->paid_in_ta_code = $request->paid_in_ta_code;
-                $vat_code->paid_in_ta_desc = $request->paid_in_ta_desc;
                 $vat_code->paid_out_ta_code = $request->paid_out_ta_code;
-                $vat_code->paid_out_ta_desc = $request->paid_out_ta_desc;
                 $vat_code->save();
 
                 $result = [];
@@ -195,19 +196,14 @@ class VatCodeController extends Controller
             DB::beginTransaction();
             try {
                 $vat_code = VatCode::find($id);
-                $vat_code->code = $request->code;
                 $vat_code->description = $request->description;
                 $vat_code->type = $request->type;
                 $vat_code->sales_cost = $request->sales_cost;
                 $vat_code->inclusice = $request->inclusice;
                 $vat_code->input_ta_code = $request->input_ta_code;
-                $vat_code->input_ta_desc = $request->input_ta_desc;
                 $vat_code->output_ta_code = $request->output_ta_code;
-                $vat_code->output_ta_desc = $request->output_ta_desc;
                 $vat_code->paid_in_ta_code = $request->paid_in_ta_code;
-                $vat_code->paid_in_ta_desc = $request->paid_in_ta_desc;
                 $vat_code->paid_out_ta_code = $request->paid_out_ta_code;
-                $vat_code->paid_out_ta_desc = $request->paid_out_ta_desc;
                 $vat_code->update();
 
                 $vat_code->vat_code_detail_satu()->delete();

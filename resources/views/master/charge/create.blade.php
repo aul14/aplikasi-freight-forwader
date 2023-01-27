@@ -43,67 +43,6 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="local_name">Local Name </label>
-                                    <input type="text" value="{{ old('local_name') }}"
-                                        class="form-control @error('local_name') is-invalid @enderror" name="local_name"
-                                        id="local_name">
-                                    @error('local_name')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-                                <div class="form-group">
-                                    <label for="charge_type">Charge Type </label>
-                                    <select name="charge_type" id="charge_type" class="form-control chosen-select">
-                                        <option value="">Select an option</option>
-                                        <option value="FREIGHT" @selected(old('charge_type') == 'FREIGHT')>FREIGHT</option>
-                                        <option value="HANDLING" @selected(old('charge_type') == 'HANDLING')>HANDLING </option>
-                                        <option value="OTHER" @selected(old('charge_type') == 'OTHER')>OTHER </option>
-                                        <option value="PERMIT" @selected(old('charge_type') == 'PERMIT')>PERMIT </option>
-                                        <option value="STORAGE" @selected(old('charge_type') == 'STORAGE')>STORAGE </option>
-                                        <option value="TRUCKING" @selected(old('charge_type') == 'TRUCKING')>TRUCKING </option>
-                                    </select>
-                                    @error('charge_type')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-                                <div class="form-group">
-                                    <label for="sales_analysis_code">Sales Analysis Code </label>
-                                    <input type="text" value="{{ old('sales_analysis_code') }}"
-                                        class="form-control @error('sales_analysis_code') is-invalid @enderror"
-                                        name="sales_analysis_code" id="sales_analysis_code">
-                                    @error('sales_analysis_code')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-                                <div class="form-group">
-                                    <label for="item_short_code">Item Short Code </label>
-                                    <input type="text" value="{{ old('item_short_code') }}"
-                                        class="form-control @error('item_short_code') is-invalid @enderror"
-                                        name="item_short_code" id="item_short_code">
-                                    @error('item_short_code')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-                                <div class="form-group">
-                                    <label for="recoverable">Recoverable </label>
-                                    <input type="checkbox" name="recoverable" @checked(old('recoverable') == 'yes') value="yes"
-                                        data-toggle="toggle" data-on="Yes" data-off="No" data-onstyle="primary"
-                                        data-offstyle="danger">
-                                    @error('recoverable')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-                                <div class="form-group">
                                     <label for="split_by_method">Split By Method </label>
                                     <select name="split_by_method" id="split_by_method" class="form-control chosen-select">
                                         <option value="">Select an option</option>
@@ -167,28 +106,6 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="cost_analysis_code">Cost Analysis Code </label>
-                                    <input type="text" value="{{ old('cost_analysis_code') }}"
-                                        class="form-control @error('cost_analysis_code') is-invalid @enderror"
-                                        name="cost_analysis_code" id="cost_analysis_code">
-                                    @error('cost_analysis_code')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-                                <div class="form-group" style="margin-bottom: 30px !important;">
-                                    <label for="lock">Lock </label>
-                                    <input type="checkbox" name="lock" @checked(old('lock') == 'yes') value="yes"
-                                        data-toggle="toggle" data-on="Yes" data-off="No" data-onstyle="primary"
-                                        data-offstyle="danger">
-                                    @error('lock')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-                                <div class="form-group">
                                     <label for="sales_cost">Sales/Cost </label>
                                     <select name="sales_cost" id="sales_cost"
                                         class="form-control chosen-select @error('sales_cost') is-invalid @enderror">
@@ -202,23 +119,48 @@
                                         </div>
                                     @enderror
                                 </div>
+                                <div class="form-group">
+                                    <label for="site_code">Site Code </label>
+                                    <input type="text" value="{{ old('site_code') }}"
+                                        class="form-control @error('site_code') is-invalid @enderror" name="site_code"
+                                        id="site_code">
+                                    @error('site_code')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label for="recoverable">Recoverable </label>
+                                    <div class="col-md-6">
+                                        <input type="checkbox" name="recoverable" @checked(old('recoverable') == 'yes')
+                                            value="yes" data-toggle="toggle" data-on="Yes" data-off="No"
+                                            data-onstyle="primary" data-offstyle="danger">
+                                        @error('recoverable')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lock">Lock </label>
+                                    <div class="col-md-6">
+                                        <input type="checkbox" name="lock" @checked(old('lock') == 'yes')
+                                            value="yes" data-toggle="toggle" data-on="Yes" data-off="No"
+                                            data-onstyle="primary" data-offstyle="danger">
+                                        @error('lock')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                </div>
+
                             </div>
                             <div class="col-md-7">
                                 <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="job_type_id">Module </label>
-                                            <select name="job_type_id" id="job_type_id" class="module-select">
-                                                <option value="">Select an option</option>
-                                            </select>
-                                            @error('job_type_id')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8">
+                                    <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="dept_code">Department Code </label>
                                             <input type="text" value="{{ old('dept_code') }}"
@@ -233,7 +175,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="sales_acc_code">Sales Account Code </label>
                                             <input type="text" value="{{ old('sales_acc_code') }}"
@@ -246,22 +188,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-md-8">
-                                        <div class="form-group">
-                                            <label for="sales_acc_desc">Sales Account Desc </label>
-                                            <input type="text" value="{{ old('sales_acc_desc') }}"
-                                                class="form-control @error('sales_acc_desc') is-invalid @enderror"
-                                                name="sales_acc_desc" id="sales_acc_desc">
-                                            @error('sales_acc_desc')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="cost_acc_code">Cost Account Code </label>
                                             <input type="text" value="{{ old('cost_acc_code') }}"
@@ -274,77 +201,9 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-md-8">
-                                        <div class="form-group">
-                                            <label for="cost_acc_desc">Cost Account Desc </label>
-                                            <input type="text" value="{{ old('cost_acc_desc') }}"
-                                                class="form-control @error('cost_acc_desc') is-invalid @enderror"
-                                                name="cost_acc_desc" id="cost_acc_desc">
-                                            @error('cost_acc_desc')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                    </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="sales_provision_acc_code">Sales Provision Account Code </label>
-                                            <input type="text" value="{{ old('sales_provision_acc_code') }}"
-                                                class="form-control @error('sales_provision_acc_code') is-invalid @enderror"
-                                                name="sales_provision_acc_code" id="sales_provision_acc_code">
-                                            @error('sales_provision_acc_code')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="form-group">
-                                            <label for="sales_provision_acc_desc">Sales Provision Account Desc </label>
-                                            <input type="text" value="{{ old('sales_provision_acc_desc') }}"
-                                                class="form-control @error('sales_provision_acc_desc') is-invalid @enderror"
-                                                name="sales_provision_acc_desc" id="sales_provision_acc_desc">
-                                            @error('sales_provision_acc_desc')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="provision_acc_code">Provision Account Code </label>
-                                            <input type="text" value="{{ old('provision_acc_code') }}"
-                                                class="form-control @error('provision_acc_code') is-invalid @enderror"
-                                                name="provision_acc_code" id="provision_acc_code">
-                                            @error('provision_acc_code')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="form-group">
-                                            <label for="provision_acc_desc">Provision Account Desc </label>
-                                            <input type="text" value="{{ old('provision_acc_desc') }}"
-                                                class="form-control @error('provision_acc_desc') is-invalid @enderror"
-                                                name="provision_acc_desc" id="provision_acc_desc">
-                                            @error('provision_acc_desc')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
+
+                                <div class="row mt-1">
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="currency_id">Currency </label>
@@ -367,7 +226,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row mt-2">
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="uom_id">Unit Of Measurement </label>
@@ -390,36 +249,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="consolidation_item_code">Consolidation Item Code </label>
-                                            <select class="cic-select" name="consolidation_item_code">
-                                                <option></option>
-                                            </select>
 
-                                            @error('consolidation_item_code')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="form-group">
-                                            <label for="consolidation_item_desc"> </label>
-                                            <input type="text" value="{{ old('consolidation_item_desc') }}" readonly
-                                                class="form-control" name="consolidation_item_desc"
-                                                id="consolidation_item_desc">
-                                            @error('consolidation_item_desc')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
+                                <div class="row mt-2">
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="wt_code_id">WHT Code </label>
@@ -472,7 +303,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row mt-1">
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="vat_code_id">Code </label>
@@ -518,18 +349,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="site_code">Site Code </label>
-                                    <input type="text" value="{{ old('site_code') }}"
-                                        class="form-control @error('site_code') is-invalid @enderror" name="site_code"
-                                        id="site_code">
-                                    @error('site_code')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div>
-
                             </div>
                         </div>
                         <hr>
@@ -537,15 +356,12 @@
                             <div class="col-md-12 col-sm-12" style="overflow:auto;">
                                 <table id="table-condition" class="table table-bordered table-sm table-responsive-sm">
                                     <thead>
-
                                         <tr>
                                             <th class="text-center th-action" style="min-width: 120px;"> Action </th>
                                             <th class="text-center" style="min-width: 200px;"> Module </th>
                                             <th class="text-center" style="min-width: 200px;"> Job Type </th>
                                             <th class="text-center" style="min-width: 200px;"> Sales Acc Code </th>
-                                            <th class="text-center" style="min-width: 200px;"> Sales Description </th>
                                             <th class="text-center" style="min-width: 200px;"> Cost Acc Code </th>
-                                            <th class="text-center" style="min-width: 200px;"> Cost Description </th>
                                             <th class="text-center" style="min-width: 200px;"> Adv Acc Code </th>
                                         </tr>
                                     </thead>
@@ -593,21 +409,7 @@
                                             <td>
                                                 <div class="form-group">
                                                     <input type="text" class="form-control" autocomplete="off"
-                                                        name="sales_desc[]">
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control" autocomplete="off"
                                                         name="cost_acc_code_detail[]">
-                                                </div>
-                                            </td>
-
-                                            <td>
-                                                <div class="form-group">
-                                                    <input type="text" class="form-control" autocomplete="off"
-                                                        name="cost_desc[]">
                                                 </div>
                                             </td>
 
@@ -699,6 +501,7 @@
                 });
                 field.children("label").text("Field " + count);
                 field.find("input").val("");
+                field.find(".select2-container").remove();
                 field.find(".select2-container").empty();
                 $(className + ":last").after($(field));
 

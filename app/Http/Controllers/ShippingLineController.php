@@ -20,7 +20,7 @@ class ShippingLineController extends Controller
     {
         if (Auth::user()->hasPermission('manage-shipline')) {
             if ($request->ajax()) {
-                $shipline = ShippingLine::all()->sortByDesc("id");
+                $shipline = ShippingLine::select('*');
                 return DataTables::of($shipline)
                     ->addColumn('action', function ($shipline) {
                         return view('datatable-modal._action', [
@@ -41,8 +41,13 @@ class ShippingLineController extends Controller
 
             // INSERT TABLE HISTORY
             $count =  History::where('user_id', auth()->user()->id)->count();
-            if ($count == 3) {
-                History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+            if ($count >= 3) {
+                $cek_double = History::where('user_id', auth()->user()->id)->where('menu', 'Shipping Line')->count();
+                if ($cek_double > 1) {
+                    History::where('user_id', auth()->user()->id)->where('menu', 'Shipping Line')->limit(1)->delete();
+                } else {
+                    History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+                }
                 History::insert([
                     'user_id'   => auth()->user()->id,
                     'menu'      => 'Shipping Line',

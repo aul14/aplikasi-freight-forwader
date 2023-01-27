@@ -24,7 +24,7 @@ class BisnisParty extends Model
 
     protected $table = "bisnis_party";
 
-    protected $with = ['currency', 'payment_term', 'city', 'country', 'port', 'salesman', 'vat_code', 'customer_type', 'vendor_type'];
+    protected $with = ['currency', 'country', 'payment_term', 'city', 'port', 'salesman', 'vat_code', 'customer_type', 'vendor_type'];
 
     public function currency()
     {
@@ -43,7 +43,7 @@ class BisnisParty extends Model
 
     public function country()
     {
-        return $this->belongsTo(Country::class);
+        return $this->belongsTo(Country::class, 'country_id', 'id');
     }
 
     public function port()
@@ -90,7 +90,7 @@ class BisnisParty extends Model
                 $bisnis_party_detail_satu->delete(); // <-- direct deletion
             });
             $bisnis_party->bisnis_party_detail_dua()->each(function ($bisnis_party_detail_dua) {
-                $bisnis_party_detail_dua->delete(); // <-- raise another deleting event on Post to delete comments
+                $bisnis_party_detail_dua->delete();
             });
             // do the rest of the cleanup...
         });

@@ -23,25 +23,15 @@
                                 <div class="form-group">
                                     <label for="code">VAT Code <span style="color: red;">*</span></label>
                                     <input type="text" value="{{ old('code', $vat_code->code) }}"
-                                        class="form-control @error('code') is-invalid @enderror" autofocus
-                                        autocomplete="off" required name="code" id="code">
+                                        class="form-control @error('code') is-invalid @enderror" readonly name="code"
+                                        id="code">
                                     @error('code')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
                                     @enderror
                                 </div>
-                                {{-- <div class="form-group">
-                                    <label for="vat_rate">VAT Rate</label>
-                                    <input type="text" name="vat_rate" id="vat_rate" data-type='currency33'
-                                        autocomplete="off" value="{{ old('vat_rate', $vat_rate) }}"
-                                        class="form-control @error('vat_rate') is-invalid @enderror">
-                                    @error('vat_rate')
-                                        <div class="invalid-feedback">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-                                </div> --}}
+
                                 <div class="form-group">
                                     <label for="type">VAT Type</label>
                                     <select name="type" id="type"
@@ -99,7 +89,7 @@
                                     @enderror
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="input_ta_code">Input Tax Account Code</label>
                                             <input type="text" name="input_ta_code" id="input_ta_code"
@@ -113,23 +103,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-md-8">
-                                        <div class="form-group">
-                                            <label for="input_ta_desc">Input Tax Account Desc</label>
-                                            <input type="text" name="input_ta_desc" id="input_ta_desc"
-                                                value="{{ old('input_ta_desc', $vat_code->input_ta_desc) }}"
-                                                autocomplete="off"
-                                                class="form-control @error('input_ta_desc') is-invalid @enderror">
-                                            @error('input_ta_desc')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="output_ta_code">Output Tax Account Code</label>
                                             <input type="text" name="output_ta_code" id="output_ta_code"
@@ -143,23 +117,10 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-md-8">
-                                        <div class="form-group">
-                                            <label for="output_ta_desc">Output Tax Account Desc</label>
-                                            <input type="text" name="output_ta_desc" id="output_ta_desc"
-                                                value="{{ old('output_ta_desc', $vat_code->output_ta_desc) }}"
-                                                autocomplete="off"
-                                                class="form-control @error('output_ta_desc') is-invalid @enderror">
-                                            @error('output_ta_desc')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                    </div>
                                 </div>
+
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="paid_in_ta_code">Paid In Tax Account Code</label>
                                             <input type="text" name="paid_in_ta_code" id="paid_in_ta_code"
@@ -173,23 +134,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-md-8">
-                                        <div class="form-group">
-                                            <label for="paid_in_ta_desc">Paid In Tax Account Desc</label>
-                                            <input type="text" name="paid_in_ta_desc" id="paid_in_ta_desc"
-                                                value="{{ old('paid_in_ta_desc', $vat_code->paid_in_ta_desc) }}"
-                                                autocomplete="off"
-                                                class="form-control @error('paid_in_ta_desc') is-invalid @enderror">
-                                            @error('paid_in_ta_desc')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="paid_out_ta_code">Paid Out Tax Account Code</label>
                                             <input type="text" name="paid_out_ta_code" id="paid_out_ta_code"
@@ -203,21 +148,8 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <div class="col-md-8">
-                                        <div class="form-group">
-                                            <label for="paid_out_ta_desc">Paid Out Tax Account Desc</label>
-                                            <input type="text" name="paid_out_ta_desc" id="paid_out_ta_desc"
-                                                value="{{ old('paid_out_ta_desc', $vat_code->paid_out_ta_desc) }}"
-                                                autocomplete="off"
-                                                class="form-control @error('paid_out_ta_desc') is-invalid @enderror">
-                                            @error('paid_out_ta_desc')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
-                                    </div>
                                 </div>
+
                             </div>
                         </div>
                         <hr>

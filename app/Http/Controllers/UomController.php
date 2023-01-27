@@ -19,7 +19,7 @@ class UomController extends Controller
     {
         if (Auth::user()->hasPermission('manage-uom')) {
             if ($request->ajax()) {
-                $uom = Uom::all()->sortByDesc("id");
+                $uom = Uom::select('*');
                 return DataTables::of($uom)
                     ->addColumn('action', function ($uom) {
                         return view('datatable-modal._action', [
@@ -42,8 +42,13 @@ class UomController extends Controller
             }
 
             $count =  History::where('user_id', auth()->user()->id)->count();
-            if ($count == 3) {
-                History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+            if ($count >= 3) {
+                $cek_double = History::where('user_id', auth()->user()->id)->where('menu', 'Unit Of Measurement')->count();
+                if ($cek_double > 1) {
+                    History::where('user_id', auth()->user()->id)->where('menu', 'Unit Of Measurement')->limit(1)->delete();
+                } else {
+                    History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+                }
                 History::insert([
                     'user_id'   => auth()->user()->id,
                     'menu'      => 'Unit Of Measurement',
@@ -154,7 +159,7 @@ class UomController extends Controller
         if (Auth::user()->hasPermission('edit-uom')) {
             $request->validate(
                 [
-                    'code'    => 'required|max:3|unique:uom,code,' . $id,
+                    'code'    => 'max:3|unique:uom,code,' . $id,
                     'description'  => 'max:50',
                     'conversion_factor'  => 'max:16',
                 ],
@@ -164,7 +169,6 @@ class UomController extends Controller
             );
 
             $uom = Uom::find($id);
-            $uom->code = $request->code;
             $uom->description = $request->description;
             $uom->type = $request->type;
             $uom->conversion_factor = ($request->conversion_factor != null) ? str_replace(",", "", $request->conversion_factor) : 0;

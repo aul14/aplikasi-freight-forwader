@@ -20,7 +20,7 @@ class WtCodeController extends Controller
     {
         if (Auth::user()->hasPermission('manage-wt_code')) {
             if ($request->ajax()) {
-                $wt_code = WtCode::all()->sortByDesc("id");
+                $wt_code = WtCode::select('*');
                 return DataTables::of($wt_code)
                     ->addColumn('action', function ($wt_code) {
                         return view('datatable-modal._action_no_role', [
@@ -44,8 +44,13 @@ class WtCodeController extends Controller
 
             // INSERT TABLE HISTORY
             $count =  History::where('user_id', auth()->user()->id)->count();
-            if ($count == 3) {
-                History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+            if ($count >= 3) {
+                $cek_double = History::where('user_id', auth()->user()->id)->where('menu', 'Withholding Tax')->count();
+                if ($cek_double > 1) {
+                    History::where('user_id', auth()->user()->id)->where('menu', 'Withholding Tax')->limit(1)->delete();
+                } else {
+                    History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+                }
                 History::insert([
                     'user_id'   => auth()->user()->id,
                     'menu'      => 'Withholding Tax',
@@ -158,7 +163,7 @@ class WtCodeController extends Controller
         if (Auth::user()->hasPermission('edit-wt_code')) {
             $request->validate(
                 [
-                    'code'    => 'required|max:3',
+                    'code'    => 'max:3',
                     'description'  => 'required|max:50',
                     'tax_rate'     => 'max:11',
                     'wht_c_acc_code'     => 'max:15',
@@ -170,7 +175,6 @@ class WtCodeController extends Controller
             );
 
             $wt_code = WtCode::find($id);
-            $wt_code->code = $request->code;
             $wt_code->description = $request->description;
             $wt_code->tax_rate = $request->tax_rate;
             $wt_code->vendor_type_id = $request->vendor_type_id;

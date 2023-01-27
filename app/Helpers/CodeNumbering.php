@@ -5,9 +5,10 @@ use App\Models\SystemNumbering;
 
 class CodeNumbering
 {
-    public static function custom_code($menu_id, $table = null)
+    public static function custom_code($menu_id, $table = null, $field)
     {
         $data_code = SystemNumbering::where('module_id', $menu_id)->first();
+        $exp_old = explode(",", $data_code->prefix);
         $exp = explode(",", $data_code->prefix);
         $next_number = $data_code->next_number;
         $length_number = $data_code->length_number;
@@ -23,6 +24,7 @@ class CodeNumbering
             $exp[array_search("[YY]", $exp)] = date('y');
         }
 
+        // dd($exp);
         if (in_array("[MM]", $exp)) {
             $exp[array_search("[MM]", $exp)] = ($cycle == "Y") ? '' :  date('m');
         }
@@ -31,12 +33,12 @@ class CodeNumbering
             $exp[array_search("[MMMM]", $exp)] = ($cycle == "Y") ? '' :  date('F');
         }
 
-
         $imp_format = implode("", $exp);
+
         $name_table = $table;
 
         // CEK CODE DARI DATABASE
-        $count_charge_table = $name_table::select('code')->where('code', 'like', "%$imp_format%")->count();
+        $count_charge_table = $name_table::select("{$field}")->where("{$field}", 'like', "%$imp_format%")->count();
 
         if ($count_charge_table == 0) {
             $data_format = 1;
@@ -48,7 +50,11 @@ class CodeNumbering
 
         // CEK MENGGUNAKAN CYCLE Y OR M
         if ($cycle == "Y") {
-            $imp_format = implode("", $exp) . ($exp[array_search("[MM]", $exp)] ? date('m') : ($exp[array_search("[MMMM]", $exp)] ? date('F') : ''));
+            if (in_array("[MM]", $exp_old) || in_array("[MMMM]", $exp_old)) {
+                $imp_format = implode("", $exp) . ($exp[array_search("[MM]", $exp)] ? date('m') : ($exp[array_search("[MMMM]", $exp)] ? date('F') : ''));
+            } else {
+                $imp_format = implode("", $exp);
+            }
         }
 
         if ($count_length_number == 0) {
@@ -75,7 +81,7 @@ class CodeNumbering
             } else if ($count_format <= 3) {
                 $imp_format .= "0{$data_format}";
             } else {
-                $imp_format .= "cuk";
+                $imp_format .= (string)$data_format;
             }
         } else if ($count_length_number == 4) {
             if ($count_format <= 1) {

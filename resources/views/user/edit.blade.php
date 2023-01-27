@@ -55,8 +55,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="role_id">Role <span style="color: red;">*</span></label>
-                                    <select name="role_id" data-live-search="true" id="role_id"
-                                        class="form-control chosen-select" required>
+                                    <select name="role_id" class="role-id" required>
+                                        <option value="">Search</option>
                                         @foreach ($roles as $role)
                                             <option value="{{ $role->id }}" @selected(old('role_id', $role_user->role_id) == $role->id)>
                                                 {{ $role->name }}</option>
@@ -126,4 +126,15 @@
             </div>
         </div>
     </div>
+@endsection
+@section('script')
+    <script>
+        $(function() {
+            $('.role-id').select2({
+                placeholder: 'Search...',
+                width: "100%",
+                allowClear: true,
+            });
+        });
+    </script>
 @endsection

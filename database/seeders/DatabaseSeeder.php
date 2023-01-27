@@ -2,17 +2,13 @@
 
 namespace Database\Seeders;
 
-use App\Models\Airline;
-use App\Models\Airport;
-use App\Models\ChargeCode;
 use App\Models\Uom;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\WtCode;
-use App\Models\Company;
+use App\Models\Airline;
+use App\Models\Airport;
 use App\Models\JobType;
-use App\Models\VatCode;
-use App\Models\Currency;
 use App\Models\Salesman;
 use App\Models\Commodity;
 use App\Models\Container;
@@ -21,13 +17,12 @@ use App\Models\VendorType;
 use App\Models\PaymentTerm;
 use App\Models\CustomerType;
 use Illuminate\Database\Seeder;
-use App\Models\CompanyDetailSatu;
-use App\Models\SystemNumbering;
 use Illuminate\Support\Facades\DB;
 use Database\Seeders\CcpSeederTable;
 use Database\Seeders\AdminSeederTable;
 use Database\Seeders\BisnisPartySeeder;
 use Database\Seeders\ModuleSeederTable;
+use Database\Seeders\QuotationTypeSeeder;
 
 
 class DatabaseSeeder extends Seeder
@@ -39,16 +34,25 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(AdminSeederTable::class);
-        $this->call(ModuleSeederTable::class);
-        $this->call(CcpSeederTable::class);
-        $this->call(BisnisPartySeeder::class);
-        $this->call(ChargeCodeSeeder::class);
-        $this->call(VendorSeeder::class);
-        $this->call(CustomerSeeder::class);
-        $this->call(ShippingLineSeeder::class);
-        $this->call(VesselSeeder::class);
-        $this->call(CompanySeeder::class);
+        $this->call([
+            AdminSeederTable::class,
+            ModuleSeederTable::class,
+            CcpSeederTable::class,
+            BisnisPartySeeder::class,
+            ChargeCodeSeeder::class,
+            VendorSeeder::class,
+            CustomerSeeder::class,
+            ShippingLineSeeder::class,
+            VesselSeeder::class,
+            CompanySeeder::class,
+            QuotationTypeSeeder::class,
+            AddInfoSeeder::class,
+            DeliveryTypeSeeder::class,
+            CurrencySeeder::class,
+            CurrencyD1Seeder::class,
+            SystemNumberingSeeder::class,
+            VatCodeSeeder::class
+        ]);
 
         Airline::insert([
             [
@@ -151,37 +155,6 @@ class DatabaseSeeder extends Seeder
             ],
         ]);
 
-        Currency::insert([
-            [
-                'code'      => 'IDR',
-                'description'   => 'INDONESIA RUPIAH',
-                'variance_percent'   => 15.000,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'code'      => 'GBP',
-                'description'   => 'UNITED KINGDOM POUNDS',
-                'variance_percent'   => 20.000,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'code'      => 'EUR',
-                'description'   => 'EURO',
-                'variance_percent'   => 20.000,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'code'      => 'USD',
-                'description'   => 'UNITED STATES DOLLARS',
-                'variance_percent'   => 5.000,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-        ]);
 
         JobType::insert([
             [
@@ -223,54 +196,6 @@ class DatabaseSeeder extends Seeder
                 'type'      => 'AI',
                 'description'   => 'AIR IMPORT',
                 'module_code'   => 'AI',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ]);
-
-        VatCode::insert([
-            [
-                'code'      => 'ZER',
-                'description'   => 'ZERO RATED',
-                'type'      => 'ZER',
-                'input_ta_code' => "1.07.02.01",
-                'input_ta_desc' => 'PPN MASUKAN DN',
-                'output_ta_code' => '2.01.03.01',
-                'output_ta_desc' => 'PPN KELUARAN',
-                'paid_in_ta_code'   => '',
-                'paid_in_ta_desc'   => '',
-                'paid_out_ta_code'   => '',
-                'paid_out_ta_desc'   => '',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'code'      => 'FRT1.1',
-                'description'   => 'FREIGHT VAT 1.1 %',
-                'type'      => 'STD',
-                'input_ta_code' => "1.07.02.01",
-                'input_ta_desc' => 'PPN MASUKAN DN',
-                'output_ta_code' => '2.01.03.01',
-                'output_ta_desc' => 'PPN KELUARAN',
-                'paid_in_ta_code'   => '',
-                'paid_in_ta_desc'   => '',
-                'paid_out_ta_code'   => '',
-                'paid_out_ta_desc'   => '',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'code'      => 'FRT',
-                'description'   => 'FREIGHT VAT 1 %',
-                'type'      => 'STD',
-                'input_ta_code' => "1.07.02.01",
-                'input_ta_desc' => 'PPN MASUKAN DN',
-                'output_ta_code' => '2.01.03.01',
-                'output_ta_desc' => 'PPN KELUARAN',
-                'paid_in_ta_code'   => '8.02.01.04',
-                'paid_in_ta_desc'   => 'PAJAK JASA GIRO',
-                'paid_out_ta_code'   => '1.11.05.03',
-                'paid_out_ta_desc'   => 'AKUMULASI PENYUSUTAN KOMPUTER DAN SOFTWARE-DCS',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -475,27 +400,6 @@ class DatabaseSeeder extends Seeder
             [
                 'code'      => 'OA',
                 'description'   => 'OVERSEAS AGENT',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ]);
-
-        SystemNumbering::insert([
-            [
-                'module_id'    => 19,
-                'cycle'         => 'Y',
-                'next_number'   => 1,
-                'length_number'   => 2,
-                'prefix'   => 'S,[YY],[MM]',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'module_id'    => 20,
-                'cycle'         => 'Y',
-                'next_number'   => 1,
-                'length_number'   => 2,
-                'prefix'   => 'C,[YY],[MM]',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

@@ -22,7 +22,7 @@ class PortController extends Controller
     {
         if (Auth::user()->hasPermission('manage-port')) {
             if ($request->ajax()) {
-                $port = Port::all()->sortByDesc("id");
+                $port = Port::select('*');
                 return DataTables::of($port)
                     ->addColumn('action', function ($port) {
                         return view('datatable-modal._action', [
@@ -45,8 +45,13 @@ class PortController extends Controller
             }
 
             $count =  History::where('user_id', auth()->user()->id)->count();
-            if ($count == 3) {
-                History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+            if ($count >= 3) {
+                $cek_double = History::where('user_id', auth()->user()->id)->where('menu', 'Sea Port')->count();
+                if ($cek_double > 1) {
+                    History::where('user_id', auth()->user()->id)->where('menu', 'Sea Port')->limit(1)->delete();
+                } else {
+                    History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+                }
                 History::insert([
                     'user_id'   => auth()->user()->id,
                     'menu'      => 'Sea Port',
@@ -178,7 +183,7 @@ class PortController extends Controller
     {
         if (Auth::user()->hasPermission('edit-port')) {
             $request->validate([
-                'code'    => 'required|max:5|unique:ports,code,' . $id,
+                'code'    => 'max:5|unique:ports,code,' . $id,
                 'name'           => 'required|max:45|unique:ports,name,' . $id,
                 'symbol'        => 'max:10',
                 'group_code'    => 'max:50',
@@ -189,7 +194,6 @@ class PortController extends Controller
             DB::beginTransaction();
             try {
                 $port = Port::find($id);
-                $port->code = strtoupper($request->code);
                 $port->name = strtoupper($request->name);
                 $port->country_id = $request->country_id;
                 $port->dg_cargo = ($request->dg_cargo == "yes") ? true : false;

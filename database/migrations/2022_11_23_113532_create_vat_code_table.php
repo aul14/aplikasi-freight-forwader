@@ -20,15 +20,10 @@ return new class extends Migration
             $table->string('type', 5)->nullable();
             $table->string('sales_cost', 20)->nullable();
             $table->boolean('inclusice')->nullable();
-            // $table->double('vat_rate')->nullable();
             $table->string('input_ta_code', 50)->nullable();
-            $table->text('input_ta_desc')->nullable();
             $table->string('output_ta_code', 50)->nullable();
-            $table->text('output_ta_desc')->nullable();
             $table->string('paid_in_ta_code', 50)->nullable();
-            $table->text('paid_in_ta_desc')->nullable();
             $table->string('paid_out_ta_code', 50)->nullable();
-            $table->text('paid_out_ta_desc')->nullable();
             $table->timestamps();
         });
     }

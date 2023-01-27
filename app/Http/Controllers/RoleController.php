@@ -24,7 +24,7 @@ class RoleController extends Controller
                     'permission_role' => function ($sql) {
                         $sql->with('permission');
                     }
-                ])->orderBy('roles.id', 'DESC')->get();
+                ])->orderBy('roles.id', 'DESC')->select('*');
                 return DataTables::of($role)
                     ->addColumn('action', function ($role) {
                         return view('datatable-modal._action', [
@@ -51,8 +51,13 @@ class RoleController extends Controller
             }
 
             $count =  History::where('user_id', auth()->user()->id)->count();
-            if ($count == 3) {
-                History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+            if ($count >= 3) {
+                $cek_double = History::where('user_id', auth()->user()->id)->where('menu', 'Roles')->count();
+                if ($cek_double > 1) {
+                    History::where('user_id', auth()->user()->id)->where('menu', 'Roles')->limit(1)->delete();
+                } else {
+                    History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+                }
                 History::insert([
                     'user_id'   => auth()->user()->id,
                     'menu'      => 'Roles',

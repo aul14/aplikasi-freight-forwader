@@ -21,7 +21,7 @@ class CityController extends Controller
     {
         if (Auth::user()->hasPermission('manage-city')) {
             if ($request->ajax()) {
-                $city = City::all()->sortByDesc("cities.id");
+                $city = City::select('*');
                 return DataTables::of($city)
                     ->addColumn('action', function ($city) {
                         return view('datatable-modal._action', [
@@ -42,8 +42,13 @@ class CityController extends Controller
 
             // INSERT TABLE HISTORY
             $count =  History::where('user_id', auth()->user()->id)->count();
-            if ($count == 3) {
-                History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+            if ($count >= 3) {
+                $cek_double = History::where('user_id', auth()->user()->id)->where('menu', 'City')->count();
+                if ($cek_double > 1) {
+                    History::where('user_id', auth()->user()->id)->where('menu', 'City')->limit(1)->delete();
+                } else {
+                    History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+                }
                 History::insert([
                     'user_id'   => auth()->user()->id,
                     'menu'      => 'City',
@@ -145,12 +150,11 @@ class CityController extends Controller
     {
         if (Auth::user()->hasPermission('edit-city')) {
             $request->validate([
-                'code'           => 'required|max:3|unique:cities,code,' . $id,
+                'code'           => 'max:3|unique:cities,code,' . $id,
                 'name'           => 'required|max:45|unique:cities,name,' . $id,
                 'country_id'     => 'required',
             ]);
             $city = City::find($id);
-            $city->code = strtoupper($request->code);
             $city->name = strtoupper($request->name);
             $city->country_id   = ($request->country_id) ? $request->country_id : 0;
             $city->port_id   = ($request->port_id) ? $request->port_id : 0;

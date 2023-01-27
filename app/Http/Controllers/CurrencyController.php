@@ -21,7 +21,7 @@ class CurrencyController extends Controller
     {
         if (Auth::user()->hasPermission('manage-currency')) {
             if ($request->ajax()) {
-                $currency = Currency::all()->sortByDesc("id");
+                $currency = Currency::select('*');
                 return DataTables::of($currency)
                     ->addColumn('action', function ($currency) {
                         return view('datatable-modal._action', [
@@ -44,8 +44,13 @@ class CurrencyController extends Controller
             }
 
             $count =  History::where('user_id', auth()->user()->id)->count();
-            if ($count == 3) {
-                History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+            if ($count >= 3) {
+                $cek_double = History::where('user_id', auth()->user()->id)->where('menu', 'Currency Code')->count();
+                if ($cek_double > 1) {
+                    History::where('user_id', auth()->user()->id)->where('menu', 'Currency Code')->limit(1)->delete();
+                } else {
+                    History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+                }
                 History::insert([
                     'user_id'   => auth()->user()->id,
                     'menu'      => 'Currency Code',
@@ -161,9 +166,10 @@ class CurrencyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Currency $currency)
+    public function edit($id)
     {
         if (Auth::user()->hasPermission('edit-currency')) {
+            $currency = Currency::with('currency_detail_satu')->where('id', $id)->first();
             $markup_percent = number_format($currency->markup_percent, 2, ".", ",");
             $variance_percent = number_format($currency->variance_percent, 3, ".", ",");
             $detail_cr = CurrencyDetailSatu::where('currency_id', $currency->id)->get();
@@ -186,7 +192,7 @@ class CurrencyController extends Controller
         if (Auth::user()->hasPermission('edit-currency')) {
             $request->validate(
                 [
-                    'code'    => 'required|max:3|unique:currency,code,' . $id,
+                    'code'    => 'max:3|unique:currency,code,' . $id,
                     'description'  => 'max:30|unique:currency,description,' . $id,
                     'large_name'  => 'max:30',
                     'small_name'  => 'max:30',
@@ -202,7 +208,6 @@ class CurrencyController extends Controller
             DB::beginTransaction();
             try {
                 $currency = Currency::find($id);
-                $currency->code = $request->code;
                 $currency->description = $request->description;
                 $currency->large_name = $request->large_name;
                 $currency->small_name = $request->small_name;

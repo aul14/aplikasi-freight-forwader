@@ -11,7 +11,7 @@ class Permission extends LaratrustPermission
 
     public function module()
     {
-        return $this->belongsTo(Module::class);
+        return $this->belongsTo(Module::class)->withTrashed();
     }
 
     public function permission_role()

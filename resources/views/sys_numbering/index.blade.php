@@ -230,7 +230,7 @@
                                     {{-- </ul> --}}
                                     - If you want to add a new module, please contact the IT team first, to match the code
                                     with the module. <br>
-                                    - Value for colomn length number yaitu, Minimum = 0, & Maximal = 12
+                                    - Value for colomn <strong>Length Number</strong> that is, Minimum = 0, & Maximal = 12
                                 </p>
 
                             </div>

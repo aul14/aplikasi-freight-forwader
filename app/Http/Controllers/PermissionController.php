@@ -21,7 +21,7 @@ class PermissionController extends Controller
     {
         if (Auth::user()->hasPermission('manage-permission')) {
             if ($request->ajax()) {
-                $permission = Permission::with('module')->orderBy('permissions.id', 'DESC')->get();
+                $permission = Permission::with('module')->orderBy('permissions.id', 'DESC')->select('*');
                 return DataTables::of($permission)
                     ->addColumn('action', function ($permission) {
                         return view('datatable-modal._action', [
@@ -37,8 +37,13 @@ class PermissionController extends Controller
             }
 
             $count =  History::where('user_id', auth()->user()->id)->count();
-            if ($count == 3) {
-                History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+            if ($count >= 3) {
+                $cek_double = History::where('user_id', auth()->user()->id)->where('menu', 'Permissions')->count();
+                if ($cek_double > 1) {
+                    History::where('user_id', auth()->user()->id)->where('menu', 'Permissions')->limit(1)->delete();
+                } else {
+                    History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+                }
                 History::insert([
                     'user_id'   => auth()->user()->id,
                     'menu'      => 'Permissions',
@@ -70,7 +75,7 @@ class PermissionController extends Controller
     public function create()
     {
         if (Auth::user()->hasPermission('create-permission')) {
-            $modules = Module::all()->sortByDesc("id");
+            $modules = Module::all();
             return view('permission.create', compact('modules'));
         } else {
             abort(403);
@@ -125,7 +130,7 @@ class PermissionController extends Controller
     public function edit(Permission $permission)
     {
         if (Auth::user()->hasPermission('edit-permission')) {
-            $modules = Module::all()->sortByDesc("id");
+            $modules = Module::all();
             return view('permission.edit', compact('modules', 'permission'));
         } else {
             abort(403);

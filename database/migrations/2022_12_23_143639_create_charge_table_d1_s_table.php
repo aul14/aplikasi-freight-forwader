@@ -30,8 +30,6 @@ return new class extends Migration
             $table->foreignId('currency_id')->nullable();
             $table->double('min_amt')->nullable();
             $table->double('amt')->nullable();
-            $table->double('cost')->nullable();
-            $table->double('percent')->nullable();
             $table->timestamps();
         });
     }

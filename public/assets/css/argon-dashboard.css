@@ -20215,7 +20215,7 @@ textarea.form-control-lg {
 }
 
 .form-group {
-  margin-bottom: 1rem;
+  margin-bottom: 0.2rem;
 }
 
 .form-check:not(.form-switch) .form-check-input[type=checkbox], .form-check:not(.form-switch) .form-check-input[type=radio] {

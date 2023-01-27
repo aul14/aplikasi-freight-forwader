@@ -23,7 +23,7 @@ class BisnisPartyController extends Controller
     {
         if (Auth::user()->hasPermission('manage-bisnis_party')) {
             if ($request->ajax()) {
-                $bisnis_party = BisnisParty::all()->sortByDesc("bisnis_party.id");
+                $bisnis_party = BisnisParty::select('*');
                 return DataTables::of($bisnis_party)
                     ->addColumn('action', function ($bisnis_party) {
                         return view('datatable-modal._action', [
@@ -56,8 +56,13 @@ class BisnisPartyController extends Controller
 
             // INSERT TABLE HISTORY
             $count =  History::where('user_id', auth()->user()->id)->count();
-            if ($count == 3) {
-                History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+            if ($count >= 3) {
+                $cek_double = History::where('user_id', auth()->user()->id)->where('menu', 'Business Party')->count();
+                if ($cek_double > 1) {
+                    History::where('user_id', auth()->user()->id)->where('menu', 'Business Party')->limit(1)->delete();
+                } else {
+                    History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+                }
                 History::insert([
                     'user_id'   => auth()->user()->id,
                     'menu'      => 'Business Party',

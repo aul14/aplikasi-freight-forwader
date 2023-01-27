@@ -15,11 +15,12 @@ return new class extends Migration
     {
         Schema::create('cities', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('country_id');
-            $table->foreignId('port_id');
-            $table->string('code', 10)->unique();
-            $table->string('name', 50);
-
+            $table->foreignId('country_id')->constrained('countries')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->foreignId('port_id')->nullable();
+            $table->string('code', 10);
+            $table->string('name', 50)->nullable();
             $table->timestamps();
         });
     }

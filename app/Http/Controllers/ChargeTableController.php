@@ -21,10 +21,9 @@ class ChargeTableController extends Controller
      */
     public function index(Request $request)
     {
-        // dd(CodeNumbering::custom_code('19', new ChargeTable()));
         if (Auth::user()->hasPermission('manage-charge_table')) {
             if ($request->ajax()) {
-                $charge_table = ChargeTable::all()->sortByDesc("id");
+                $charge_table = ChargeTable::select('*');
                 return DataTables::of($charge_table)
                     ->addColumn('action', function ($charge_table) {
                         return view('datatable-modal._action', [
@@ -50,8 +49,13 @@ class ChargeTableController extends Controller
             }
 
             $count =  History::where('user_id', auth()->user()->id)->count();
-            if ($count == 3) {
-                History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+            if ($count >= 3) {
+                $cek_double = History::where('user_id', auth()->user()->id)->where('menu', 'Charge Table')->count();
+                if ($cek_double > 1) {
+                    History::where('user_id', auth()->user()->id)->where('menu', 'Charge Table')->limit(1)->delete();
+                } else {
+                    History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+                }
                 History::insert([
                     'user_id'   => auth()->user()->id,
                     'menu'      => 'Charge Table',
@@ -108,13 +112,12 @@ class ChargeTableController extends Controller
             DB::beginTransaction();
             try {
                 $table = new ChargeTable();
-                $code = CodeNumbering::custom_code('19', $table);
+                $code = CodeNumbering::custom_code('19', $table, 'code');
 
                 $charge_table = $table;
                 $charge_table->code = $code;
                 $charge_table->description = $request->description;
                 $charge_table->job_type_id = $request->job_type_id;
-                $charge_table->module_code = $request->module_code;
                 $charge_table->transit_time = $request->transit_time;
                 $charge_table->frequency = $request->frequency;
                 $charge_table->bisnis_party_id = $request->bisnis_party_id;
@@ -138,25 +141,23 @@ class ChargeTableController extends Controller
 
                 $result = [];
                 if ($request->charge_code_id[0] != null) {
-                    foreach ($request->charge_code_id as $key => $val) {
+                    foreach (array_unique($request->charge_code_id) as $key => $val) {
                         $result[] = [
                             'charge_table_id' => $charge_table->id,
                             'charge_code_id'       => $val,
-                            'qty'       => $request->qty[$key],
-                            'cargo'       => $request->cargo[$key],
-                            'dg'       => $request->dg[$key],
-                            'uom_id'       => $request->uom_id[$key],
-                            'chg'       => $request->chg[$key],
-                            'vat_code_id'       => $request->vat_code_id[$key],
-                            'p_c'       => $request->p_c[$key],
-                            'chg_unit'       => $request->chg_unit[$key],
-                            'container_id'       => $request->container_id[$key],
-                            'rate'       => $request->rate[$key],
-                            'currency_id'       => $request->currency_id[$key],
+                            'qty'       => !empty($request->qty[$key]) ? $request->qty[$key] : 0,
+                            'cargo'       => !empty($request->cargo[$key]) ? $request->cargo[$key] : null,
+                            'dg'       => !empty($request->dg[$key]) ? $request->dg[$key] : null,
+                            'uom_id'       => !empty($request->uom_id[$key]) ? $request->uom_id[$key] : 0,
+                            'chg'       => !empty($request->chg[$key]) ? $request->chg[$key] : null,
+                            'vat_code_id'       => !empty($request->vat_code_id[$key]) ? $request->vat_code_id[$key] : null,
+                            'p_c'       => !empty($request->p_c[$key]) ? $request->p_c[$key] : null,
+                            'chg_unit'       => !empty($request->chg_unit[$key]) ? $request->chg_unit[$key] : null,
+                            'container_id'       => !empty($request->container_id[$key]) ? $request->container_id[$key] : null,
+                            'rate'       => !empty($request->rate[$key]) ? $request->rate[$key] : null,
+                            'currency_id'       => !empty($request->currency_id[$key]) ? $request->currency_id[$key] : null,
                             'min_amt'       => ($request->min_amt[$key] != null) ?  str_replace(",", "", $request->min_amt[$key]) : 0,
                             'amt'       => ($request->amt[$key] != null) ?  str_replace(",", "", $request->amt[$key]) : 0,
-                            'cost'       => ($request->cost[$key] != null) ?  str_replace(",", "", $request->cost[$key]) : 0,
-                            'percent'       => ($request->percent[$key] != null) ?  str_replace(",", "", $request->percent[$key]) : 0,
                             'created_at' => now(),
                             'updated_at' => now(),
                         ];
@@ -193,9 +194,11 @@ class ChargeTableController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(ChargeTable $charge_table)
+    public function edit($id)
     {
         if (Auth::user()->hasPermission('edit-charge_table')) {
+            $charge_table = ChargeTable::with('charge_table_detail_satu')->where('id', $id)->first();
+
             $effective_date = ($charge_table->effective_date != null) ? date('d/m/Y', strtotime($charge_table->effective_date)) : null;
             $exp_date = ($charge_table->exp_date != null) ? date('d/m/Y', strtotime($charge_table->exp_date)) : null;
             $c_detail = ChargeTableD1::where('charge_table_id', $charge_table->id)->get();
@@ -227,7 +230,6 @@ class ChargeTableController extends Controller
                 $charge_table = ChargeTable::find($id);
                 $charge_table->description = $request->description;
                 $charge_table->job_type_id = $request->job_type_id;
-                $charge_table->module_code = $request->module_code;
                 $charge_table->transit_time = $request->transit_time;
                 $charge_table->frequency = $request->frequency;
                 $charge_table->bisnis_party_id = $request->bisnis_party_id;
@@ -252,25 +254,23 @@ class ChargeTableController extends Controller
                 $charge_table->charge_table_detail_satu()->delete();
                 $result = [];
                 if ($request->charge_code_id[0] != null) {
-                    foreach ($request->charge_code_id as $key => $val) {
+                    foreach (array_unique($request->charge_code_id) as $key => $val) {
                         $result[] = [
                             'charge_table_id' => $charge_table->id,
                             'charge_code_id'       => $val,
-                            'qty'       => $request->qty[$key],
-                            'cargo'       => $request->cargo[$key],
-                            'dg'       => $request->dg[$key],
-                            'uom_id'       => $request->uom_id[$key],
-                            'chg'       => $request->chg[$key],
-                            'vat_code_id'       => $request->vat_code_id[$key],
-                            'p_c'       => $request->p_c[$key],
-                            'chg_unit'       => $request->chg_unit[$key],
-                            'container_id'       => $request->container_id[$key],
-                            'rate'       => $request->rate[$key],
-                            'currency_id'       => $request->currency_id[$key],
+                            'qty'       => !empty($request->qty[$key]) ? $request->qty[$key] : 0,
+                            'cargo'       => !empty($request->cargo[$key]) ? $request->cargo[$key] : null,
+                            'dg'       => !empty($request->dg[$key]) ? $request->dg[$key] : null,
+                            'uom_id'       => !empty($request->uom_id[$key]) ? $request->uom_id[$key] : 0,
+                            'chg'       => !empty($request->chg[$key]) ? $request->chg[$key] : null,
+                            'vat_code_id'       => !empty($request->vat_code_id[$key]) ? $request->vat_code_id[$key] : null,
+                            'p_c'       => !empty($request->p_c[$key]) ? $request->p_c[$key] : null,
+                            'chg_unit'       => !empty($request->chg_unit[$key]) ? $request->chg_unit[$key] : null,
+                            'container_id'       => !empty($request->container_id[$key]) ? $request->container_id[$key] : null,
+                            'rate'       => !empty($request->rate[$key]) ? $request->rate[$key] : null,
+                            'currency_id'       => !empty($request->currency_id[$key]) ? $request->currency_id[$key] : null,
                             'min_amt'       => ($request->min_amt[$key] != null) ?  str_replace(",", "", $request->min_amt[$key]) : 0,
                             'amt'       => ($request->amt[$key] != null) ?  str_replace(",", "", $request->amt[$key]) : 0,
-                            'cost'       => ($request->cost[$key] != null) ?  str_replace(",", "", $request->cost[$key]) : 0,
-                            'percent'       => ($request->percent[$key] != null) ?  str_replace(",", "", $request->percent[$key]) : 0,
                             'created_at' => now(),
                             'updated_at' => now(),
                         ];

@@ -43,9 +43,9 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="job_type_id">Job Type / Module </label>
+                                    <label for="job_type_id">Job Type </label>
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <select name="job_type_id"
                                                 class="job-type @error('job_type_id') is-invalid @enderror">
                                                 <option value="{{ $cost_table->job_type_id }}">
@@ -58,25 +58,15 @@
                                                 </div>
                                             @enderror
                                         </div>
-                                        <div class="col-md-6">
-                                            <select name="module_code"
-                                                class="module-code @error('module_code') is-invalid @enderror">
-                                                <option value="{{ $cost_table->module_code }}">
-                                                    {{ $cost_table->module_code }}</option>
-                                            </select>
-                                            @error('module_code')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                        </div>
+
                                     </div>
                                 </div>
 
                                 <div class="row mt-3">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="effective_date">Effective Date </label>
+                                            <label for="effective_date">Effective Date <span
+                                                    style="color: red;">*</span></label>
                                             <input type="text" value="{{ old('effective_date', $effective_date) }}"
                                                 autocomplete="off"
                                                 class="form-control @error('effective_date') is-invalid @enderror date-picker"
@@ -366,7 +356,8 @@
 
                                                     <td>
                                                         <div class="form-group">
-                                                            <input type="text" class="form-control"
+                                                            <input type="text" class="form-control qty-input"
+                                                                id="qty-input-1"
                                                                 value="{{ number_format($item->qty, 4, '.', ',') }}"
                                                                 autocomplete="off" data-type='currency4' name="qty[]">
                                                         </div>
@@ -458,29 +449,18 @@
                                                                     CONTAINER</option>
                                                                 <option value="REV TON" @selected($item->chg_unit == 'REV TON')>REV
                                                                     TON</option>
-                                                                <option value="REV TON RND UP"
-                                                                    @selected($item->chg_unit == 'REV TON RND UP')>REV TON RND UP</option>
-                                                                <option value="REV TON CUSTOM"
-                                                                    @selected($item->chg_unit == 'REV TON CUSTOM')>REV TON CUSTOM</option>
                                                                 <option value="SHIPMENT" @selected($item->chg_unit == 'SHIPMENT')>
                                                                     SHIPMENT</option>
                                                                 <option value="HOUSE" @selected($item->chg_unit == 'HOUSE')>HOUSE
                                                                 </option>
-                                                                <option value="SUBHOUSE B/L" @selected($item->chg_unit == 'SUBHOUSE B/L')>
-                                                                    SUBHOUSE B/L</option>
+
                                                                 <option value="VOLUME" @selected($item->chg_unit == 'VOLUME')>VOLUME
                                                                 </option>
                                                                 <option value="WEIGHT" @selected($item->chg_unit == 'WEIGHT')>WEIGHT
                                                                 </option>
                                                                 <option value="PCS" @selected($item->chg_unit == 'PCS')>PCS
                                                                 </option>
-                                                                <option value="BLOCK OF 4 M3"
-                                                                    @selected($item->chg_unit == 'BLOCK OF 4 M3')>BLOCK OF 4 M3</option>
-                                                                <option value="BLOCK OF 3 M3"
-                                                                    @selected($item->chg_unit == 'BLOCK OF 3 M3')>BLOCK OF 3 M3</option>
-                                                                <option value="INVOICE CHARGE WEIGHT"
-                                                                    @selected($item->chg_unit == 'INVOICE CHARGE WEIGHT')>INVOICE CHARGE WEIGHT
-                                                                </option>
+
                                                             </select>
                                                         </div>
                                                     </td>
@@ -577,8 +557,9 @@
 
                                                 <td>
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" autocomplete="off"
-                                                            data-type='currency4' name="qty[]">
+                                                        <input type="text" class="form-control qty-input"
+                                                            id="qty-input-1" autocomplete="off" data-type='currency4'
+                                                            name="qty[]">
                                                     </div>
                                                 </td>
 
@@ -647,18 +628,11 @@
                                                             <option value="">Search</option>
                                                             <option value="CONTAINER">CONTAINER</option>
                                                             <option value="REV TON">REV TON</option>
-                                                            <option value="REV TON RND UP">REV TON RND UP</option>
-                                                            <option value="REV TON CUSTOM">REV TON CUSTOM</option>
                                                             <option value="SHIPMENT">SHIPMENT</option>
                                                             <option value="HOUSE">HOUSE</option>
-                                                            <option value="SUBHOUSE B/L">SUBHOUSE B/L</option>
                                                             <option value="VOLUME">VOLUME</option>
                                                             <option value="WEIGHT">WEIGHT</option>
                                                             <option value="PCS">PCS</option>
-                                                            <option value="BLOCK OF 4 M3">BLOCK OF 4 M3</option>
-                                                            <option value="BLOCK OF 3 M3">BLOCK OF 3 M3</option>
-                                                            <option value="INVOICE CHARGE WEIGHT">INVOICE CHARGE WEIGHT
-                                                            </option>
                                                         </select>
                                                     </div>
                                                 </td>
@@ -745,6 +719,7 @@
         let uom = ".uom-select";
         let vat = ".vat-select";
         let container = ".container-select";
+        let qty_input = ".qty-input";
         let maxFields = MAX_FIELD;
 
         function totalFields() {
@@ -766,9 +741,7 @@
                 field.find(currency).empty();
                 field.find(uom).empty();
                 field.find(vat).empty();
-                field.children("label").text("Field " + count);
-                field.find("input").val("");
-                field.find(".select2-container").empty();
+                field.find(qty_input).attr("id", "qty-input-" + count);
                 field.find(charge_code).attr("id", "charge-code-select-" + count).select2({
                     placeholder: 'Search item code',
                     width: "100%",
@@ -916,7 +889,10 @@
                     width: "100%",
                     allowClear: true,
                 });
-
+                field.children("label").text("Field " + count);
+                field.find("input").val("");
+                field.find(".select2-container").remove();
+                field.find(".select2-container").empty();
                 $(className + ":last").after($(field));
 
                 $(`#charge-code-select-${count}`).select2({
@@ -1271,6 +1247,52 @@
                     }
                 });
 
+                $(`.chgunit-select`).change(function(e) {
+                    e.preventDefault();
+                    let val = $(this).val();
+                    if (val == "REV TON") {
+                        $(`#chg-select-${count}`).attr("disabled", true);
+                        $(`#pc-select-${count}`).attr("disabled", true);
+                        $(`#container-select-${count}`).attr("disabled", true);
+                        $(`#qty-input-${count}`).attr("disabled", false);
+                        $(`#cargo-select-${count}`).attr("disabled", false);
+                        $(`#dg-select-${count}`).attr("disabled", false);
+                        $(`#uom-select-${count}`).attr("disabled", false);
+                    } else if (val == "SHIPMENT") {
+                        $(`#qty-input-${count}`).attr("disabled", true);
+                        $(`#cargo-select-${count}`).attr("disabled", true);
+                        $(`#dg-select-${count}`).attr("disabled", true);
+                        $(`#uom-select-${count}`).attr("disabled", true);
+                        $(`#container-select-${count}`).attr("disabled", true);
+                        $(`#chg-select-${count}`).attr("disabled", false);
+                        $(`#pc-select-${count}`).attr("disabled", false);
+                    } else if (val == "VOLUME" || val == "WEIGHT" || val == "PCS") {
+                        $(`#container-select-${count}`).attr("disabled", true);
+                        $(`#qty-input-${count}`).attr("disabled", false);
+                        $(`#cargo-select-${count}`).attr("disabled", false);
+                        $(`#dg-select-${count}`).attr("disabled", false);
+                        $(`#uom-select-${count}`).attr("disabled", false);
+                        $(`#chg-select-${count}`).attr("disabled", false);
+                        $(`#pc-select-${count}`).attr("disabled", false);
+                    } else {
+                        $(`#container-select-${count}`).attr("disabled", false);
+                        $(`#qty-input-${count}`).attr("disabled", false);
+                        $(`#cargo-select-${count}`).attr("disabled", false);
+                        $(`#dg-select-${count}`).attr("disabled", false);
+                        $(`#uom-select-${count}`).attr("disabled", false);
+                        $(`#chg-select-${count}`).attr("disabled", false);
+                        $(`#pc-select-${count}`).attr("disabled", false);
+                    }
+                });
+
+                $(`#container-select-${count}`).attr("disabled", false);
+                $(`#qty-input-${count}`).attr("disabled", false);
+                $(`#cargo-select-${count}`).attr("disabled", false);
+                $(`#dg-select-${count}`).attr("disabled", false);
+                $(`#uom-select-${count}`).attr("disabled", false);
+                $(`#chg-select-${count}`).attr("disabled", false);
+                $(`#pc-select-${count}`).attr("disabled", false);
+
             } else {
                 alert(`Maximum ${maxFields} line`);
             }
@@ -1575,6 +1597,44 @@
                 },
             });
 
+            $(`.chgunit-select`).change(function(e) {
+                e.preventDefault();
+                let val = $(this).val();
+                if (val == "REV TON") {
+                    $("#chg-select-1").attr("disabled", true);
+                    $("#pc-select-1").attr("disabled", true);
+                    $("#container-select-1").attr("disabled", true);
+                    $("#qty-input-1").attr("disabled", false);
+                    $("#cargo-select-1").attr("disabled", false);
+                    $("#dg-select-1").attr("disabled", false);
+                    $("#uom-select-1").attr("disabled", false);
+                } else if (val == "SHIPMENT") {
+                    $("#qty-input-1").attr("disabled", true);
+                    $("#cargo-select-1").attr("disabled", true);
+                    $("#dg-select-1").attr("disabled", true);
+                    $("#uom-select-1").attr("disabled", true);
+                    $("#container-select-1").attr("disabled", true);
+                    $("#chg-select-1").attr("disabled", false);
+                    $("#pc-select-1").attr("disabled", false);
+                } else if (val == "VOLUME" || val == "WEIGHT" || val == "PCS") {
+                    $("#container-select-1").attr("disabled", true);
+                    $("#qty-input-1").attr("disabled", false);
+                    $("#cargo-select-1").attr("disabled", false);
+                    $("#dg-select-1").attr("disabled", false);
+                    $("#uom-select-1").attr("disabled", false);
+                    $("#chg-select-1").attr("disabled", false);
+                    $("#pc-select-1").attr("disabled", false);
+                } else {
+                    $("#container-select-1").attr("disabled", false);
+                    $("#qty-input-1").attr("disabled", false);
+                    $("#cargo-select-1").attr("disabled", false);
+                    $("#dg-select-1").attr("disabled", false);
+                    $("#uom-select-1").attr("disabled", false);
+                    $("#chg-select-1").attr("disabled", false);
+                    $("#pc-select-1").attr("disabled", false);
+                }
+            });
+
             $('.chgunit-select').select2({
                 placeholder: 'Search chg unit',
                 width: "100%",
@@ -1609,6 +1669,36 @@
                 placeholder: 'Search rate',
                 width: "100%",
                 allowClear: true,
+            });
+
+            $('.vendor-select').select2({
+                placeholder: 'Search vendor',
+                width: "100%",
+                allowClear: true,
+                ajax: {
+                    url: '{{ route('get.bisnis.party') }}',
+                    dataType: 'json',
+                    type: 'POST',
+                    delay: 250,
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data, function(item) {
+                                return {
+                                    text: `${item.code}`,
+                                    id: item.id,
+                                    custom_attribute: item.name
+                                }
+                            })
+                        };
+                    },
+                    cache: false
+                }
+            });
+
+            $(".vendor-select").change(function(e) {
+                e.preventDefault();
+                let desc = $(this).select2('data')[0].custom_attribute;
+                $("input[name=bisnis_party_name]").val(desc);
             });
 
             $('.container-select').select2({
@@ -1699,8 +1789,8 @@
 
             });
 
-            $('.vendor-select').select2({
-                placeholder: 'Search vendor',
+            $('.customer-select').select2({
+                placeholder: 'Search customer',
                 width: "100%",
                 allowClear: true,
                 ajax: {
@@ -1723,7 +1813,7 @@
                 }
             });
 
-            $(".vendor-select").change(function(e) {
+            $(".customer-select").change(function(e) {
                 e.preventDefault();
                 let desc = $(this).select2('data')[0].custom_attribute;
                 $("input[name=bisnis_party_name]").val(desc);
@@ -1847,29 +1937,6 @@
                 e.preventDefault();
                 let desc = $(this).select2('data')[0].custom_attribute;
                 $("input[name=second_port_name]").val(desc);
-            });
-
-            $(`.module-code`).select2({
-                placeholder: 'Search module',
-                width: "100%",
-                allowClear: true,
-                ajax: {
-                    url: '{{ route('charge.job') }}',
-                    dataType: 'json',
-                    type: 'POST',
-                    delay: 0,
-                    processResults: function(data) {
-                        return {
-                            results: $.map(data, function(item) {
-                                return {
-                                    text: `${item.module_code}`,
-                                    id: item.module_code,
-                                }
-                            })
-                        };
-                    },
-                    cache: false
-                }
             });
 
             $(`.job-type`).select2({

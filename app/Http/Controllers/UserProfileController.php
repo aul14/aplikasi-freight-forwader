@@ -11,8 +11,13 @@ class UserProfileController extends Controller
     public function show()
     {
         $count =  History::where('user_id', auth()->user()->id)->count();
-        if ($count == 3) {
-            History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+        if ($count >= 3) {
+            $cek_double = History::where('user_id', auth()->user()->id)->where('menu', 'Profile')->count();
+            if ($cek_double > 1) {
+                History::where('user_id', auth()->user()->id)->where('menu', 'Profile')->limit(1)->delete();
+            } else {
+                History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+            }
             History::insert([
                 'user_id'   => auth()->user()->id,
                 'menu'      => 'Profile',

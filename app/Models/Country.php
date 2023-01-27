@@ -30,7 +30,7 @@ class Country extends Model
                 $detail_country_port->delete(); // <-- direct deletion
             });
             $country->detail_country_symbol()->each(function ($detail_country_symbol) {
-                $detail_country_symbol->delete(); // <-- raise another deleting event on Post to delete comments
+                $detail_country_symbol->delete();
             });
             // do the rest of the cleanup...
         });

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Airline;
+use App\Models\Airport;
 use App\Models\BisnisParty;
 use App\Models\Uom;
 use App\Models\City;
@@ -16,16 +18,115 @@ use App\Models\Currency;
 use App\Models\Customer;
 use App\Models\Salesman;
 use App\Models\ChargeCode;
+use App\Models\ChargeTable;
+use App\Models\Commodity;
 use App\Models\Container;
+use App\Models\CurrencyDetailSatu;
 use App\Models\VendorType;
 use App\Models\PaymentTerm;
 use App\Models\CustomerType;
+use App\Models\DeliveryType;
+use App\Models\QuotationType;
 use App\Models\ShippingLine;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class DataAjaxController extends Controller
 {
+    public function ajax_change_date(Request $request)
+    {
+        $data = date('d/m/Y', strtotime(now()->addDays($request->value)));
+
+        return response()->json($data);
+    }
+
+    public function ajax_format_currency(Request $request)
+    {
+        $data = number_format($request->total, 2, ".", ",");
+
+        return response()->json($data);
+    }
+
+    public function ajax_commodity(Request $request)
+    {
+        $search = strtoupper($request->q);
+
+        $commodity = [];
+        if ($request->ajax()) {
+            if ($search == '') {
+                $commodity = Commodity::orderby('code', 'asc')->select('id', 'code', 'description')->limit(10)->get();
+            } else {
+                $commodity = Commodity::orderby('code', 'asc')->select('id', 'code', 'description')->where('code', 'like', "%$search%")->orWhere('description', 'like', "%$search%")->limit(10)->get();
+            }
+        }
+
+        return response()->json($commodity);
+    }
+
+    public function ajax_get_airport(Request $request)
+    {
+        $search = strtoupper($request->q);
+
+        $airport = [];
+        if ($request->ajax()) {
+            if ($search == '') {
+                $airport = Airport::orderby('code', 'asc')->select('id', 'code', 'name')->limit(10)->get();
+            } else {
+                $airport = Airport::orderby('code', 'asc')->select('id', 'code', 'name')->where('code', 'like', "%$search%")->orWhere('name', 'like', "%$search%")->limit(10)->get();
+            }
+        }
+
+        return response()->json($airport);
+    }
+
+    public function ajax_get_airline(Request $request)
+    {
+        $search = strtoupper($request->q);
+
+        $airline = [];
+        if ($request->ajax()) {
+            if ($search == '') {
+                $airline = Airline::orderby('code', 'asc')->select('id', 'code', 'name', 'airline_id')->limit(10)->get();
+            } else {
+                $airline = Airline::orderby('code', 'asc')->select('id', 'code', 'name', 'airline_id')->where('code', 'like', "%$search%")->orWhere('name', 'like', "%$search%")->orWhere('airline_id', 'like', "%$search%")->limit(10)->get();
+            }
+        }
+
+        return response()->json($airline);
+    }
+
+    public function ajax_del_type(Request $request)
+    {
+        $search = strtoupper($request->q);
+
+        $type = [];
+        if ($request->ajax()) {
+            if ($search == '') {
+                $type = DeliveryType::orderby('type', 'asc')->select('id', 'type', 'description')->limit(10)->get();
+            } else {
+                $type = DeliveryType::orderby('type', 'asc')->select('id', 'type', 'description')->where('type', 'like', "%$search%")->orWhere('description', 'like', "%$search%")->limit(10)->get();
+            }
+        }
+
+        return response()->json($type);
+    }
+
+    public function ajax_quot_type(Request $request)
+    {
+        $search = strtoupper($request->q);
+
+        $type = [];
+        if ($request->ajax()) {
+            if ($search == '') {
+                $type = QuotationType::orderby('type', 'asc')->select('id', 'type', 'description')->limit(10)->get();
+            } else {
+                $type = QuotationType::orderby('type', 'asc')->select('id', 'type', 'description')->where('type', 'like', "%$search%")->orWhere('description', 'like', "%$search%")->limit(10)->get();
+            }
+        }
+
+        return response()->json($type);
+    }
+
     public function ajax_get_port(Request $request)
     {
         $search = strtoupper($request->q);
@@ -78,16 +179,29 @@ class DataAjaxController extends Controller
     {
         $search = strtoupper($request->q);
 
-        $jobs = [];
+        $currency = [];
         if ($request->ajax()) {
             if ($search == '') {
-                $jobs = Currency::orderby('id', 'asc')->limit(10)->get();
+                $currency = Currency::orderby('id', 'asc')->limit(10)->get();
             } else {
-                $jobs = Currency::orderby('id', 'asc')->where('code', 'like', "%$search%")->orWhere('description', 'like', "%$search%")->limit(10)->get();
+                $currency = Currency::orderby('id', 'asc')->where('code', 'like', "%$search%")->orWhere('description', 'like', "%$search%")->limit(10)->get();
             }
         }
 
-        return response()->json($jobs);
+        return response()->json($currency);
+    }
+
+    public function ajax_get_detail_currency(Request $request)
+    {
+        $search = strtoupper($request->code);
+
+        if ($request->ajax()) {
+            $currency = Currency::with('currency_detail_satu')->where('code', $search)->first();
+
+            $detail = CurrencyDetailSatu::orderby('date', 'desc')->where('currency_id', $currency->id)->first()->curr_rate;
+        }
+
+        return response()->json(number_format($detail, 2, ".", ","));
     }
 
     public function ajax_get_container(Request $request)
@@ -340,6 +454,22 @@ class DataAjaxController extends Controller
                 $vat = BisnisParty::orderby('id', 'asc')->limit(10)->get();
             } else {
                 $vat = BisnisParty::orderby('id', 'asc')->where('code', 'like', "%$search%")->orWhere('name', 'like', "%$search%")->limit(10)->get();
+            }
+        }
+
+        return response()->json($vat);
+    }
+
+    public function ajax_get_charge_table(Request $request)
+    {
+        $search = strtoupper($request->q);
+
+        $vat = [];
+        if ($request->ajax()) {
+            if ($search == '') {
+                $vat = ChargeTable::orderby('id', 'asc')->limit(10)->get();
+            } else {
+                $vat = ChargeTable::orderby('id', 'asc')->where('code', 'like', "%$search%")->orWhere('description', 'like', "%$search%")->limit(10)->get();
             }
         }
 

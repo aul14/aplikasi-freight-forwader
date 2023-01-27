@@ -31,14 +31,13 @@
                                         </div>
                                     @enderror
                                 </div>
+
                                 <div class="form-group">
                                     <label for="module_id">Module <span style="color: red;">*</span></label>
-                                    <select name="module_id" data-live-search="true" id="module_id"
-                                        class="form-control chosen-select" required>
-                                        <option value=""></option>
+                                    <select name="module_id" class="module-id" required>
+                                        <option value="">Search</option>
                                         @foreach ($modules as $module)
-                                            <option value="{{ $module->id }}"
-                                                {{ Input::old('module_id') == $module->id ? 'selected' : '' }}>
+                                            <option value="{{ $module->id }}" @selected(old('module_id') == $module->id)>
                                                 {{ $module->name }}</option>
                                         @endforeach
                                     </select>
@@ -84,4 +83,15 @@
             </div>
         </div>
     </div>
+@endsection
+@section('script')
+    <script>
+        $(function() {
+            $('.module-id').select2({
+                placeholder: 'Search...',
+                width: "100%",
+                allowClear: true,
+            });
+        });
+    </script>
 @endsection

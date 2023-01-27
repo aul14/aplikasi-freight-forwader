@@ -19,7 +19,7 @@ class IncotermsController extends Controller
     {
         if (Auth::user()->hasPermission('manage-incoterms')) {
             if ($request->ajax()) {
-                $incoterms = Incoterms::all()->sortByDesc("id");
+                $incoterms = Incoterms::select('*');
                 return DataTables::of($incoterms)
                     ->addColumn('action', function ($incoterms) {
                         return view('datatable-modal._action', [
@@ -39,8 +39,13 @@ class IncotermsController extends Controller
             }
 
             $count =  History::where('user_id', auth()->user()->id)->count();
-            if ($count == 3) {
-                History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+            if ($count >= 3) {
+                $cek_double = History::where('user_id', auth()->user()->id)->where('menu', 'Incoterms')->count();
+                if ($cek_double > 1) {
+                    History::where('user_id', auth()->user()->id)->where('menu', 'Incoterms')->limit(1)->delete();
+                } else {
+                    History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+                }
                 History::insert([
                     'user_id'   => auth()->user()->id,
                     'menu'      => 'Incoterms',

@@ -22,7 +22,7 @@ class VendorController extends Controller
     {
         if (Auth::user()->hasPermission('manage-vendor')) {
             if ($request->ajax()) {
-                $vendor = Vendor::all()->sortByDesc("id");
+                $vendor = Vendor::select('*');
                 return DataTables::of($vendor)
                     ->addColumn('action', function ($vendor) {
                         return view('datatable-modal._action', [
@@ -42,7 +42,7 @@ class VendorController extends Controller
             }
 
             $count =  History::where('user_id', auth()->user()->id)->count();
-            if ($count == 3) {
+            if ($count >= 3) {
                 History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
                 History::insert([
                     'user_id'   => auth()->user()->id,

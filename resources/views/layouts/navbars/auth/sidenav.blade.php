@@ -105,12 +105,12 @@
 
             {{-- MENU MASTER --}}
             <li class="nav-item ">
-                <a aria-expanded="{{ Request::is('country*') || Request::is('cost_table*') || Request::is('charge_table*') || Request::is('city*') || Request::is('port*') || Request::is('commodity*') || Request::is('container*') || Request::is('job_type*') || Request::is('currency*') || Request::is('vat_code*') || Request::is('uom*') || Request::is('charge_code*') || Request::is('wt_code*') || Request::is('party_type*') || Request::is('pay_term*') || Request::is('salesman*') || Request::is('bisnis_party*') || Request::is('airport*') || Request::is('airline*') || Request::is('shipline*') || Request::is('vessel*') || Request::is('incoterms*') ? 'true' : 'false' }}"
+                <a aria-expanded="{{ Request::is('country*') || Request::is('cost_table*') || Request::is('charge_table*') || Request::is('city*') || Request::is('port*') || Request::is('commodity*') || Request::is('container*') || Request::is('job_type*') || Request::is('currency*') || Request::is('vat_code*') || Request::is('uom*') || Request::is('charge_code*') || Request::is('wt_code*') || Request::is('party_type*') || Request::is('pay_term*') || Request::is('salesman*') || Request::is('bisnis_party*') || Request::is('airport*') || Request::is('airline*') || Request::is('shipline*') || Request::is('vessel*') || Request::is('incoterms*') || Request::is('quotation_type*') || Request::is('del_type*') ? 'true' : 'false' }}"
                     data-toggle="collapse" data-target="#collapseShow3" class="sidebar-menu-item nav-link ">
                     <div><span class="nav-link-text text-uppercase text-xs font-weight-bolder">Master <b
                                 class="caret"></b></span></div>
                 </a>
-                <div class="collapse {{ Request::is('country*') || Request::is('cost_table*') || Request::is('charge_table*') || Request::is('city*') || Request::is('port*') || Request::is('commodity*') || Request::is('container*') || Request::is('job_type*') || Request::is('currency*') || Request::is('vat_code*') || Request::is('uom*') || Request::is('charge_code*') || Request::is('wt_code*') || Request::is('party_type*') || Request::is('pay_term*') || Request::is('salesman*') || Request::is('bisnis_party*') || Request::is('airport*') || Request::is('airline*') || Request::is('shipline*') || Request::is('vessel*') || Request::is('incoterms*') ? 'show' : '' }}"
+                <div class="collapse {{ Request::is('country*') || Request::is('cost_table*') || Request::is('charge_table*') || Request::is('city*') || Request::is('port*') || Request::is('commodity*') || Request::is('container*') || Request::is('job_type*') || Request::is('currency*') || Request::is('vat_code*') || Request::is('uom*') || Request::is('charge_code*') || Request::is('wt_code*') || Request::is('party_type*') || Request::is('pay_term*') || Request::is('salesman*') || Request::is('bisnis_party*') || Request::is('airport*') || Request::is('airline*') || Request::is('shipline*') || Request::is('vessel*') || Request::is('incoterms*') || Request::is('quotation_type*') || Request::is('del_type*') ? 'show' : '' }}"
                     id="collapseShow3">
                     <ul class="nav nav-sm flex-column">
                         @permission('manage-airline')
@@ -279,6 +279,21 @@
                                 <ul class="navbar-nav"></ul>
                             </li>
                         @endpermission
+                        @permission('manage-del_type')
+                            <li class="nav-item">
+                                <!---->
+                                <div class="collapse ">
+                                    <ul class="nav nav-sm flex-column"></ul>
+                                </div> <a href="{{ route('del_type.index') }}"
+                                    class="nav-link {{ Request::is('del_type*') ? 'active' : '' }}">
+                                    <i class="fa fa-d text-primary text-sm opacity-10"></i>
+                                    <div>
+                                        <span class="nav-link-text">Delivery Type</span>
+                                    </div>
+                                </a>
+                                <ul class="navbar-nav"></ul>
+                            </li>
+                        @endpermission
                         @permission('manage-incoterms')
                             <li class="nav-item">
                                 <!---->
@@ -334,6 +349,21 @@
                                     <i class="fa fa-p text-primary text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Payment Term</span>
+                                    </div>
+                                </a>
+                                <ul class="navbar-nav"></ul>
+                            </li>
+                        @endpermission
+                        @permission('manage-quotation_type')
+                            <li class="nav-item">
+                                <!---->
+                                <div class="collapse ">
+                                    <ul class="nav nav-sm flex-column"></ul>
+                                </div> <a href="{{ route('quotation_type.index') }}"
+                                    class="nav-link {{ Request::is('quotation_type*') ? 'active' : '' }}">
+                                    <i class="fa fa-q text-primary text-sm opacity-10"></i>
+                                    <div>
+                                        <span class="nav-link-text">Quotation Type</span>
                                     </div>
                                 </a>
                                 <ul class="navbar-nav"></ul>
@@ -449,15 +479,60 @@
                 </div>
             </li>
 
+            {{-- MENU TRANSACTION --}}
+            <li class="nav-item ">
+                <a aria-expanded="{{ Request::is('sea_quot*') || Request::is('air_quot*') ? 'true' : 'false' }}"
+                    data-toggle="collapse" data-target="#collapseShow4" class="sidebar-menu-item nav-link ">
+                    <div><span class="nav-link-text text-uppercase text-xs font-weight-bolder">TRANSACTION <b
+                                class="caret"></b></span></div>
+                </a>
+                <div class="collapse {{ Request::is('sea_quot*') || Request::is('air_quot*') ? 'show' : '' }}"
+                    id="collapseShow4">
+                    <ul class="nav nav-sm flex-column">
+                        @permission('manage-air_quot')
+                            <li class="nav-item">
+                                <!---->
+                                <div class="collapse ">
+                                    <ul class="nav nav-sm flex-column"></ul>
+                                </div> <a href="{{ route('air_quot.index') }}"
+                                    class="nav-link {{ Request::is('air_quot*') ? 'active' : '' }}">
+                                    <i class="fa fa-a text-primary text-sm opacity-10"></i>
+                                    <div>
+                                        <span class="nav-link-text">Air Freight Quotation</span>
+                                    </div>
+                                </a>
+                                <ul class="navbar-nav"></ul>
+                            </li>
+                        @endpermission
+                        @permission('manage-sea_quot')
+                            <li class="nav-item">
+                                <!---->
+                                <div class="collapse ">
+                                    <ul class="nav nav-sm flex-column"></ul>
+                                </div> <a href="{{ route('sea_quot.index') }}"
+                                    class="nav-link {{ Request::is('sea_quot*') ? 'active' : '' }}">
+                                    <i class="fa fa-s text-primary text-sm opacity-10"></i>
+                                    <div>
+                                        <span class="nav-link-text">Sea Freight Quotation</span>
+                                    </div>
+                                </a>
+                                <ul class="navbar-nav"></ul>
+                            </li>
+                        @endpermission
+
+                    </ul>
+                </div>
+            </li>
+
             {{-- MENU SETTINGS --}}
             <li class="nav-item ">
                 <a aria-expanded="{{ Request::is('profile*') || Request::is('users*') || Request::is('modules*') || Request::is('permissions*') || Request::is('roles*') || Request::is('company*') || Request::is('sys_numbering*') ? 'true' : 'false' }}"
-                    data-toggle="collapse" data-target="#collapseShow4" class="sidebar-menu-item nav-link ">
+                    data-toggle="collapse" data-target="#collapseShow5" class="sidebar-menu-item nav-link ">
                     <div><span class="nav-link-text text-uppercase text-xs font-weight-bolder">Settings <b
                                 class="caret"></b></span></div>
                 </a>
                 <div class="collapse {{ Request::is('profile*') || Request::is('users*') || Request::is('modules*') || Request::is('permissions*') || Request::is('roles*') || Request::is('company*') || Request::is('sys_numbering*') ? 'show' : '' }}"
-                    id="collapseShow4">
+                    id="collapseShow5">
                     <ul class="nav nav-sm flex-column">
                         @permission('manage-company')
                             <li class="nav-item">

@@ -7,7 +7,7 @@
                         ©
                         <script>
                             document.write(new Date().getFullYear())
-                        </script>, V.1
+                        </script>, {{ Cache::get('db-connection') }}, V.1
 
                     </div>
                 </div>

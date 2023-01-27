@@ -40,10 +40,10 @@
                                                     <div class="form-group">
                                                         <label for="code">Country Code <span
                                                                 style="color: red;">*</span></label>
-                                                        <input type="text" autocomplete="off"
+                                                        <input type="text" readonly
                                                             value="{{ old('code', $country->code) }}"
                                                             class="form-control @error('code') is-invalid @enderror"
-                                                            required name="code" id="code">
+                                                            name="code" id="code">
                                                         @error('code')
                                                             <div class="invalid-feedback">
                                                                 {{ $message }}

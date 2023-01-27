@@ -20,7 +20,7 @@ class VesselController extends Controller
     {
         if (Auth::user()->hasPermission('manage-vessel')) {
             if ($request->ajax()) {
-                $vessel = Vessel::all()->sortByDesc("id");
+                $vessel = Vessel::select('*');
                 return DataTables::of($vessel)
                     ->addColumn('action', function ($vessel) {
                         return view('datatable-modal._action', [
@@ -46,8 +46,13 @@ class VesselController extends Controller
             }
 
             $count =  History::where('user_id', auth()->user()->id)->count();
-            if ($count == 3) {
-                History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+            if ($count >= 3) {
+                $cek_double = History::where('user_id', auth()->user()->id)->where('menu', 'Vessel')->count();
+                if ($cek_double > 1) {
+                    History::where('user_id', auth()->user()->id)->where('menu', 'Vessel')->limit(1)->delete();
+                } else {
+                    History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+                }
                 History::insert([
                     'user_id'   => auth()->user()->id,
                     'menu'      => 'Vessel',

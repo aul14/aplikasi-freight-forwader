@@ -16,8 +16,14 @@ class AdminSeederTable extends Seeder
      *
      * @return void
      */
+
     public function run()
     {
+        // Role::truncate();
+        // User::truncate();
+        // Module::truncate();
+        // Permission::truncate();
+
         // PROFILE
         $moduleProfile = Module::create([
             'name'      => 'Module Profile'
@@ -1091,6 +1097,154 @@ class AdminSeederTable extends Seeder
             ]);
         }
 
+        // QUOTATION TYPE
+        $moduleQuotationType = Module::create([
+            'name' => 'Module Quotation Type'
+        ]);
+
+        $permissionmoduleQuotationType = [
+            [
+                'name' => 'manage-quotation_type',
+                'display_name' => 'Manage Quotation Type',
+                'description' => 'Can Manage Quotation Type'
+            ],
+            [
+                'name' => 'create-quotation_type',
+                'display_name' => 'Create Quotation Type',
+                'description' => 'Can Create Quotation Type'
+            ],
+            [
+                'name' => 'edit-quotation_type',
+                'display_name' => 'Edit Quotation Type',
+                'description' => 'Can Edit Quotation Type'
+            ],
+            [
+                'name' => 'delete-quotation_type',
+                'display_name' => 'Delete Quotation Type',
+                'description' => 'Can Delete Quotation Type'
+            ]
+        ];
+
+        foreach ($permissionmoduleQuotationType as $key) {
+            Permission::create([
+                'name' => $key['name'],
+                'display_name' => $key['display_name'],
+                'description' => $key['description'],
+                'module_id' => $moduleQuotationType->id
+            ]);
+        }
+
+        // SEA FREIGHT QUOTATION
+        $moduleSeaQuotation = Module::create([
+            'name' => 'Module Sea Freight Quotation'
+        ]);
+
+        $permissionmoduleSeaQuotation = [
+            [
+                'name' => 'manage-sea_quot',
+                'display_name' => 'Manage Sea Freight Quotation',
+                'description' => 'Can Manage Sea Freight Quotation'
+            ],
+            [
+                'name' => 'create-sea_quot',
+                'display_name' => 'Create Sea Freight Quotation',
+                'description' => 'Can Create Sea Freight Quotation'
+            ],
+            [
+                'name' => 'edit-sea_quot',
+                'display_name' => 'Edit Sea Freight Quotation',
+                'description' => 'Can Edit Sea Freight Quotation'
+            ],
+            [
+                'name' => 'delete-sea_quot',
+                'display_name' => 'Delete Sea Freight Quotation',
+                'description' => 'Can Delete Sea Freight Quotation'
+            ]
+        ];
+
+        foreach ($permissionmoduleSeaQuotation as $key) {
+            Permission::create([
+                'name' => $key['name'],
+                'display_name' => $key['display_name'],
+                'description' => $key['description'],
+                'module_id' => $moduleSeaQuotation->id
+            ]);
+        }
+
+        // DELIVERY TYPE
+        $moduleDeliveryType = Module::create([
+            'name' => 'Module Delivery Type'
+        ]);
+
+        $permissionmoduleDeliveryType = [
+            [
+                'name' => 'manage-del_type',
+                'display_name' => 'Manage Delivery Type',
+                'description' => 'Can Manage Delivery Type'
+            ],
+            [
+                'name' => 'create-del_type',
+                'display_name' => 'Create Delivery Type',
+                'description' => 'Can Create Delivery Type'
+            ],
+            [
+                'name' => 'edit-del_type',
+                'display_name' => 'Edit Delivery Type',
+                'description' => 'Can Edit Delivery Type'
+            ],
+            [
+                'name' => 'delete-del_type',
+                'display_name' => 'Delete Delivery Type',
+                'description' => 'Can Delete Delivery Type'
+            ]
+        ];
+
+        foreach ($permissionmoduleDeliveryType as $key) {
+            Permission::create([
+                'name' => $key['name'],
+                'display_name' => $key['display_name'],
+                'description' => $key['description'],
+                'module_id' => $moduleDeliveryType->id
+            ]);
+        }
+
+        // AIR FREIGHT QUOTATION
+        $moduleAirQuotation = Module::create([
+            'name' => 'Module Air Freight Quotation'
+        ]);
+
+        $permissionmoduleAirQuotation = [
+            [
+                'name' => 'manage-air_quot',
+                'display_name' => 'Manage Air Freight Quotation',
+                'description' => 'Can Manage Air Freight Quotation'
+            ],
+            [
+                'name' => 'create-air_quot',
+                'display_name' => 'Create Air Freight Quotation',
+                'description' => 'Can Create Air Freight Quotation'
+            ],
+            [
+                'name' => 'edit-air_quot',
+                'display_name' => 'Edit Air Freight Quotation',
+                'description' => 'Can Edit Air Freight Quotation'
+            ],
+            [
+                'name' => 'delete-air_quot',
+                'display_name' => 'Delete Air Freight Quotation',
+                'description' => 'Can Delete Air Freight Quotation'
+            ]
+        ];
+
+        foreach ($permissionmoduleAirQuotation as $key) {
+            Permission::create([
+                'name' => $key['name'],
+                'display_name' => $key['display_name'],
+                'description' => $key['description'],
+                'module_id' => $moduleAirQuotation->id
+            ]);
+        }
+
         // SUPER ADMIN RULES
         Role::create([
             'name' => 'super_admin',
@@ -1216,6 +1370,22 @@ class AdminSeederTable extends Seeder
             'create-incoterms',
             'edit-incoterms',
             'delete-incoterms',
+            'manage-quotation_type',
+            'create-quotation_type',
+            'edit-quotation_type',
+            'delete-quotation_type',
+            'manage-sea_quot',
+            'create-sea_quot',
+            'edit-sea_quot',
+            'delete-sea_quot',
+            'manage-del_type',
+            'create-del_type',
+            'edit-del_type',
+            'delete-del_type',
+            'manage-air_quot',
+            'create-air_quot',
+            'edit-air_quot',
+            'delete-air_quot',
         ];
 
         $userAdmin = User::create([
@@ -1359,6 +1529,22 @@ class AdminSeederTable extends Seeder
             'create-incoterms',
             'edit-incoterms',
             'delete-incoterms',
+            'manage-quotation_type',
+            'create-quotation_type',
+            'edit-quotation_type',
+            'delete-quotation_type',
+            'manage-sea_quot',
+            'create-sea_quot',
+            'edit-sea_quot',
+            'delete-sea_quot',
+            'manage-del_type',
+            'create-del_type',
+            'edit-del_type',
+            'delete-del_type',
+            'manage-air_quot',
+            'create-air_quot',
+            'edit-air_quot',
+            'delete-air_quot',
         ];
 
         $userOwner = User::create([

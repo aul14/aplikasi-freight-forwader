@@ -21,8 +21,13 @@ class SystemNumberingController extends Controller
         if (Auth::user()->hasPermission('manage-sys_numbering')) {
             // INSERT TABLE HISTORY
             $count =  History::where('user_id', auth()->user()->id)->count();
-            if ($count == 3) {
-                History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+            if ($count >= 3) {
+                $cek_double = History::where('user_id', auth()->user()->id)->where('menu', 'System Numbering')->count();
+                if ($cek_double > 1) {
+                    History::where('user_id', auth()->user()->id)->where('menu', 'System Numbering')->limit(1)->delete();
+                } else {
+                    History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+                }
                 History::insert([
                     'user_id'   => auth()->user()->id,
                     'menu'      => 'System Numbering',
@@ -40,7 +45,7 @@ class SystemNumberingController extends Controller
                 ]);
             }
 
-            $sys_num = SystemNumbering::all()->sortByDesc("id");
+            $sys_num = SystemNumbering::get('*');
             return view('sys_numbering.index', compact('sys_num'));
         } else {
             abort(403);
@@ -57,7 +62,7 @@ class SystemNumberingController extends Controller
         //
     }
 
-    /**
+    /*
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request

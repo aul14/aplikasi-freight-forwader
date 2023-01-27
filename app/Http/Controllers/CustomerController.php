@@ -47,7 +47,7 @@ class CustomerController extends Controller
             }
 
             $count =  History::where('user_id', auth()->user()->id)->count();
-            if ($count == 3) {
+            if ($count >= 3) {
                 History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
                 History::insert([
                     'user_id'   => auth()->user()->id,

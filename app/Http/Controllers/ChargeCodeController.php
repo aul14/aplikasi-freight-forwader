@@ -26,7 +26,7 @@ class ChargeCodeController extends Controller
     {
         if (Auth::user()->hasPermission('manage-charge_code')) {
             if ($request->ajax()) {
-                $charge_code = ChargeCode::all()->sortByDesc("charge_code.id");
+                $charge_code = ChargeCode::orderBy('id', 'DESC')->select('*');
                 return DataTables::of($charge_code)
                     ->addColumn('action', function ($charge_code) {
                         return view('datatable-modal._action', [
@@ -55,8 +55,13 @@ class ChargeCodeController extends Controller
             }
 
             $count =  History::where('user_id', auth()->user()->id)->count();
-            if ($count == 3) {
-                History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+            if ($count >= 3) {
+                $cek_double = History::where('user_id', auth()->user()->id)->where('menu', 'Charge Code')->count();
+                if ($cek_double > 1) {
+                    History::where('user_id', auth()->user()->id)->where('menu', 'Charge Code')->limit(1)->delete();
+                } else {
+                    History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+                }
                 History::insert([
                     'user_id'   => auth()->user()->id,
                     'menu'      => 'Charge Code',
@@ -110,11 +115,6 @@ class ChargeCodeController extends Controller
                     'cost_percent'     => 'max:17',
                     'sales_acc_code'     => 'max:15',
                     'cost_acc_code'     => 'max:15',
-                    'sales_provision_acc_code'     => 'max:15',
-                    'provision_acc_code'     => 'max:15',
-                    'sales_analysis_code'     => 'max:10',
-                    'item_short_code'     => 'max:10',
-                    'cost_analysis_code'     => 'max:10',
                     'site_code'     => 'max:20',
                 ],
                 [
@@ -128,27 +128,14 @@ class ChargeCodeController extends Controller
                 $charge_code = new ChargeCode();
                 $charge_code->item_code = $request->item_code;
                 $charge_code->item_description = $request->item_description;
-                $charge_code->local_name = $request->local_name;
-                $charge_code->charge_type = $request->charge_type;
-                $charge_code->job_type_id = $request->job_type_id;
                 $charge_code->dept_code = $request->dept_code;
                 $charge_code->sales_acc_code = $request->sales_acc_code;
-                $charge_code->sales_acc_desc = $request->sales_acc_desc;
                 $charge_code->cost_acc_code = $request->cost_acc_code;
-                $charge_code->cost_acc_desc = $request->cost_acc_desc;
-                $charge_code->sales_provision_acc_code = $request->sales_provision_acc_code;
-                $charge_code->sales_provision_acc_desc = $request->sales_provision_acc_desc;
-                $charge_code->provision_acc_code = $request->provision_acc_code;
-                $charge_code->provision_acc_desc = $request->provision_acc_desc;
                 $charge_code->currency_id = $request->currency_id;
                 $charge_code->uom_id = $request->uom_id;
-                $charge_code->consolidation_item_code = $request->consolidation_item_code;
-                $charge_code->consolidation_item_desc = $request->consolidation_item_desc;
-                $charge_code->sales_analysis_code = $request->sales_analysis_code;
                 $charge_code->wt_code_id = $request->wt_code_id;
                 $charge_code->cost_ammount = ($request->cost_ammount != null) ?  str_replace(",", "", $request->cost_ammount) : 0;
                 $charge_code->cost_percent = ($request->cost_percent != null) ?  str_replace(",", "", $request->cost_percent) : 0;
-                $charge_code->item_short_code = $request->item_short_code;
                 $charge_code->recoverable =  ($request->recoverable == "yes") ? true : false;
                 $charge_code->split_by_method = $request->split_by_method;
                 $charge_code->charge_unit = $request->charge_unit;
@@ -157,7 +144,6 @@ class ChargeCodeController extends Controller
                 $charge_code->cost_code = $request->cost_code;
                 $charge_code->cost_code_desc = $request->cost_code_desc;
                 $charge_code->lock = ($request->lock == "yes") ? true : false;
-                $charge_code->cost_analysis_code = $request->cost_analysis_code;
                 $charge_code->sales_cost = $request->sales_cost;
                 $charge_code->site_code = $request->site_code;
                 $charge_code->save();
@@ -170,9 +156,7 @@ class ChargeCodeController extends Controller
                             'module'       => $val,
                             'job_type'       => $request->job_type[$key],
                             'sales_acc_code'       => $request->sales_acc_code_detail[$key],
-                            'sales_desc'       => $request->sales_desc[$key],
                             'cost_acc_code'       => $request->cost_acc_code_detail[$key],
-                            'cost_desc'       => $request->cost_desc[$key],
                             'adv_acc_code'       => $request->adv_acc_code[$key],
                             'created_at' => now(),
                             'updated_at' => now(),
@@ -235,17 +219,12 @@ class ChargeCodeController extends Controller
         if (Auth::user()->hasPermission('edit-charge_code')) {
             $request->validate(
                 [
-                    'item_code'    => 'required|max:30|unique:charge_code,item_code,' . $id,
+                    'item_code'    => 'max:30|unique:charge_code,item_code,' . $id,
                     'item_description'  => 'max:50',
                     'cost_ammount'     => 'max:17',
                     'cost_percent'     => 'max:17',
                     'sales_acc_code'     => 'max:15',
                     'cost_acc_code'     => 'max:15',
-                    'sales_provision_acc_code'     => 'max:15',
-                    'provision_acc_code'     => 'max:15',
-                    'sales_analysis_code'     => 'max:10',
-                    'item_short_code'     => 'max:10',
-                    'cost_analysis_code'     => 'max:10',
                     'site_code'     => 'max:20',
                 ],
                 [
@@ -257,29 +236,15 @@ class ChargeCodeController extends Controller
             DB::beginTransaction();
             try {
                 $charge_code = ChargeCode::find($id);
-                $charge_code->item_code = $request->item_code;
                 $charge_code->item_description = $request->item_description;
-                $charge_code->local_name = $request->local_name;
-                $charge_code->charge_type = $request->charge_type;
-                $charge_code->job_type_id = $request->job_type_id;
                 $charge_code->dept_code = $request->dept_code;
                 $charge_code->sales_acc_code = $request->sales_acc_code;
-                $charge_code->sales_acc_desc = $request->sales_acc_desc;
                 $charge_code->cost_acc_code = $request->cost_acc_code;
-                $charge_code->cost_acc_desc = $request->cost_acc_desc;
-                $charge_code->sales_provision_acc_code = $request->sales_provision_acc_code;
-                $charge_code->sales_provision_acc_desc = $request->sales_provision_acc_desc;
-                $charge_code->provision_acc_code = $request->provision_acc_code;
-                $charge_code->provision_acc_desc = $request->provision_acc_desc;
                 $charge_code->currency_id = $request->currency_id;
                 $charge_code->uom_id = $request->uom_id;
-                $charge_code->consolidation_item_code = $request->consolidation_item_code;
-                $charge_code->consolidation_item_desc = $request->consolidation_item_desc;
-                $charge_code->sales_analysis_code = $request->sales_analysis_code;
                 $charge_code->wt_code_id = $request->wt_code_id;
                 $charge_code->cost_ammount = ($request->cost_ammount != null) ?  str_replace(",", "", $request->cost_ammount) : 0;
                 $charge_code->cost_percent = ($request->cost_percent != null) ?  str_replace(",", "", $request->cost_percent) : 0;
-                $charge_code->item_short_code = $request->item_short_code;
                 $charge_code->recoverable =  ($request->recoverable == "yes") ? true : false;
                 $charge_code->split_by_method = $request->split_by_method;
                 $charge_code->charge_unit = $request->charge_unit;
@@ -288,7 +253,6 @@ class ChargeCodeController extends Controller
                 $charge_code->cost_code = $request->cost_code;
                 $charge_code->cost_code_desc = $request->cost_code_desc;
                 $charge_code->lock = ($request->lock == "yes") ? true : false;
-                $charge_code->cost_analysis_code = $request->cost_analysis_code;
                 $charge_code->sales_cost = $request->sales_cost;
                 $charge_code->site_code = $request->site_code;
                 $charge_code->update();
@@ -302,9 +266,7 @@ class ChargeCodeController extends Controller
                             'module'       => $val,
                             'job_type'       => $request->job_type[$key],
                             'sales_acc_code'       => $request->sales_acc_code_detail[$key],
-                            'sales_desc'       => $request->sales_desc[$key],
                             'cost_acc_code'       => $request->cost_acc_code_detail[$key],
-                            'cost_desc'       => $request->cost_desc[$key],
                             'adv_acc_code'       => $request->adv_acc_code[$key],
                             'created_at' => now(),
                             'updated_at' => now(),

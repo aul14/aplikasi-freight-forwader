@@ -23,8 +23,8 @@
                                 <div class="form-group">
                                     <label for="code">Commodity Code <span style="color: red;">*</span></label>
                                     <input type="text" value="{{ old('code', $commodity->code) }}"
-                                        class="form-control @error('code') is-invalid @enderror" autofocus
-                                        autocomplete="off" required name="code" id="code">
+                                        class="form-control @error('code') is-invalid @enderror" readonly name="code"
+                                        id="code">
                                     @error('code')
                                         <div class="invalid-feedback">
                                             {{ $message }}

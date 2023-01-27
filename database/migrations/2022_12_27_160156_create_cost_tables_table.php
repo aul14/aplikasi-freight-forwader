@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('code', 20)->unique();
             $table->string('description', 50)->nullable();
             $table->foreignId('job_type_id')->nullable();
-            $table->string('module_code', 5)->nullable();
             $table->foreignId('bisnis_party_id')->nullable();
             $table->string('port_loading_code', 50)->nullable();
             $table->string('port_loading_name', 100)->nullable();

@@ -19,7 +19,7 @@ class CommodityController extends Controller
     {
         if (Auth::user()->hasPermission('manage-commodity')) {
             if ($request->ajax()) {
-                $commodity = Commodity::all()->sortByDesc("id");
+                $commodity = Commodity::select('*');
                 return DataTables::of($commodity)
                     ->addColumn('action', function ($commodity) {
                         return view('datatable-modal._action', [
@@ -43,8 +43,13 @@ class CommodityController extends Controller
 
             // INSERT TABLE HISTORY
             $count =  History::where('user_id', auth()->user()->id)->count();
-            if ($count == 3) {
-                History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+            if ($count >= 3) {
+                $cek_double = History::where('user_id', auth()->user()->id)->where('menu', 'Commodity')->count();
+                if ($cek_double > 1) {
+                    History::where('user_id', auth()->user()->id)->where('menu', 'Commodity')->limit(1)->delete();
+                } else {
+                    History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+                }
                 History::insert([
                     'user_id'   => auth()->user()->id,
                     'menu'      => 'Commodity',
@@ -144,12 +149,11 @@ class CommodityController extends Controller
     {
         if (Auth::user()->hasPermission('edit-commodity')) {
             $request->validate([
-                'code'    => 'required|max:10|unique:commodity,code,' . $id,
+                'code'    => 'max:10|unique:commodity,code,' . $id,
                 'description'           => 'required|max:50|unique:commodity,description,' . $id,
             ]);
 
             $commodity = Commodity::find($id);
-            $commodity->code = $request->code;
             $commodity->description = $request->description;
             $commodity->dutiable = ($request->dutiable == "yes") ? true : false;
             $commodity->update();

@@ -23,8 +23,8 @@
                                 <div class="form-group">
                                     <label for="code">Incoterms Code <span style="color: red;">*</span></label>
                                     <input type="text" value="{{ old('code', $incoterm->code) }}"
-                                        class="form-control @error('code') is-invalid @enderror" autocomplete="off" readonly
-                                        name="code" id="code">
+                                        class="form-control @error('code') is-invalid @enderror" readonly name="code"
+                                        id="code">
                                     @error('code')
                                         <div class="invalid-feedback">
                                             {{ $message }}

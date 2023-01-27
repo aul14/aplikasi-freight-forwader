@@ -1196,6 +1196,7 @@
                 field.attr("id", "dynamic-field-" + count);
                 field.children("label").text("Field " + count);
                 field.find("input").val("");
+                field.find(".select2-container").remove();
                 field.find(".select2-container").empty();
                 $(className + ":last").after($(field));
 

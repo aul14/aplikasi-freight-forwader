@@ -25,7 +25,7 @@ class CountryController extends Controller
     {
         if (Auth::user()->hasPermission('manage-country')) {
             if ($request->ajax()) {
-                $country = Country::all()->sortByDesc("countries.id");
+                $country = Country::select('*');
                 return DataTables::of($country)
                     ->addColumn('action', function ($country) {
                         return view('datatable-modal._action', [
@@ -46,8 +46,13 @@ class CountryController extends Controller
 
             // INSERT TABLE HISTORY
             $count =  History::where('user_id', auth()->user()->id)->count();
-            if ($count == 3) {
-                History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+            if ($count >= 3) {
+                $cek_double = History::where('user_id', auth()->user()->id)->where('menu', 'Country')->count();
+                if ($cek_double > 1) {
+                    History::where('user_id', auth()->user()->id)->where('menu', 'Country')->limit(1)->delete();
+                } else {
+                    History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+                }
                 History::insert([
                     'user_id'   => auth()->user()->id,
                     'menu'      => 'Country',
@@ -196,7 +201,7 @@ class CountryController extends Controller
     {
         if (Auth::user()->hasPermission('edit-country')) {
             $request->validate([
-                'code'    => 'required|max:2|unique:countries,code,' . $id,
+                'code'    => 'max:2|unique:countries,code,' . $id,
                 'name' => 'required|max:45|unique:countries,name,' . $id,
                 'image_country'     => 'image|max:1024|mimes:png,jpg',
             ]);
@@ -205,7 +210,6 @@ class CountryController extends Controller
             DB::beginTransaction();
             try {
                 $country = Country::find($id);
-                $country->code = strtoupper($request->code);
                 $country->name = strtoupper($request->name);
                 $country->idd = $request->idd;
                 $country->region_code = strtoupper($request->region_code);

@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/fontawesome.min.css?v=1.0.0') }}">
     <link href="{{ asset('assets/css/nucleo-svg.css?v=1.0.0') }}" rel="stylesheet" />
     <!-- CSS Files -->
-    <link id="pagestyle" rel="stylesheet" href="{{ asset('assets/css/argon-dashboard.css?v=1.1.2') }}" />
+    <link id="pagestyle" rel="stylesheet" href="{{ asset('assets/css/argon-dashboard.css?v=1.1.3') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/styles.css?v=1.2.2') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css?v=1.0.0') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/jquery.toast.min.css?v=1.0.0') }}">
@@ -42,7 +42,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script>
-        let MAX_FIELD = 99999;
+        let MAX_FIELD = 9999999;
     </script>
 </head>
 {{-- "g-sidenav-show dark-version bg-gray-600" --}}
@@ -58,7 +58,7 @@
 
     @auth
         @if (in_array(request()->route()->getName(),
-            ['sign-in-static', 'sign-up-static', 'login', 'register', 'recover-password', 'rtl', 'virtual-reality']))
+                ['sign-in-static', 'sign-up-static', 'login', 'register', 'recover-password', 'rtl', 'virtual-reality']))
             @yield('content')
         @else
             <div class="min-height-300 bg-primary position-absolute w-100"></div>
@@ -146,6 +146,11 @@
         });
     </script>
     @yield('script')
+    @yield('sub_script_1')
+    @yield('sub_script_2')
+    @yield('sub_script_3')
+    @yield('sub_script_4')
+    @yield('sub_script_5')
 </body>
 
 </html>

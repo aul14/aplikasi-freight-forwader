@@ -35,7 +35,6 @@
                                     <th class="select-filter">Curr Code</th>
                                     <th class="select-filter">Sales Acc Code</th>
                                     <th class="select-filter">Cost Acc Code</th>
-                                    <th class="select-filter">Provision Acc Code</th>
                                     <th class="select-filter">Charge Unit</th>
                                     <th class="select-filter">Updated At</th>
                                 </tr>
@@ -54,7 +53,6 @@
                                     <th>Curr Code</th>
                                     <th>Sales Acc Code</th>
                                     <th>Cost Acc Code</th>
-                                    <th>Provision Acc Code</th>
                                     <th>Charge Unit</th>
                                     <th>Updated At</th>
                                 </tr>
@@ -141,11 +139,6 @@
                     {
                         data: 'cost_acc_code',
                         name: 'cost_acc_code',
-
-                    },
-                    {
-                        data: 'provision_acc_code',
-                        name: 'provision_acc_code',
 
                     },
                     {

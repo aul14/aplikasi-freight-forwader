@@ -19,7 +19,7 @@ class PartyTypeController extends Controller
     {
         if (Auth::user()->hasPermission('manage-party_type')) {
             if ($request->ajax()) {
-                $party_type = PartyType::all()->sortByDesc("id");
+                $party_type = PartyType::select('*');
                 return DataTables::of($party_type)
                     ->addColumn('action', function ($party_type) {
                         return view('datatable-modal._action', [
@@ -39,8 +39,13 @@ class PartyTypeController extends Controller
             }
 
             $count =  History::where('user_id', auth()->user()->id)->count();
-            if ($count == 3) {
-                History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+            if ($count >= 3) {
+                $cek_double = History::where('user_id', auth()->user()->id)->where('menu', 'Party Type')->count();
+                if ($cek_double > 1) {
+                    History::where('user_id', auth()->user()->id)->where('menu', 'Party Type')->limit(1)->delete();
+                } else {
+                    History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+                }
                 History::insert([
                     'user_id'   => auth()->user()->id,
                     'menu'      => 'Party Type',
@@ -140,7 +145,7 @@ class PartyTypeController extends Controller
         if (Auth::user()->hasPermission('edit-party_type')) {
             $validateData = $request->validate(
                 [
-                    'code'         => 'required|max:3',
+                    'code'         => 'max:3',
                     'description'  => 'required|max:50',
                 ],
             );

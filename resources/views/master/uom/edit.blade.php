@@ -23,7 +23,7 @@
                                 <div class="form-group">
                                     <label for="code">Uom Code <span style="color: red;">*</span></label>
                                     <input type="text" value="{{ old('code', $uom->code) }}"
-                                        class="form-control @error('code') is-invalid @enderror" required name="code"
+                                        class="form-control @error('code') is-invalid @enderror" readonly name="code"
                                         id="code">
                                     @error('code')
                                         <div class="invalid-feedback">

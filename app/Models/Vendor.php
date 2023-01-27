@@ -23,27 +23,27 @@ class Vendor extends Model
 
     public function currency()
     {
-        return $this->belongsTo(Currency::class);
+        return $this->belongsTo(Currency::class)->withTrashed();
     }
 
     public function payment_term()
     {
-        return $this->belongsTo(PaymentTerm::class);
+        return $this->belongsTo(PaymentTerm::class)->withTrashed();
     }
 
     public function vat_code()
     {
-        return $this->belongsTo(VatCode::class);
+        return $this->belongsTo(VatCode::class)->withTrashed();
     }
 
     public function city()
     {
-        return $this->belongsTo(City::class);
+        return $this->belongsTo(City::class)->withTrashed();
     }
 
     public function country()
     {
-        return $this->belongsTo(Country::class);
+        return $this->belongsTo(Country::class)->withTrashed();
     }
 
 

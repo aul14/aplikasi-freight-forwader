@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('code', 10)->unique();
             $table->string('description', 50);
             $table->boolean('dutiable');
-
             $table->timestamps();
         });
     }

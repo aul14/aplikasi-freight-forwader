@@ -17,48 +17,56 @@ use App\Models\BisnisPartyD1;
 use App\Models\BisnisPartyD2;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BisnisParty extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $table = "bisnis_party";
 
     protected $with = ['currency', 'country', 'payment_term', 'city', 'port', 'salesman', 'vat_code', 'customer_type', 'vendor_type'];
 
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
+
     public function currency()
     {
-        return $this->belongsTo(Currency::class);
+        return $this->belongsTo(Currency::class)->withTrashed();
     }
 
     public function payment_term()
     {
-        return $this->belongsTo(PaymentTerm::class);
+        return $this->belongsTo(PaymentTerm::class)->withTrashed();
     }
 
     public function city()
     {
-        return $this->belongsTo(City::class);
+        return $this->belongsTo(City::class)->withTrashed();
     }
 
     public function country()
     {
-        return $this->belongsTo(Country::class, 'country_id', 'id');
+        return $this->belongsTo(Country::class)->withTrashed();
     }
 
     public function port()
     {
-        return $this->belongsTo(Port::class);
+        return $this->belongsTo(Port::class)->withTrashed();
     }
 
     public function salesman()
     {
-        return $this->belongsTo(Salesman::class);
+        return $this->belongsTo(Salesman::class)->withTrashed();
     }
 
     public function vat_code()
     {
-        return $this->belongsTo(VatCode::class);
+        return $this->belongsTo(VatCode::class)->withTrashed();
     }
 
     public function customer_type()

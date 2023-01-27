@@ -15,6 +15,6 @@ class VatCodeDetailSatu extends Model
 
     public function vat_code()
     {
-        return $this->belongsTo(VatCode::class);
+        return $this->belongsTo(VatCode::class)->withTrashed();
     }
 }

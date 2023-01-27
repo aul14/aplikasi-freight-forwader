@@ -8,12 +8,20 @@ use App\Models\Country;
 use App\Models\NoOfDay;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Port extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
-    protected $with = ['country'];
+    protected $with = 'country';
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
 
     public function detail_port_city()
     {
@@ -22,7 +30,7 @@ class Port extends Model
 
     public function country()
     {
-        return $this->belongsTo(Country::class);
+        return $this->belongsTo(Country::class)->withTrashed();
     }
 
     // this is a recommended way to declare event handlers

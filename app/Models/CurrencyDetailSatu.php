@@ -13,7 +13,7 @@ class CurrencyDetailSatu extends Model
 
     public function currency()
     {
-        return $this->belongsTo(Currency::class);
+        return $this->belongsTo(Currency::class)->withTrashed();
     }
 
     use HasFactory;

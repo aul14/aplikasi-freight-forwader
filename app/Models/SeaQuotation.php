@@ -9,10 +9,18 @@ use App\Models\SeaQuotationD2;
 use App\Models\SeaQuotationSD1;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SeaQuotation extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
 
     // protected $with = ['quotation', 'payment_term'];
 
@@ -23,7 +31,7 @@ class SeaQuotation extends Model
 
     public function payment_term()
     {
-        return $this->belongsTo(PaymentTerm::class);
+        return $this->belongsTo(PaymentTerm::class)->withTrashed();
     }
 
     public function sea_quotation_d1()

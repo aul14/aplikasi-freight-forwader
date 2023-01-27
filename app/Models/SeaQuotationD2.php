@@ -16,6 +16,6 @@ class SeaQuotationD2 extends Model
 
     public function sea_quotation()
     {
-        return $this->belongsTo(SeaQuotation::class);
+        return $this->belongsTo(SeaQuotation::class)->withTrashed();
     }
 }

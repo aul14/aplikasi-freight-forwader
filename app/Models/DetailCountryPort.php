@@ -18,11 +18,11 @@ class DetailCountryPort extends Model
 
     public function country()
     {
-        return $this->belongsTo(Country::class);
+        return $this->belongsTo(Country::class)->withTrashed();
     }
 
     public function port()
     {
-        return $this->belongsTo(Port::class);
+        return $this->belongsTo(Port::class)->withTrashed();
     }
 }

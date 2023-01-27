@@ -15,6 +15,6 @@ class ChargeCodeDetail1 extends Model
 
     public function charge_code()
     {
-        return $this->belongsTo(ChargeCode::class);
+        return $this->belongsTo(ChargeCode::class)->withTrashed();
     }
 }

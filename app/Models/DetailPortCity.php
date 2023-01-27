@@ -15,11 +15,11 @@ class DetailPortCity extends Model
 
     public function port()
     {
-        return $this->belongsTo(Port::class);
+        return $this->belongsTo(Port::class)->withTrashed();
     }
 
     public function city()
     {
-        return $this->belongsTo(City::class);
+        return $this->belongsTo(City::class)->withTrashed();
     }
 }

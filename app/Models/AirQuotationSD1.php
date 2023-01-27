@@ -15,7 +15,7 @@ class AirQuotationSD1 extends Model
 
     public function air_quotation()
     {
-        return $this->belongsTo(AirQuotation::class);
+        return $this->belongsTo(AirQuotation::class)->withTrashed();
     }
 
     public function air_quotation_d1()

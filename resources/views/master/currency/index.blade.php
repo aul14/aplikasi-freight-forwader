@@ -38,7 +38,7 @@
                                 <tr>
                                     <th></th>
                                     <th></th>
-                                    <td>Curr Code</td>
+                                    <th>Curr Code</th>
                                     <th>Curr Description</th>
                                     <th>Variance Percent</th>
                                     <th>Updated At</th>

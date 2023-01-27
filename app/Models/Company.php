@@ -21,7 +21,7 @@ class Company extends Model
 
     public function currency()
     {
-        return $this->belongsTo(Currency::class);
+        return $this->belongsTo(Currency::class)->withTrashed();
     }
 
     // this is the recommended way for declaring event handlers

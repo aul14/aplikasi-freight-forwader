@@ -15,6 +15,6 @@ class BisnisPartyD1 extends Model
 
     public function bisnis_party()
     {
-        return $this->belongsTo(BisnisParty::class);
+        return $this->belongsTo(BisnisParty::class)->withTrashed();
     }
 }

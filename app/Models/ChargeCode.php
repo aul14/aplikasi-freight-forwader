@@ -7,38 +7,46 @@ use App\Models\JobType;
 use App\Models\Currency;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ChargeCode extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $table = "charge_code";
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
 
     protected $with = ['job_type', 'currency', 'uom', 'wt_code', 'vat_code'];
 
     public function job_type()
     {
-        return $this->belongsTo(JobType::class);
+        return $this->belongsTo(JobType::class)->withTrashed();
     }
 
     public function currency()
     {
-        return $this->belongsTo(Currency::class);
+        return $this->belongsTo(Currency::class)->withTrashed();
     }
 
     public function uom()
     {
-        return $this->belongsTo(Uom::class);
+        return $this->belongsTo(Uom::class)->withTrashed();
     }
 
     public function wt_code()
     {
-        return $this->belongsTo(WtCode::class);
+        return $this->belongsTo(WtCode::class)->withTrashed();
     }
 
     public function vat_code()
     {
-        return $this->belongsTo(VatCode::class);
+        return $this->belongsTo(VatCode::class)->withTrashed();
     }
 
     public function charge_code_detail_satu()

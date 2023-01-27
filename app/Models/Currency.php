@@ -5,10 +5,20 @@ namespace App\Models;
 use App\Models\CurrencyDetailSatu;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Currency extends Model
 {
+    use SoftDeletes;
+
     protected $table = "currency";
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
 
     public function currency_detail_satu()
     {

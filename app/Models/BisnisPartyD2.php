@@ -15,11 +15,11 @@ class BisnisPartyD2 extends Model
 
     public function bisnis_party()
     {
-        return $this->belongsTo(BisnisParty::class);
+        return $this->belongsTo(BisnisParty::class)->withTrashed();
     }
 
     public function party_type()
     {
-        return $this->belongsTo(PartyType::class);
+        return $this->belongsTo(PartyType::class)->withTrashed();
     }
 }

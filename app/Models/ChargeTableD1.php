@@ -21,31 +21,31 @@ class ChargeTableD1 extends Model
 
     public function charge_table()
     {
-        return $this->belongsTo(ChargeTable::class);
+        return $this->belongsTo(ChargeTable::class)->withTrashed();
     }
 
     public function charge_code()
     {
-        return $this->belongsTo(ChargeCode::class);
+        return $this->belongsTo(ChargeCode::class)->withTrashed();
     }
 
     public function uom()
     {
-        return $this->belongsTo(Uom::class);
+        return $this->belongsTo(Uom::class)->withTrashed();
     }
 
     public function vat_code()
     {
-        return $this->belongsTo(VatCode::class);
+        return $this->belongsTo(VatCode::class)->withTrashed();
     }
 
     public function container()
     {
-        return $this->belongsTo(Container::class);
+        return $this->belongsTo(Container::class)->withTrashed();
     }
 
     public function currency()
     {
-        return $this->belongsTo(Currency::class);
+        return $this->belongsTo(Currency::class)->withTrashed();
     }
 }

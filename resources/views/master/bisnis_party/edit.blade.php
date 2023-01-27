@@ -620,7 +620,7 @@
                                                     <div class="row mt-1">
                                                         <div class="col-md-4">
                                                             <div class="form-group">
-                                                                <label for="port_id">Port </label>
+                                                                <label for="port_id">Sea Port </label>
                                                                 <select class="port-select" name="port_id">
                                                                     <option value="{{ $bisnis_party->port_id }}">
                                                                         {{ $bisnis_party->port_id != null ? $bisnis_party->port->code : '' }}

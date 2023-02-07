@@ -17,8 +17,11 @@
                     <th class="text-center" style="min-width: 200px;"> Container </th>
                     <th class="text-center" style="min-width: 200px;"> Rate </th>
                     <th class="text-center" style="min-width: 200px;"> Currency </th>
-                    <th class="text-center" style="min-width: 200px;"> Min Amount </th>
-                    <th class="text-center" style="min-width: 200px;"> Amount </th>
+                    <th class="text-center" style="min-width: 200px;"> Currency Rate </th>
+                    <th class="text-center" style="min-width: 200px;"> Unit Rate </th>
+                    <th class="text-center" style="min-width: 200px;"> IDR Min Amount </th>
+                    {{-- <th class="text-center" style="min-width: 200px;"> Amount </th> --}}
+                    <th class="text-center" style="min-width: 200px;"> IDR Amount </th>
                 </tr>
             </thead>
 
@@ -52,7 +55,7 @@
                             <td>
                                 <div class="form-group">
                                     <input type="text" class="form-control item-descd2"
-                                        value="{{ $item_d2->item_desc_d2 }}" name="item_desc_d2[]" readonly
+                                        value="{{ $item_d2->item_desc_d2 }}" name="item_desc_d2[]"
                                         id="item-descd2-{{ $key_d2 + 1 }}">
                                 </div>
                             </td>
@@ -79,7 +82,8 @@
                                     <input type="text" class="form-control qty-inputd2" autocomplete="off"
                                         @disabled($item_d2->chg_unit_d2 == 'SHIPMENT') data-type='currency4'
                                         value="{{ number_format($item_d2->qty_d2, 4, '.', ',') }}" name="qty_d2[]"
-                                        id="qty-inputd2-{{ $key_d2 + 1 }}">
+                                        id="qty-inputd2-{{ $key_d2 + 1 }}"
+                                        onchange="sum_idr_d2({{ $key_d2 + 1 }}, 1)">
                                 </div>
                             </td>
 
@@ -180,17 +184,39 @@
 
                             <td>
                                 <div class="form-group">
-                                    <input type="text" class="form-control" autocomplete="off"
-                                        value="{{ number_format($item_d2->min_amt_d2, 2, '.', ',') }}"
-                                        data-type='currency' name="min_amt_d2[]">
+                                    <input type="text" class="form-control curr-rated2"
+                                        id="curr-rated2{{ $key_d2 + 1 }}" autocomplete="off" data-type='currency'
+                                        name="curr_rate_d2[]"
+                                        value="{{ number_format($item_d2->curr_rate_d2, 2, '.', ',') }}"
+                                        onchange="sum_idr_d2({{ $key_d2 + 1 }}, 1)">
+                                </div>
+                            </td>
+
+
+                            <td>
+                                <div class="form-group">
+                                    <input type="text" class="form-control unit-rated2"
+                                        id="unit-rated2{{ $key_d2 + 1 }}" autocomplete="off" data-type='currency'
+                                        value="{{ number_format($item_d2->unit_rate_d2, 2, '.', ',') }}"
+                                        name="unit_rate_d2[]" onchange="sum_idr_d2({{ $key_d2 + 1 }}, 1)">
                                 </div>
                             </td>
 
                             <td>
                                 <div class="form-group">
-                                    <input type="text" class="form-control" autocomplete="off"
-                                        value="{{ number_format($item_d2->amt_d2, 2, '.', ',') }}"
-                                        data-type='currency_amt' name="amt_d2[]">
+                                    <input type="text" class="form-control min-amtd2"
+                                        id="min-amtd2{{ $key_d2 + 1 }}" autocomplete="off" data-type='currency'
+                                        value="{{ number_format($item_d2->min_amt_d2, 2, '.', ',') }}"
+                                        name="min_amt_d2[]" onchange="sum_idr_d2({{ $key_d2 + 1 }}, 1)">
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="form-group">
+                                    <input type="text" class="form-control idr-amtd2"
+                                        id="idr-amtd2{{ $key_d2 + 1 }}" readonly data-idrd2="1" autocomplete="off"
+                                        value="{{ number_format($item_d2->idr_amt_d2, 2, '.', ',') }}"
+                                        data-type='currency_amt' name="idr_amt_d2[]">
                                 </div>
                             </td>
 
@@ -221,7 +247,7 @@
 
                         <td>
                             <div class="form-group">
-                                <input type="text" class="form-control item-descd2" name="item_desc_d2[]" readonly
+                                <input type="text" class="form-control item-descd2" name="item_desc_d2[]"
                                     id="item-descd2-1">
                             </div>
                         </td>
@@ -245,7 +271,8 @@
                         <td>
                             <div class="form-group">
                                 <input type="text" class="form-control qty-inputd2" autocomplete="off"
-                                    data-type='currency4' name="qty_d2[]" id="qty-inputd2-1">
+                                    data-type='currency4' name="qty_d2[]" id="qty-inputd2-1"
+                                    onchange="sum_idr_d2(1, 1)">
                             </div>
                         </td>
 
@@ -336,15 +363,33 @@
 
                         <td>
                             <div class="form-group">
-                                <input type="text" class="form-control" autocomplete="off" data-type='currency'
-                                    name="min_amt_d2[]">
+                                <input type="text" class="form-control curr-rated2" id="curr-rated21"
+                                    autocomplete="off" data-type='currency' name="curr_rate_d2[]"
+                                    onchange="sum_idr_d2(1, 1)">
+                            </div>
+                        </td>
+
+
+                        <td>
+                            <div class="form-group">
+                                <input type="text" class="form-control unit-rated2" id="unit-rated21"
+                                    autocomplete="off" data-type='currency' name="unit_rate_d2[]"
+                                    onchange="sum_idr_d2(1, 1)">
                             </div>
                         </td>
 
                         <td>
                             <div class="form-group">
-                                <input type="text" class="form-control" autocomplete="off"
-                                    data-type='currency_amt' name="amt_d2[]">
+                                <input type="text" class="form-control min-amtd2" id="min-amtd21"
+                                    autocomplete="off" data-type='currency' name="min_amt_d2[]"
+                                    onchange="sum_idr_d2(1, 1)">
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="form-group">
+                                <input type="text" class="form-control idr-amtd2" id="idr-amtd21" readonly
+                                    data-idrd2="1" autocomplete="off" data-type='currency_amt' name="idr_amt_d2[]">
                             </div>
                         </td>
 
@@ -375,6 +420,10 @@
         let vatD2 = ".vat-selectd2";
         let containerD2 = ".container-selectd2";
         let qtyInputD2 = ".qty-inputd2";
+        let curr_rateD2 = ".curr-rated2";
+        let idr_amtD2 = ".idr-amtd2";
+        let unit_rateD2 = ".unit-rated2";
+        let min_amtD2 = ".min-amtd2";
         let countParseD2 = [];
         let countParseD2Array = [];
 
@@ -415,56 +464,6 @@
 
         });
 
-        function evtChangeChgUnitD2(evt1 = null, evt2 = null) {
-            $(`.chgunit-selectd2`).change(function(e) {
-                e.preventDefault();
-                let val = $(this).val();
-                if (val == "REV TON") {
-                    $(`#chg-selectd2${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
-                    $(`#pc-selectd2${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
-                    $(`#container-selectd2${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
-                    $(`#qty-inputd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
-                    $(`#cargo-selectd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
-                    $(`#dg-selectd2${evt2}-${evt1}`).attr(`disabled`, false);
-                    $(`#uom-selectd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
-                } else if (val == `SHIPMENT`) {
-                    $(`#qty-inputd2${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
-                    $(`#cargo-selectd2${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
-                    $(`#dg-selectd2${evt2}-${evt1}`).attr(`disabled`, true)
-                    $(`#uom-selectd2${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
-                    $(`#container-selectd2${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
-                    $(`#chg-selectd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
-                    $(`#pc-selectd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
-                } else if (val == `VOLUME` || val == `WEIGHT` || val == `PCS`) {
-                    $(`#container-selectd2${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
-                    $(`#qty-inputd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
-                    $(`#cargo-selectd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
-                    $(`#dg-selectd2${evt2}-${evt1}`).attr(`disabled`, false);
-                    $(`#uom-selectd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
-                    $(`#chg-selectd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
-                    $(`#pc-selectd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
-                } else {
-                    $(`#container-selectd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
-                    $(`#qty-inputd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
-                    $(`#cargo-selectd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
-                    $(`#dg-selectd2${evt2}-${evt1}`).attr(`disabled`, false);
-                    $(`#uom-selectd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
-                    $(`#chg-selectd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
-                    $(`#pc-selectd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
-                }
-            });
-        }
-
-        function evtEnabledSubDetailD2(evt1 = null, evt2 = null) {
-            $(`#container-selectd2${evt2}-${evt1}`).attr(`disabled`, false);
-            $(`#qty-inputd2${evt2}-${evt1}`).attr(`disabled`, false);
-            $(`#cargo-selectd2${evt2}-${evt1}`).attr(`disabled`, false);
-            $(`#dg-selectd2${evt2}-${evt1}`).attr(`disabled`, false);
-            $(`#uom-selectd2${evt2}-${evt1}`).attr(`disabled`, false);
-            $(`#chg-selectd2${evt2}-${evt1}`).attr(`disabled`, false);
-            $(`#pc-selectd2${evt2}-${evt1}`).attr(`disabled`, false);
-        }
-
         function addNewFieldD2(obj) {
             if (totalFieldD2() < maxFields) {
                 let timeD2 = Math.floor(Date.now() / 1000);
@@ -490,7 +489,16 @@
                 fieldD2.find(pcD2).val('');
                 fieldD2.find(chgD2).val('');
                 fieldD2.find(rateD2).val('');
-                fieldD2.find(qtyInputD2).attr("id", "qty-inputd2-" + countD2);
+
+                fieldD2.find(qtyInputD2).attr("id", "qty-inputd2-" + countD2).removeAttr("onchange").attr("onchange",
+                    `sum_idr_d2(${countD2}, 1)`);
+                fieldD2.find(curr_rateD2).attr("id", "curr-rated2" + countD2).removeAttr("onchange").attr("onchange",
+                    `sum_idr_d2(${countD2}, 1)`);
+                fieldD2.find(unit_rateD2).attr("id", "unit-rated2" + countD2).removeAttr("onchange").attr("onchange",
+                    `sum_idr_d2(${countD2}, 1)`);
+                fieldD2.find(min_amtD2).attr("id", "min-amtd2" + countD2).removeAttr("onchange").attr("onchange",
+                    `sum_idr_d2(${countD2}, 1)`);
+                fieldD2.find(idr_amtD2).attr("id", "idr-amtd2" + countD2).attr("data-idrd2", 1);
 
                 fieldD2.find(itemSelectD2).attr("id", "item-selectd2-" + countD2).select2({
                     placeholder: 'Search...',
@@ -702,6 +710,91 @@
             } else {
                 alert("Minimum 1 line");
             }
+        }
+
+        function sum_idr_d2(evt = null, evt2 = null) {
+            let currd2 = parseFloat($(`#curr-rated2${evt}`).val().split(',').join(""));
+            let qtyd2 = ($(`#qty-inputd2-${evt}`).val().split(',').join("") == '' || $(`#qty-inputd2-${evt}`).val()
+                .split(
+                    ',')
+                .join("") == '0.0000') ? 1 : parseFloat($(`#qty-inputd2-${evt}`).val().split(',').join(""));
+            let mind2 = ($(`#min-amtd2${evt}`).val().split(',').join("") == '' || $(`#min-amtd2${evt}`).val().split(
+                    ',')
+                .join(
+                    "") == '0.00') ? 0 : parseFloat($(`#min-amtd2${evt}`).val().split(',').join(""));
+            let unitd2 = parseFloat($(`#unit-rated2${evt}`).val().split(',').join(""));
+            let idrd2 = parseFloat($(`#idr-amtd2${evt}`).val().split(',').join(""));
+
+            let count_idrd2 = unitd2 * (currd2 * qtyd2);
+
+            let val_idrd2 = count_idrd2 > mind2 ? count_idrd2 : mind2;
+
+            $.ajax({
+                type: "post",
+                url: '{{ route('format.currency') }}',
+                data: {
+                    total: val_idrd2
+                },
+                dataType: "json",
+                success: function(response) {
+                    document.getElementById(`idr-amtd2${evt}`).value = response;
+
+                    // if (evt2 != '') {
+                    //     sumofunittotal(evt2);
+                    // }
+                }
+            });
+
+        }
+
+        function evtChangeChgUnitD2(evt1 = null, evt2 = null) {
+            $(`.chgunit-selectd2`).change(function(e) {
+                e.preventDefault();
+                let val = $(this).val();
+                if (val == "REV TON") {
+                    $(`#chg-selectd2${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
+                    $(`#pc-selectd2${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
+                    $(`#container-selectd2${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
+                    $(`#qty-inputd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
+                    $(`#cargo-selectd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
+                    $(`#dg-selectd2${evt2}-${evt1}`).attr(`disabled`, false);
+                    $(`#uom-selectd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
+                } else if (val == `SHIPMENT`) {
+                    $(`#qty-inputd2${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
+                    $(`#cargo-selectd2${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
+                    $(`#dg-selectd2${evt2}-${evt1}`).attr(`disabled`, true)
+                    $(`#uom-selectd2${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
+                    $(`#container-selectd2${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
+                    $(`#chg-selectd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
+                    $(`#pc-selectd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
+                } else if (val == `VOLUME` || val == `WEIGHT` || val == `PCS`) {
+                    $(`#container-selectd2${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
+                    $(`#qty-inputd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
+                    $(`#cargo-selectd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
+                    $(`#dg-selectd2${evt2}-${evt1}`).attr(`disabled`, false);
+                    $(`#uom-selectd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
+                    $(`#chg-selectd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
+                    $(`#pc-selectd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
+                } else {
+                    $(`#container-selectd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
+                    $(`#qty-inputd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
+                    $(`#cargo-selectd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
+                    $(`#dg-selectd2${evt2}-${evt1}`).attr(`disabled`, false);
+                    $(`#uom-selectd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
+                    $(`#chg-selectd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
+                    $(`#pc-selectd2${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
+                }
+            });
+        }
+
+        function evtEnabledSubDetailD2(evt1 = null, evt2 = null) {
+            $(`#container-selectd2${evt2}-${evt1}`).attr(`disabled`, false);
+            $(`#qty-inputd2${evt2}-${evt1}`).attr(`disabled`, false);
+            $(`#cargo-selectd2${evt2}-${evt1}`).attr(`disabled`, false);
+            $(`#dg-selectd2${evt2}-${evt1}`).attr(`disabled`, false);
+            $(`#uom-selectd2${evt2}-${evt1}`).attr(`disabled`, false);
+            $(`#chg-selectd2${evt2}-${evt1}`).attr(`disabled`, false);
+            $(`#pc-selectd2${evt2}-${evt1}`).attr(`disabled`, false);
         }
     </script>
 @endsection

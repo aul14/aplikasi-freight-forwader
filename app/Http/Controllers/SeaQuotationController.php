@@ -7,11 +7,13 @@ use App\Models\AddInfo;
 use App\Models\AddInfoD1;
 use App\Models\History;
 use App\Models\ChargeTable;
+use App\Models\Company;
 use App\Models\Quotation;
 use App\Models\SeaQuotation;
 use App\Models\SeaQuotationD1;
 use App\Models\SeaQuotationD2;
 use App\Models\SeaQuotationSD1;
+use Barryvdh\DomPDF\PDF;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
@@ -244,7 +246,8 @@ class SeaQuotationController extends Controller
                                     'currency'     => !empty($request->currency[$key2]) ? $request->currency[$key2] : null,
                                     'curr_rate'     => !empty($request->curr_rate[$key2]) ? str_replace(",", "", $request->curr_rate[$key2])  : null,
                                     'min_amt'     => !empty($request->min_amt[$key2]) ? str_replace(",", "", $request->min_amt[$key2])  : null,
-                                    'amt'     => !empty($request->amt[$key2]) ?  str_replace(",", "", $request->amt[$key2])  : null,
+                                    'unit_rate'     => !empty($request->unit_rate[$key2]) ?  str_replace(",", "", $request->unit_rate[$key2])  : null,
+                                    'idr_amt'     => !empty($request->idr_amt[$key2]) ?  str_replace(",", "", $request->idr_amt[$key2])  : null,
                                     'created_at' => now(),
                                     'updated_at' => now(),
                                 ];
@@ -274,8 +277,10 @@ class SeaQuotationController extends Controller
                             'container_d2'     => !empty($request->container_d2[$key3]) ? $request->container_d2[$key3] : null,
                             'rate_d2'     => !empty($request->rate_d2[$key3]) ? $request->rate_d2[$key3] : null,
                             'currency_d2'     => !empty($request->currency_d2[$key3]) ? $request->currency_d2[$key3] : null,
+                            'curr_rate_d2'     => !empty($request->curr_rate_d2[$key3]) ? str_replace(",", "", $request->curr_rate_d2[$key3])  : null,
+                            'unit_rate_d2'     => !empty($request->unit_rate_d2[$key3]) ? str_replace(",", "", $request->unit_rate_d2[$key3])  : null,
                             'min_amt_d2'     => !empty($request->min_amt_d2[$key3]) ? str_replace(",", "", $request->min_amt_d2[$key3])  : null,
-                            'amt_d2'     => !empty($request->amt_d2[$key3]) ?  str_replace(",", "", $request->amt_d2[$key3])  : null,
+                            'idr_amt_d2'     => !empty($request->idr_amt_d2[$key3]) ? str_replace(",", "", $request->idr_amt_d2[$key3])  : null,
                             'created_at' => now(),
                             'updated_at' => now(),
                         ];
@@ -448,9 +453,9 @@ class SeaQuotationController extends Controller
                 //SAVE TO TABLE SEA QUOTATION D1 AND SUB D1
                 $result_sd1 = [];
                 $result_d1 = [];
+                $sea_quot->sea_quotation_d1()->forceDelete();
+                $sea_quot->sea_quotation_s_d1()->forceDelete();
                 if ($request->port_loading_code[0] != null) {
-                    $sea_quot->sea_quotation_d1()->delete();
-                    $sea_quot->sea_quotation_s_d1()->delete();
                     foreach ($request->fch_code as $key => $val) {
                         $result_d1[] = [
                             'sea_quotation_id' => $sea_quot->id,
@@ -506,7 +511,8 @@ class SeaQuotationController extends Controller
                                     'currency'     => !empty($request->currency[$key2]) ? $request->currency[$key2] : null,
                                     'curr_rate'     => !empty($request->curr_rate[$key2]) ? str_replace(",", "", $request->curr_rate[$key2])  : null,
                                     'min_amt'     => !empty($request->min_amt[$key2]) ? str_replace(",", "", $request->min_amt[$key2])  : null,
-                                    'amt'     => !empty($request->amt[$key2]) ?  str_replace(",", "", $request->amt[$key2])  : null,
+                                    'unit_rate'     => !empty($request->unit_rate[$key2]) ?  str_replace(",", "", $request->unit_rate[$key2])  : null,
+                                    'idr_amt'     => !empty($request->idr_amt[$key2]) ?  str_replace(",", "", $request->idr_amt[$key2])  : null,
                                     'created_at' => now(),
                                     'updated_at' => now(),
                                 ];
@@ -519,8 +525,8 @@ class SeaQuotationController extends Controller
 
                 //SAVE TO TABLE SEA QUOTATION D2
                 $result_d2 = [];
+                $sea_quot->sea_quotation_d2()->forceDelete();
                 if ($request->item_code_d2[0] !=  null) {
-                    $sea_quot->sea_quotation_d2()->delete();
                     foreach (array_unique($request->item_code_d2) as $key3 => $val3) {
                         $result_d2[] = [
                             'sea_quotation_id'    =>   $sea_quot->id,
@@ -537,8 +543,10 @@ class SeaQuotationController extends Controller
                             'container_d2'     => !empty($request->container_d2[$key3]) ? $request->container_d2[$key3] : null,
                             'rate_d2'     => !empty($request->rate_d2[$key3]) ? $request->rate_d2[$key3] : null,
                             'currency_d2'     => !empty($request->currency_d2[$key3]) ? $request->currency_d2[$key3] : null,
+                            'curr_rate_d2'     => !empty($request->curr_rate_d2[$key3]) ? str_replace(",", "", $request->curr_rate_d2[$key3])  : null,
+                            'unit_rate_d2'     => !empty($request->unit_rate_d2[$key3]) ? str_replace(",", "", $request->unit_rate_d2[$key3])  : null,
                             'min_amt_d2'     => !empty($request->min_amt_d2[$key3]) ? str_replace(",", "", $request->min_amt_d2[$key3])  : null,
-                            'amt_d2'     => !empty($request->amt_d2[$key3]) ?  str_replace(",", "", $request->amt_d2[$key3])  : null,
+                            'idr_amt_d2'     => !empty($request->idr_amt_d2[$key3]) ? str_replace(",", "", $request->idr_amt_d2[$key3])  : null,
                             'created_at' => now(),
                             'updated_at' => now(),
                         ];
@@ -615,5 +623,19 @@ class SeaQuotationController extends Controller
         } else {
             abort(403);
         }
+    }
+
+    public function pdf($id)
+    {
+        $sea_quot = SeaQuotation::with(['quotation', 'payment_term', 'sea_quotation_d1', 'sea_quotation_d2.vat.vat_code_detail_satu'])->where('id', $id)->first();
+        $sq_d1 = SeaQuotationD1::with('sea_quotation_s_d1.vat.vat_code_detail_satu')->where('sea_quotation_id', $id)->get()->toArray();
+        $company = Company::with('company_detail_satu')->first();
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('trx.sea_quot.export_pdf', [
+            'sq'    => $sea_quot,
+            'sq_d1' => $sq_d1,
+            'company'   => $company
+        ])->setPaper('a4', 'portrait');
+        return $pdf->stream('laporan.pdf');
     }
 }

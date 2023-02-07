@@ -18,15 +18,17 @@
                     <th class="text-center" style="min-width: 200px;"> Rate </th>
                     <th class="text-center" style="min-width: 200px;"> Currency </th>
                     <th class="text-center" style="min-width: 200px;"> Currency Rate </th>
-                    <th class="text-center" style="min-width: 200px;"> Min Amount </th>
-                    <th class="text-center" style="min-width: 200px;"> Amount </th>
+                    <th class="text-center" style="min-width: 200px;"> Unit Rate </th>
+                    <th class="text-center" style="min-width: 200px;"> IDR Min Amount </th>
+                    {{-- <th class="text-center" style="min-width: 200px;"> Amount </th> --}}
+                    <th class="text-center" style="min-width: 200px;"> IDR Amount </th>
                 </tr>
             </thead>
 
             <tbody class="tbody-condition" id="tbody-condition-1">
                 <tr class="dynamic-field" id="dynamic-field-1">
                     <td class="text-center">
-                        <button type="button" onclick="addNewField(this)" id="add-button-1"
+                        <button type="button" onclick="addNewField(this.id)" id="add-button-1"
                             class="btn btn-xs btn-primary float-left text-uppercase shadow-sm add-button"><i
                                 class="fa fa-plus fa-fw"></i>
                         </button>
@@ -49,8 +51,7 @@
 
                     <td>
                         <div class="form-group">
-                            <input type="text" class="form-control item-desc" name="item_desc[]" readonly
-                                id="item-desc-1">
+                            <input type="text" class="form-control item-desc" name="item_desc[]" id="item-desc-1">
                         </div>
                     </td>
 
@@ -72,7 +73,7 @@
                     <td>
                         <div class="form-group">
                             <input type="text" class="form-control qty-input" autocomplete="off"
-                                data-type='currency4' name="qty[]" id="qty-input-1">
+                                data-type='currency4' name="qty[]" id="qty-input-1" onchange="sum_idr(1, 1)">
                         </div>
                     </td>
 
@@ -163,23 +164,36 @@
 
                     <td>
                         <div class="form-group">
-                            <input type="text" class="form-control curr-rate" id="curr-rate1" data-curr="1"
-                                autocomplete="off" data-type='currency' name="curr_rate[]"
-                                onchange="sumofunittotal(1)">
+                            <input type="text" class="form-control curr-rate" id="curr-rate1" autocomplete="off"
+                                data-type='currency' name="curr_rate[]" onchange="sum_idr(1, 1)">
+                        </div>
+                    </td>
+
+                    <td>
+                        <div class="form-group">
+                            <input type="text" class="form-control unit-rate" id="unit-rate1" autocomplete="off"
+                                data-type='currency' name="unit_rate[]" onchange="sum_idr(1, 1)">
                         </div>
                     </td>
 
                     <td>
                         <div class="form-group">
                             <input type="text" class="form-control min-amt" id="min-amt1" autocomplete="off"
-                                data-type='currency' name="min_amt[]">
+                                data-type='currency' name="min_amt[]" onchange="sum_idr(1, 1)">
                         </div>
                     </td>
 
+                    {{-- <td>
+                        <div class="form-group">
+                            <input type="text" class="form-control amt" id="amt1" readonly
+                                autocomplete="off" data-type='currency_amt' name="amt[]" onchange="sum_idr(1)">
+                        </div>
+                    </td> --}}
+
                     <td>
                         <div class="form-group">
-                            <input type="text" class="form-control amt" id="amt1" autocomplete="off"
-                                data-type='currency_amt' onchange="sumofunittotal(1)" name="amt[]">
+                            <input type="text" class="form-control idr-amt" id="idr-amt1" readonly
+                                data-idr="1" autocomplete="off" data-type='currency_amt' name="idr_amt[]">
                         </div>
                     </td>
 
@@ -192,7 +206,7 @@
 <div class="row mt-2 align-items-center">
     <div class="col-md-12 d-flex justify-content-end">
         <div class="form-group">
-            <label for="total_amt">Total Amount</label>
+            <label for="total_amt">IDR Total Amount</label>
             <input type="text" value="{{ old('total_amt') }}" data-type='currency0' readonly
                 title="No Of Container Type 1" class="form-control @error('total_amt') is-invalid @enderror total-amt"
                 name="total_amt[]" id="total-amt-1">
@@ -231,21 +245,13 @@
         let min_amt = ".min-amt";
         let fchsub_code = ".fchsub-code";
         let amt = ".amt";
+        let idr_amt = ".idr-amt";
+        let unit_rate = ".unit-rate";
         let countParseSub = [];
         let countParseSubArray = [];
 
         function totalFieldSub() {
             return $(classNameSub).length;
-        }
-
-        function evtEnabledSubDetail(evt1 = null, evt2 = null) {
-            $(`#container-select${evt2}-${evt1}`).attr(`disabled`, false);
-            $(`#qty-input${evt2}-${evt1}`).attr(`disabled`, false);
-            $(`#cargo-select${evt2}-${evt1}`).attr(`disabled`, false);
-            $(`#dg-select${evt2}-${evt1}`).attr(`disabled`, false);
-            $(`#uom-select${evt2}-${evt1}`).attr(`disabled`, false);
-            $(`#chg-select${evt2}-${evt1}`).attr(`disabled`, false);
-            $(`#pc-select${evt2}-${evt1}`).attr(`disabled`, false);
         }
 
         $(function() {
@@ -277,18 +283,16 @@
                 fieldSub.find(".select2-container").remove();
                 fieldSub.find(".select2-container").empty();
                 fieldSub.find(itemSelectSub).empty();
-                fieldSub.find(chgunitSub).empty();
-                fieldSub.find(pcSub).empty();
-                fieldSub.find(chgSub).empty();
-                fieldSub.find(cargoSub).empty();
-                fieldSub.find(dgSub).empty();
-                fieldSub.find(rateSub).empty();
+                fieldSub.find(chgunitSub).val('');
+                fieldSub.find(pcSub).val('');
+                fieldSub.find(chgSub).val('');
+                fieldSub.find(cargoSub).val('');
+                fieldSub.find(dgSub).val('');
+                fieldSub.find(rateSub).val('');
                 fieldSub.find(currencySub).empty();
                 fieldSub.find(uomSub).empty();
                 fieldSub.find(vatSub).empty();
                 fieldSub.find(containerSub).empty();
-                fieldSub.find(qtyInputSub).attr("id", "qty-input-" + countSub);
-
                 fieldSub.find(itemSelectSub).attr("id", "item-select-" + countSub).select2({
                     placeholder: 'Search...',
                     width: "100%",
@@ -315,22 +319,36 @@
                 fieldSub.find(itemDescSub).attr("id", "item-desc-" + countSub);
 
                 if (total_line > 0) {
-                    let fchsubcode = $(`#fchsub-code-${row_number}`).val();
-
-                    fieldSub.find("#add-button-1").attr("id", "add-button-" + row_number).removeAttr("onclick").attr(
+                    let fchsubcode = $(`#fchsub-code-${obj.split("-")[2]}`).val();
+                    fieldSub.find(addButton).attr("id", "add-button-" + obj.split("-")[2]).removeAttr("onclick").attr(
                         "onclick",
-                        `addNewField(this, '#wrapper-row-list-fch-${row_number}')`);
-                    fieldSub.find(amt).attr("id", "amt" + row_number).removeAttr("onchange").attr("onchange",
-                        `sumofunittotal(${row_number})`);
-                    fieldSub.find(curr_rate).attr("data-curr", row_number).removeAttr("onchange").attr("onchange",
-                        `sumofunittotal(${row_number})`);
+                        `addNewField(this.id, '#wrapper-row-list-fch-${obj.split("-")[2]}')`);
+
+                    fieldSub.find(qtyInputSub).attr("id", "qty-input-" + countSub).removeAttr("onchange").attr("onchange",
+                        `sum_idr(${countSub}, ${obj.split("-")[2]})`);
+                    fieldSub.find(curr_rate).attr("id", "curr-rate" + countSub).removeAttr("onchange").attr("onchange",
+                        `sum_idr(${countSub}, ${obj.split("-")[2]})`);
+                    fieldSub.find(unit_rate).attr("id", "unit-rate" + countSub).removeAttr("onchange").attr("onchange",
+                        `sum_idr(${countSub}, ${obj.split("-")[2]})`);
+                    fieldSub.find(min_amt).attr("id", "min-amt" + countSub).removeAttr("onchange").attr("onchange",
+                        `sum_idr(${countSub}, ${obj.split("-")[2]})`);
+                    fieldSub.find(idr_amt).attr("id", "idr-amt" + countSub).attr("data-idr", obj.split("-")[2]);
+
                     fieldSub.find(fchsub_code).attr("id", "fchsub-code-" + countSub).val(fchsubcode)
                 } else {
                     let fchsubcode = $(`#fchsub-code-1`).val();
                     fieldSub.find(fchsub_code).attr("id", "fchsub-code-" + countSub).val(fchsubcode);
-                }
 
-                fieldSub.find(curr_rate).attr("id", "curr-rate" + countSub);
+                    fieldSub.find(qtyInputSub).attr("id", "qty-input-" + countSub).removeAttr("onchange").attr("onchange",
+                        `sum_idr(${countSub}, 1)`);
+                    fieldSub.find(curr_rate).attr("id", "curr-rate" + countSub).removeAttr("onchange").attr("onchange",
+                        `sum_idr(${countSub}, 1)`);
+                    fieldSub.find(unit_rate).attr("id", "unit-rate" + countSub).removeAttr("onchange").attr("onchange",
+                        `sum_idr(${countSub}, 1)`);
+                    fieldSub.find(min_amt).attr("id", "min-amt" + countSub).removeAttr("onchange").attr("onchange",
+                        `sum_idr(${countSub}, 1)`);
+                    fieldSub.find(idr_amt).attr("id", "idr-amt" + countSub).attr("data-idr", 1);
+                }
 
                 fieldSub.find(removeButton).attr("id", "remove-button-" + countSub);
 
@@ -523,23 +541,58 @@
             }
         }
 
+        function evtEnabledSubDetail(evt1 = null, evt2 = null) {
+            $(`#container-select${evt2}-${evt1}`).attr(`disabled`, false);
+            $(`#qty-input${evt2}-${evt1}`).attr(`disabled`, false);
+            $(`#cargo-select${evt2}-${evt1}`).attr(`disabled`, false);
+            $(`#dg-select${evt2}-${evt1}`).attr(`disabled`, false);
+            $(`#uom-select${evt2}-${evt1}`).attr(`disabled`, false);
+            $(`#chg-select${evt2}-${evt1}`).attr(`disabled`, false);
+            $(`#pc-select${evt2}-${evt1}`).attr(`disabled`, false);
+        }
+
+        function sum_idr(evt = null, evt2 = null) {
+            let curr = parseFloat($(`#curr-rate${evt}`).val().split(',').join(""));
+            let qty = ($(`#qty-input-${evt}`).val().split(',').join("") == '' || $(`#qty-input-${evt}`).val().split(',')
+                .join("") == '0.0000') ? 1 : parseFloat($(`#qty-input-${evt}`).val().split(',').join(""));
+            let min = ($(`#min-amt${evt}`).val().split(',').join("") == '' || $(`#min-amt${evt}`).val().split(',').join(
+                "") == '0.00') ? 0 : parseFloat($(`#min-amt${evt}`).val().split(',').join(""));
+            let unit = parseFloat($(`#unit-rate${evt}`).val().split(',').join(""));
+            let idr = parseFloat($(`#idr-amt${evt}`).val().split(',').join(""));
+
+            let count_idr = unit * (curr * qty);
+
+            let val_idr = count_idr > min ? count_idr : min;
+
+            $.ajax({
+                type: "post",
+                url: '{{ route('format.currency') }}',
+                data: {
+                    total: val_idr
+                },
+                dataType: "json",
+                success: function(response) {
+                    document.getElementById(`idr-amt${evt}`).value = response;
+
+                    if (evt2 != '') {
+                        sumofunittotal(evt2);
+                    }
+                }
+            });
+
+        }
+
         function sumofunittotal(num = null) {
             var total = 0;
             var amt = 0
-            var curr = 0
-            var sum = 0
-            var curr_num = $(`*[data-curr="${num}"]`);
-            var amt_num = document.querySelectorAll(`#amt${num}`);
+            var curr_num = $(`*[data-idr="${num}"]`);
 
-            for (var i = 0; i < amt_num.length; ++i) {
-                if (!isNaN(parseFloat(amt_num[i].value.split(',').join("")))) {
-                    curr = parseFloat(amt_num[i].value.split(',').join(""));
-                }
+            for (var i = 0; i < curr_num.length; ++i) {
                 if (!isNaN(parseFloat(curr_num[i].value.split(',').join("")))) {
                     amt = parseFloat(curr_num[i].value.split(',').join(""));
-                    sum = curr * amt;
+                    total += amt;
                 }
-                total += sum;
+
             }
 
             $.ajax({

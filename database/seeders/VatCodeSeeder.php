@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\VatCode;
+use App\Models\VatCodeDetailSatu;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -15,7 +16,9 @@ class VatCodeSeeder extends Seeder
      */
     public function run()
     {
-        // VatCode::truncate();
+        VatCode::truncate();
+        VatCodeDetailSatu::truncate();
+
         VatCode::insert([
             [
                 'code'      => 'ZER',
@@ -69,6 +72,44 @@ class VatCodeSeeder extends Seeder
                 'output_ta_code' => '2.01.03.01',
                 'paid_in_ta_code'   => '',
                 'paid_out_ta_code'   => '',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
+
+        VatCodeDetailSatu::insert([
+            [
+                'vat_code_id'      => 1,
+                'date'      => '2023-02-02',
+                'vat_rate'      => 0,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'vat_code_id'      => 2,
+                'date'      => '2023-02-02',
+                'vat_rate'      => 1.1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'vat_code_id'      => 3,
+                'date'      => '2023-02-02',
+                'vat_rate'      => 1,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'vat_code_id'      => 4,
+                'date'      => '2023-02-02',
+                'vat_rate'      => 10,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'vat_code_id'      => 5,
+                'date'      => '2023-02-02',
+                'vat_rate'      => 11,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

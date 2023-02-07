@@ -25,7 +25,14 @@
 
 <!-- START OF #wrapper-row-list-fch -->
 @if (count($aq_d1) > 0)
+    @php
+        $count_test = '';
+        $test_arr = [];
+    @endphp
     @foreach ($aq_d1 as $key => $item)
+        @php
+            $count_test = 1;
+        @endphp
         <div id="wrapper-row-list-fch-{{ $key + 1 }}" class="wrapper-row-list-fch ">
             <div class="row row-list-fch">
                 <div class="col-md-2">
@@ -386,33 +393,28 @@
 
         $(function() {
             <?php if(count($aq_d1) > 0): ?>
+            <?php $count_test = ''; ?>
             <?php foreach($aq_d1 as $key => $item): ?>
+            <?php $count_test = 1; ?>
             evtAirPort(`#airdept-select-{{ $key + 1 }}`, `#airdept-name-{{ $key + 1 }}`);
             evtAirPort(`#airdest-select-{{ $key + 1 }}`, `#airdest-name-{{ $key + 1 }}`);
             evtAirLine(`#airline-select-{{ $key + 1 }}`, ``);
             evtItemCode(`#salesitem-select-{{ $key + 1 }}`, `#salesitem-name-{{ $key + 1 }}`);
             evtCurrencyCode(`#currencyd1-select-{{ $key + 1 }}`, null, false, null);
-            <?php foreach($item->air_quotation_s_d2 as $key_s_d2 => $item_s_d2): ?>
-            evtItemCode(`#item-select-{{ $key_s_d2 + $key * 2 }}`, `#item-desc-{{ $key_s_d2 + $key * 2 }}`);
+            <?php foreach($item->air_quotation_s_d2 as $key_s_d2 => $item_s_d2):   ?>
+            <?php $count_test += $key_s_d2 + $key * 2; ?>
+            evtItemCode(`#item-select-{{ $count_test }}`, `#item-desc-{{ $count_test }}`);
             evtNoData(
-                `#chgunit-select-{{ $key_s_d2 + $key * 2 }}, #chg-select-{{ $key_s_d2 + $key * 2 }}, #pc-select-{{ $key_s_d2 + $key * 2 }}, #rate-select-{{ $key_s_d2 + $key * 2 }}`
+                `#chgunit-select-{{ $count_test }}, #chg-select-{{ $count_test }}, #pc-select-{{ $count_test }}, #rate-select-{{ $count_test }}`
             );
             evtNoData(
-                `#due-select-{{ $key_s_d2 + $key * 2 }}`
+                `#due-select-{{ $count_test }}`
             );
-            evtUomCode(`#uom-sub-{{ $key_s_d2 + $key * 2 }}`);
-            evtCurrencyCode(`#currency-sub-{{ $key_s_d2 + $key * 2 }}`, null, true,
-                "#curr-rate{{ $key_s_d2 + $key * 2 }}");
-            evtVatCode(`#vat-select-{{ $key_s_d2 + $key * 2 }}`);
-            evtChangeChgUnit(`{{ $key_s_d2 + $key * 2 }}`, '');
-
-            $(`#add-button-{{ $key_s_d2 + $key * 2 }}`).removeAttr("onclick").attr("onclick",
-                `addNewField(this.id, '#wrapper-row-list-fch-{{ $key + 1 }}')`);
-            $(`#amt{{ $key_s_d2 + $key * 2 }}`).removeAttr("onchange").attr("onchange",
-                `sumofunittotal({{ $key + 1 }})`);
-            $(`#amt{{ $key_s_d2 + $key * 2 }}`).attr("id", "amt" + `{{ $key + 1 }}`)
-            $(`#curr-rate{{ $key_s_d2 + $key * 2 }}`).removeAttr("onchange").attr("onchange",
-                `sumofunittotal({{ $key + 1 }})`).attr("data-curr", `{{ $key + 1 }}`);
+            evtUomCode(`#uom-sub-{{ $count_test }}`);
+            evtCurrencyCode(`#currency-sub-{{ $count_test }}`, null, true,
+                "#curr-rate{{ $count_test }}");
+            evtVatCode(`#vat-select-{{ $count_test }}`);
+            evtChangeChgUnit(`{{ $count_test }}`, '');
 
             <?php endforeach; ?>
 
@@ -424,12 +426,11 @@
             evtAirLine(`#airline-select-1`, ``);
             evtItemCode(`#salesitem-select-1`, `#salesitem-name-1`);
             evtCurrencyCode(`#currencyd1-select-1`, null, false, null);
+            let timeVal = Math.floor(Date.now() / 1000) + totalFields() + Math.floor(Math.random() * 999) + 1;
+            $(`#fch-code-1, #fchsub-code-1`).val(timeVal);
+
             <?php endif; ?>
 
-            let timeVal = Math.floor(Date.now() / 1000) + totalFields() + Math.floor(Math.random() * 999) + 1;
-            <?php if(count($aq_d1) == 0): ?>
-            $(`#fch-code-1, #fchsub-code-1`).val(timeVal);
-            <?php endif; ?>
         });
 
         function totalFields() {
@@ -618,12 +619,7 @@
                 });
                 obj_new.find("#item-desc-1").attr("id", "item-descsub-" + row_number);
 
-                obj_new.find("#amt1").removeAttr("onchange").attr("onchange", `sumofunittotal(${row_number})`).attr("id",
-                    "amt" + row_number);
-
                 obj_new.find("#fchsub-code-1").attr("id", "fchsub-code-" + row_number);
-
-                obj_new.find("#curr-rate1").attr("id", "curr-rate" + row_number);
 
                 obj_new.find("#dynamic-field-1").attr("id", "dynamic-field-" + row_number);
                 obj_new.find("#tbody-condition-1").attr("id", "tbody-condition-" + row_number);
@@ -631,14 +627,21 @@
                 obj_new.find("#add-button-1").attr("id", "add-button-" + row_number);
                 obj_new.find("#remove-button-1").attr("id", "remove-button-" + row_number);
 
-                obj_new.find("#qty-input-1").attr("id", "qty-inputsub-" + row_number);
+                obj_new.find("#qty-input-1").attr("id", "qty-input-" + row_number).removeAttr("onchange").attr("onchange",
+                    `sum_idr(${row_number}, ${row_number})`).attr('disabled', false);
+                obj_new.find("#curr-rate1").attr("id", "curr-rate" + row_number).removeAttr("onchange").attr("onchange",
+                    `sum_idr(${row_number}, ${row_number})`);
+                obj_new.find("#unit-rate1").attr("id", "unit-rate" + row_number).removeAttr("onchange").attr("onchange",
+                    `sum_idr(${row_number}, ${row_number})`);
+                obj_new.find("#min-amt1").attr("id", "min-amt" + row_number).removeAttr("onchange").attr("onchange",
+                    `sum_idr(${row_number}, ${row_number})`);
+                obj_new.find("#idr-amt1").attr("id", "idr-amt" + row_number).attr("data-idr", row_number);
 
                 obj_new.find("#chgunit-select-1").attr("id", "chgunit-selectsub-" + row_number).select2({
                     placeholder: 'Search...',
                     width: "100%",
                     allowClear: true,
                 });
-
                 obj_new.find("#due-select-1").attr("id", "due-selectsub-" + row_number).select2({
                     placeholder: 'Search...',
                     width: "100%",
@@ -754,7 +757,6 @@
 
                 $(className + ":last").after($(obj_new));
 
-                $(`#fch-code-${row_number}, #fchsub-code-${row_number}`).val(row_number);
 
                 evtAirPort(`#airdept-select-1`, `#airdept-name-1`);
                 evtAirPort(`#airdept-select-${row_number}`, `#airdept-name-${row_number}`);
@@ -767,10 +769,10 @@
                 evtCurrencyCode(`#currencyd1-select-1`, null, false, null);
                 evtCurrencyCode(`#currencyd1-select-${row_number}`, null, false, null);
 
-                $(`#curr-rate${row_number}`).removeAttr("onchange").attr("onchange", `sumofunittotal(${row_number})`);
-                $(`#curr-rate${row_number}`).attr("data-curr", row_number);
                 $(`#add-button-${row_number}`).removeAttr("onclick").attr("onclick",
-                    `addNewField(this, '#wrapper-row-list-fch-${row_number}')`);
+                    `addNewField(this.id, '#wrapper-row-list-fch-${row_number}')`);
+
+                $(`#fch-code-${row_number}, #fchsub-code-${row_number}`).val(row_number);
 
                 evtChangeChgUnit(row_number, 'sub');
                 evtEnabledSubDetail(row_number, 'sub');
@@ -794,10 +796,7 @@
 
 
                 // DELETE ROW SUB JIKA ADA LEBIH DARI 1
-                obj_new.find(`#dynamic-field-0`).remove()
-                countParseSubArray.map((fchsub, i) =>
-                    obj_new.find(`#dynamic-field-${fchsub}`).remove()
-                );
+                obj_new.find(`.dynamic-field`).not(':first').remove();
 
                 evtCountRowNumber();
 

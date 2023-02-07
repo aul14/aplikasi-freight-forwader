@@ -26,7 +26,7 @@ class SeaQuotation extends Model
 
     public function quotation()
     {
-        return $this->belongsTo(Quotation::class);
+        return $this->belongsTo(Quotation::class)->withTrashed();
     }
 
     public function payment_term()
@@ -36,17 +36,17 @@ class SeaQuotation extends Model
 
     public function sea_quotation_d1()
     {
-        return $this->hasMany(SeaQuotationD1::class);
+        return $this->hasMany(SeaQuotationD1::class)->withTrashed();
     }
 
     public function sea_quotation_d2()
     {
-        return $this->hasMany(SeaQuotationD2::class);
+        return $this->hasMany(SeaQuotationD2::class)->withTrashed();
     }
 
     public function sea_quotation_s_d1()
     {
-        return $this->hasMany(SeaQuotationSD1::class);
+        return $this->hasMany(SeaQuotationSD1::class)->withTrashed();
     }
 
     // this is the recommended way for declaring event handlers

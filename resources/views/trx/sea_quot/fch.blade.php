@@ -38,12 +38,13 @@
             </div>
             <div class="row my-3">
                 <div class="col-md-6">
-                    <a href="javascript:void(0)" class="btn  btn-primary" title="Add row" onclick="add_row_fch(this)">
+                    <a href="javascript:void(0)" class="btn btn-primary add-btn-fch" id="add-btn-fch-1" title="Add row"
+                        onclick="add_row_fch(this.id)">
                         <i class="fa fa-plus"></i>
                     </a>
                 </div>
                 <div class="col-md-6">
-                    <a href="javascript:void(0)" class="btn  btn-danger" title="Delete row"
+                    <a href="javascript:void(0)" class="btn btn-danger" title="Delete row"
                         onclick="delete_row_fch(this)">
                         <i class="fa fa-minus"></i>
                     </a>
@@ -301,6 +302,7 @@
         let delivery = ".delivery-select";
         let delivery_name = ".delivery-name";
         let fch_code = ".fch-code";
+        let add_btn_fch = ".add-btn-fch";
         let row_number = 0;
         let total_line = 0;
         let obj_new = "";
@@ -351,12 +353,12 @@
                 obj_new.find(delivery).empty();
 
                 obj_new.find(itemSelectSub).empty();
-                obj_new.find(chgunitSub).empty();
-                obj_new.find(pcSub).empty();
-                obj_new.find(chgSub).empty();
-                obj_new.find(cargoSub).empty();
-                obj_new.find(dgSub).empty();
-                obj_new.find(rateSub).empty();
+                obj_new.find(chgunitSub).val('');
+                obj_new.find(pcSub).val('');
+                obj_new.find(chgSub).val('');
+                obj_new.find(cargoSub).val('');
+                obj_new.find(dgSub).val('');
+                obj_new.find(rateSub).val('');
                 obj_new.find(currencySub).empty();
                 obj_new.find(uomSub).empty();
                 obj_new.find(vatSub).empty();
@@ -364,6 +366,8 @@
                 obj_new.find(total_amt).attr("id", "total-amt-" + row_number);
 
                 obj_new.find(fch_code).attr("id", "fch-code-" + row_number);
+
+                obj_new.find(add_btn_fch).attr("id", "add-btn-fch-" + row_number);
 
                 obj_new.find(port_loading).attr("id", "portloading-select-" + row_number).select2({
                     placeholder: 'Search port',
@@ -641,11 +645,7 @@
                 });
                 obj_new.find("#item-desc-1").attr("id", "item-descsub-" + row_number);
 
-                obj_new.find("#amt1").attr("id", "amt" + row_number);
-
                 obj_new.find("#fchsub-code-1").attr("id", "fchsub-code-" + row_number);
-
-                obj_new.find("#curr-rate1").attr("id", "curr-rate" + row_number);
 
                 obj_new.find("#dynamic-field-1").attr("id", "dynamic-field-" + row_number);
                 obj_new.find("#tbody-condition-1").attr("id", "tbody-condition-" + row_number);
@@ -653,7 +653,15 @@
                 obj_new.find("#add-button-1").attr("id", "add-button-" + row_number);
                 obj_new.find("#remove-button-1").attr("id", "remove-button-" + row_number);
 
-                obj_new.find("#qty-input-1").attr("id", "qty-inputsub-" + row_number);
+                obj_new.find("#qty-input-1").attr("id", "qty-input-" + row_number).removeAttr("onchange").attr("onchange",
+                    `sum_idr(${row_number}, ${row_number})`).attr('disabled', false);
+                obj_new.find("#curr-rate1").attr("id", "curr-rate" + row_number).removeAttr("onchange").attr("onchange",
+                    `sum_idr(${row_number}, ${row_number})`);
+                obj_new.find("#unit-rate1").attr("id", "unit-rate" + row_number).removeAttr("onchange").attr("onchange",
+                    `sum_idr(${row_number}, ${row_number})`);
+                obj_new.find("#min-amt1").attr("id", "min-amt" + row_number).removeAttr("onchange").attr("onchange",
+                    `sum_idr(${row_number}, ${row_number})`);
+                obj_new.find("#idr-amt1").attr("id", "idr-amt" + row_number).attr("data-idr", row_number);
 
                 obj_new.find("#chgunit-select-1").attr("id", "chgunit-selectsub-" + row_number).select2({
                     placeholder: 'Search...',
@@ -804,11 +812,8 @@
                 evtDeliveryType(`#delivery-select-1`, `#delivery-name-1`);
                 evtDeliveryType(`#delivery-select-${row_number}`, `#delivery-name-${row_number}`);
 
-                $(`#amt${row_number}`).removeAttr("onchange").attr("onchange", `sumofunittotal(${row_number})`);
-                $(`#curr-rate${row_number}`).removeAttr("onchange").attr("onchange", `sumofunittotal(${row_number})`);
-                $(`#curr-rate${row_number}`).attr("data-curr", row_number);
                 $(`#add-button-${row_number}`).removeAttr("onclick").attr("onclick",
-                    `addNewField(this, '#wrapper-row-list-fch-${row_number}')`);
+                    `addNewField(this.id, '#wrapper-row-list-fch-${row_number}')`);
 
                 evtChangeChgUnit(row_number, 'sub');
                 evtEnabledSubDetail(row_number, 'sub');
@@ -830,9 +835,7 @@
                 evtVatCode(`#vat-selectsub-${row_number}`);
 
                 // DELETE ROW SUB JIKA ADA LEBIH DARI 1
-                countParseSubArray.map((fchsub, i) =>
-                    obj_new.find(`#dynamic-field-${fchsub}`).remove()
-                );
+                obj_new.find(`.dynamic-field`).not(':first').remove();
 
                 evtCountRowNumber();
 
@@ -1076,12 +1079,12 @@
                     $(`#chg-select${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
                     $(`#pc-select${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
                     $(`#container-select${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
-                    $(`#qty-input${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
+                    $(`#qty-input-${evt1}`).attr(`disabled`, false).attr('required', true);
                     $(`#cargo-select${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
                     $(`#dg-select${evt2}-${evt1}`).attr(`disabled`, false);
                     $(`#uom-select${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
                 } else if (val == `SHIPMENT`) {
-                    $(`#qty-input${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
+                    $(`#qty-input-${evt1}`).attr(`disabled`, true).attr('required', false);
                     $(`#cargo-select${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
                     $(`#dg-select${evt2}-${evt1}`).attr(`disabled`, true);
                     $(`#uom-select${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
@@ -1090,7 +1093,7 @@
                     $(`#pc-select${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
                 } else if (val == `VOLUME` || val == `WEIGHT` || val == `PCS`) {
                     $(`#container-select${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
-                    $(`#qty-input${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
+                    $(`#qty-input-${evt1}`).attr(`disabled`, false).attr('required', true);
                     $(`#cargo-select${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
                     $(`#dg-select${evt2}-${evt1}`).attr(`disabled`, false);
                     $(`#uom-select${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
@@ -1098,7 +1101,7 @@
                     $(`#pc-select${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
                 } else {
                     $(`#container-select${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
-                    $(`#qty-input${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
+                    $(`#qty-input-${evt1}`).attr(`disabled`, false).attr('required', true);
                     $(`#cargo-select${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
                     $(`#dg-select${evt2}-${evt1}`).attr(`disabled`, false);
                     $(`#uom-select${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);

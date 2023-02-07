@@ -12,6 +12,7 @@ use App\Models\AirQuotationD1;
 use App\Models\AirQuotationD2;
 use App\Models\AirQuotationSD1;
 use App\Models\AirQuotationSD2;
+use App\Models\Company;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
@@ -251,7 +252,8 @@ class AirQuotationController extends Controller
                                     'currency_s_d2'     => !empty($request->currency_s_d2[$key2]) ? $request->currency_s_d2[$key2] : null,
                                     'curr_rate_s_d2'     => !empty($request->curr_rate_s_d2[$key2]) ? str_replace(",", "", $request->curr_rate_s_d2[$key2])  : null,
                                     'min_amt_s_d2'     => !empty($request->min_amt_s_d2[$key2]) ? str_replace(",", "", $request->min_amt_s_d2[$key2])  : null,
-                                    'amt_s_d2'     => !empty($request->amt_s_d2[$key2]) ?  str_replace(",", "", $request->amt_s_d2[$key2])  : null,
+                                    'unit_rate_s_d2'     => !empty($request->unit_rate_s_d2[$key2]) ?  str_replace(",", "", $request->unit_rate_s_d2[$key2])  : null,
+                                    'idr_amt_s_d2'     => !empty($request->idr_amt_s_d2[$key2]) ?  str_replace(",", "", $request->idr_amt_s_d2[$key2])  : null,
                                     'created_at' => now(),
                                     'updated_at' => now(),
                                 ];
@@ -281,8 +283,10 @@ class AirQuotationController extends Controller
                             'due_d2'     => !empty($request->due_d2[$key3]) ? $request->due_d2[$key3] : null,
                             'rate_d2'     => !empty($request->rate_d2[$key3]) ? $request->rate_d2[$key3] : null,
                             'currency_d2'     => !empty($request->currency_d2[$key3]) ? $request->currency_d2[$key3] : null,
+                            'curr_rate_d2'     => !empty($request->curr_rate_d2[$key3]) ? str_replace(",", "", $request->curr_rate_d2[$key3])  : null,
+                            'unit_rate_d2'     => !empty($request->unit_rate_d2[$key3]) ? str_replace(",", "", $request->unit_rate_d2[$key3])  : null,
                             'min_amt_d2'     => !empty($request->min_amt_d2[$key3]) ? str_replace(",", "", $request->min_amt_d2[$key3])  : null,
-                            'amt_d2'     => !empty($request->amt_d2[$key3]) ?  str_replace(",", "", $request->amt_d2[$key3])  : null,
+                            'idr_amt_d2'     => !empty($request->idr_amt_d2[$key3]) ? str_replace(",", "", $request->idr_amt_d2[$key3])  : null,
                             'created_at' => now(),
                             'updated_at' => now(),
                         ];
@@ -429,8 +433,8 @@ class AirQuotationController extends Controller
                 // $result_sd1 = [];
                 $result_sd2 = [];
                 $result_d1 = [];
-                $air_quot->air_quotation_d1()->delete();
-                $air_quot->air_quotation_s_d2()->delete();
+                $air_quot->air_quotation_d1()->forceDelete();
+                $air_quot->air_quotation_s_d2()->forceDelete();
                 if ($request->air_dept_code[0] != null) {
                     foreach ($request->fch_code as $key => $val) {
                         $result_d1[] = [
@@ -522,7 +526,8 @@ class AirQuotationController extends Controller
                                     'currency_s_d2'     => !empty($request->currency_s_d2[$key2]) ? $request->currency_s_d2[$key2] : null,
                                     'curr_rate_s_d2'     => !empty($request->curr_rate_s_d2[$key2]) ? str_replace(",", "", $request->curr_rate_s_d2[$key2])  : null,
                                     'min_amt_s_d2'     => !empty($request->min_amt_s_d2[$key2]) ? str_replace(",", "", $request->min_amt_s_d2[$key2])  : null,
-                                    'amt_s_d2'     => !empty($request->amt_s_d2[$key2]) ?  str_replace(",", "", $request->amt_s_d2[$key2])  : null,
+                                    'unit_rate_s_d2'     => !empty($request->unit_rate_s_d2[$key2]) ?  str_replace(",", "", $request->unit_rate_s_d2[$key2])  : null,
+                                    'idr_amt_s_d2'     => !empty($request->idr_amt_s_d2[$key2]) ?  str_replace(",", "", $request->idr_amt_s_d2[$key2])  : null,
                                     'created_at' => now(),
                                     'updated_at' => now(),
                                 ];
@@ -536,7 +541,7 @@ class AirQuotationController extends Controller
 
                 //SAVE TO TABLE AIR QUOTATION D2
                 $result_d2 = [];
-                $air_quot->air_quotation_d2()->delete();
+                $air_quot->air_quotation_d2()->forceDelete();
                 if ($request->item_code_d2[0] !=  null) {
                     foreach (array_unique($request->item_code_d2) as $key3 => $val3) {
                         $result_d2[] = [
@@ -553,8 +558,10 @@ class AirQuotationController extends Controller
                             'due_d2'     => !empty($request->due_d2[$key3]) ? $request->due_d2[$key3] : null,
                             'rate_d2'     => !empty($request->rate_d2[$key3]) ? $request->rate_d2[$key3] : null,
                             'currency_d2'     => !empty($request->currency_d2[$key3]) ? $request->currency_d2[$key3] : null,
+                            'curr_rate_d2'     => !empty($request->curr_rate_d2[$key3]) ? str_replace(",", "", $request->curr_rate_d2[$key3])  : null,
+                            'unit_rate_d2'     => !empty($request->unit_rate_d2[$key3]) ? str_replace(",", "", $request->unit_rate_d2[$key3])  : null,
                             'min_amt_d2'     => !empty($request->min_amt_d2[$key3]) ? str_replace(",", "", $request->min_amt_d2[$key3])  : null,
-                            'amt_d2'     => !empty($request->amt_d2[$key3]) ?  str_replace(",", "", $request->amt_d2[$key3])  : null,
+                            'idr_amt_d2'     => !empty($request->idr_amt_d2[$key3]) ? str_replace(",", "", $request->idr_amt_d2[$key3])  : null,
                             'created_at' => now(),
                             'updated_at' => now(),
                         ];
@@ -630,5 +637,19 @@ class AirQuotationController extends Controller
         } else {
             abort(403);
         }
+    }
+
+    public function pdf($id)
+    {
+        $air_quot = AirQuotation::with(['quotation',  'air_quotation_d1', 'air_quotation_d2.vat.vat_code_detail_satu'])->where('id', $id)->first();
+        $aq_d1 = AirQuotationD1::with('air_quotation_s_d2.vat.vat_code_detail_satu')->where('air_quotation_id', $id)->get()->toArray();
+        $company = Company::with('company_detail_satu')->first();
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('trx.air_quot.export_pdf', [
+            'aq'    => $air_quot,
+            'aq_d1' => $aq_d1,
+            'company'   => $company
+        ])->setPaper('a4', 'portrait');
+        return $pdf->stream('laporan.pdf');
     }
 }

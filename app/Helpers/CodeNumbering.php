@@ -38,7 +38,7 @@ class CodeNumbering
         $name_table = $table;
 
         // CEK CODE DARI DATABASE
-        $count_charge_table = $name_table::select("{$field}")->where("{$field}", 'like', "%$imp_format%")->count();
+        $count_charge_table = $name_table::select("{$field}")->where("{$field}", 'like', "%$imp_format%")->withTrashed()->count();
 
         if ($count_charge_table == 0) {
             $data_format = 1;

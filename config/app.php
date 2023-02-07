@@ -196,7 +196,10 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\NumberingServiceProvider::class,
-
+        /*
+         * DOM PDF
+         */
+        Barryvdh\DomPDF\ServiceProvider::class,
     ],
 
     /*
@@ -215,6 +218,7 @@ return [
         'Laratrust'   => Laratrust\LaratrustFacade::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'Input' => Illuminate\Support\Facades\Request::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
         // 'CodeNumbering' => App\Helpers\CodeNumbering::class
     ])->toArray(),
 

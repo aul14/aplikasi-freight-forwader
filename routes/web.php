@@ -43,6 +43,7 @@ use App\Http\Controllers\VatCodeController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\VesselController;
 use App\Http\Controllers\WtCodeController;
+use App\Models\SeaQuotation;
 
 /*
 |--------------------------------------------------------------------------
@@ -102,6 +103,8 @@ Route::group(['middleware' => ['auth', 'prevent-back-history']], function () {
 	Route::resource('/del_type', DeliveryTypeController::class);
 	Route::resource('/air_quot', AirQuotationController::class);
 	Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
+	Route::get('/pdf_sea_quot/{sea_quot}', [SeaQuotationController::class, 'pdf'])->name('pdf.sea');
+	Route::get('/pdf_air_quot/{air_quot}', [AirQuotationController::class, 'pdf'])->name('pdf.air');
 	Route::get('/company', [CompanyController::class, 'index'])->name('company');
 	Route::get('/dashboard', [HomeController::class, 'index'])->name('home');
 	Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');

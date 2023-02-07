@@ -12,12 +12,20 @@ use App\Models\DeliveryType;
 use App\Models\QuotationType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Quotation extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $with = ['quotation_type', 'job_type', 'bisnis_party', 'salesman', 'currency', 'delivery_type', 'commodity', 'uom'];
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
 
     public function quotation_type()
     {

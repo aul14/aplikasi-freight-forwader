@@ -17,8 +17,10 @@
                     <th class="text-center" style="min-width: 200px;"> Rate </th>
                     <th class="text-center" style="min-width: 200px;"> Currency </th>
                     <th class="text-center" style="min-width: 200px;"> Currency Rate </th>
-                    <th class="text-center" style="min-width: 200px;"> Min Amount </th>
-                    <th class="text-center" style="min-width: 200px;"> Amount </th>
+                    <th class="text-center" style="min-width: 200px;"> Unit Rate </th>
+                    <th class="text-center" style="min-width: 200px;"> IDR Min Amount </th>
+                    {{-- <th class="text-center" style="min-width: 200px;"> Amount </th> --}}
+                    <th class="text-center" style="min-width: 200px;"> IDR Amount </th>
                 </tr>
             </thead>
 
@@ -26,17 +28,18 @@
                 @if ($count_s_d2 > 0)
                     @foreach ($item_s_d2 as $key_s_d2 => $val)
                         @php
-                            $count_test = $key_s_d2 + $key * 2;
+                            $count_test += $key_s_d2 + $key * 2;
                         @endphp
                         <tr class="dynamic-field" id="dynamic-field-{{ $count_test }}">
                             <td class="text-center">
-                                <button type="button" onclick="addNewField(this.id)"
-                                    id="add-button-{{ $count_test }}"
+                                <button type="button"
+                                    onclick="addNewField(this.id, '#wrapper-row-list-fch-{{ $key + 1 }}')"
+                                    id="add-button-{{ $key + 1 }}"
                                     class="btn btn-xs btn-primary float-left text-uppercase shadow-sm add-button"><i
                                         class="fa fa-plus fa-fw"></i>
                                 </button>
                                 <button type="button" onclick="removeLastField(this)"
-                                    id="remove-button-{{ $count_test }}"
+                                    id="remove-button-{{ $key + 1 }}"
                                     class="btn btn-xs btn-danger float-left text-uppercase ml-1 remove-button"><i
                                         class="fa fa-minus fa-fw"></i>
                                 </button>
@@ -82,8 +85,10 @@
                             <td>
                                 <div class="form-group">
                                     <input type="text" class="form-control qty-input" autocomplete="off"
-                                        data-type='currency4' value="{{ number_format($val->qty_s_d2, 4, '.', ',') }}"
-                                        name="qty_s_d2[]" id="qty-input-{{ $count_test }}">
+                                        @disabled($val->chg_unit_s_d2 == 'SHIPMENT') data-type='currency4'
+                                        value="{{ number_format($val->qty_s_d2, 4, '.', ',') }}" name="qty_s_d2[]"
+                                        id="qty-input-{{ $count_test }}"
+                                        onchange="sum_idr({{ $count_test }}, {{ $key + 1 }})">
                                 </div>
                             </td>
 
@@ -169,28 +174,41 @@
                             <td>
                                 <div class="form-group">
                                     <input type="text" class="form-control curr-rate"
-                                        id="curr-rate{{ $count_test }}" data-curr="{{ $count_test }}"
+                                        id="curr-rate{{ $count_test }}" autocomplete="off" data-type='currency'
+                                        name="curr_rate_s_d2[]"
                                         value="{{ number_format($val->curr_rate_s_d2, 2, '.', ',') }}"
-                                        autocomplete="off" data-type='currency' name="curr_rate_s_d2[]"
-                                        onchange="sumofunittotal({{ $count_test }})">
+                                        onchange="sum_idr({{ $count_test }}, {{ $key + 1 }})">
+                                </div>
+                            </td>
+
+
+                            <td>
+                                <div class="form-group">
+                                    <input type="text" class="form-control unit-rate"
+                                        id="unit-rate{{ $count_test }}" autocomplete="off" data-type='currency'
+                                        name="unit_rate_s_d2[]"
+                                        value="{{ number_format($val->unit_rate_s_d2, 2, '.', ',') }}"
+                                        onchange="sum_idr({{ $count_test }}, {{ $key + 1 }})">
                                 </div>
                             </td>
 
                             <td>
                                 <div class="form-group">
                                     <input type="text" class="form-control min-amt"
-                                        id="min-amt{{ $count_test }}"
+                                        id="min-amt{{ $count_test }}" autocomplete="off" data-type='currency'
+                                        name="min_amt_s_d2[]"
                                         value="{{ number_format($val->min_amt_s_d2, 2, '.', ',') }}"
-                                        autocomplete="off" data-type='currency' name="min_amt_s_d2[]">
+                                        onchange="sum_idr({{ $count_test }}, {{ $key + 1 }})">
                                 </div>
                             </td>
 
                             <td>
                                 <div class="form-group">
-                                    <input type="text" class="form-control amt" id="amt{{ $count_test }}"
+                                    <input type="text" class="form-control idr-amt"
+                                        id="idr-amt{{ $count_test }}" readonly data-idr="{{ $key + 1 }}"
                                         autocomplete="off" data-type='currency_amt'
-                                        value="{{ number_format($val->amt_s_d2, 2, '.', ',') }}"
-                                        onchange="sumofunittotal({{ $count_test }})" name="amt_s_d2[]">
+                                        value="{{ number_format($val->idr_amt_s_d2, 2, '.', ',') }}"
+                                        name="idr_amt_s_d2[]">
                                 </div>
                             </td>
 
@@ -199,7 +217,7 @@
                 @else
                     <tr class="dynamic-field" id="dynamic-field-1">
                         <td class="text-center">
-                            <button type="button" onclick="addNewField(this)" id="add-button-1"
+                            <button type="button" onclick="addNewField(this.id)" id="add-button-1"
                                 class="btn btn-xs btn-primary float-left text-uppercase shadow-sm add-button"><i
                                     class="fa fa-plus fa-fw"></i>
                             </button>
@@ -244,7 +262,8 @@
                         <td>
                             <div class="form-group">
                                 <input type="text" class="form-control qty-input" autocomplete="off"
-                                    data-type='currency4' name="qty_s_d2[]" id="qty-input-1">
+                                    data-type='currency4' name="qty_s_d2[]" id="qty-input-1"
+                                    onchange="sum_idr(1, 1)">
                             </div>
                         </td>
 
@@ -323,23 +342,33 @@
 
                         <td>
                             <div class="form-group">
-                                <input type="text" class="form-control curr-rate" id="curr-rate1" data-curr="1"
+                                <input type="text" class="form-control curr-rate" id="curr-rate1"
                                     autocomplete="off" data-type='currency' name="curr_rate_s_d2[]"
-                                    onchange="sumofunittotal(1)">
+                                    onchange="sum_idr(1, 1)">
+                            </div>
+                        </td>
+
+
+                        <td>
+                            <div class="form-group">
+                                <input type="text" class="form-control unit-rate" id="unit-rate1"
+                                    autocomplete="off" data-type='currency' name="unit_rate_s_d2[]"
+                                    onchange="sum_idr(1, 1)">
                             </div>
                         </td>
 
                         <td>
                             <div class="form-group">
                                 <input type="text" class="form-control min-amt" id="min-amt1" autocomplete="off"
-                                    data-type='currency' name="min_amt_s_d2[]">
+                                    data-type='currency' name="min_amt_s_d2[]" onchange="sum_idr(1, 1)">
                             </div>
                         </td>
 
                         <td>
                             <div class="form-group">
-                                <input type="text" class="form-control amt" id="amt1" autocomplete="off"
-                                    data-type='currency_amt' onchange="sumofunittotal(1)" name="amt_s_d2[]">
+                                <input type="text" class="form-control idr-amt" id="idr-amt1" readonly
+                                    data-idr="1" autocomplete="off" data-type='currency_amt'
+                                    name="idr_amt_s_d2[]">
                             </div>
                         </td>
 
@@ -355,7 +384,7 @@
     <div class="row mt-2 align-items-center">
         <div class="col-md-12 d-flex justify-content-end">
             <div class="form-group">
-                <label for="total_amt">Total Amount</label>
+                <label for="total_amt">IDR Total Amount</label>
                 <input type="text"
                     value="{{ old('total_amt', $count_s_d2 == 0 ? '' : number_format($item->total_amt, 2, '.', ',')) }}"
                     data-type='currency0' readonly title="No Of Container Type 1"
@@ -373,7 +402,7 @@
     <div class="row mt-2 align-items-center">
         <div class="col-md-12 d-flex justify-content-end">
             <div class="form-group">
-                <label for="total_amt">Total Amount</label>
+                <label for="total_amt">IDR Total Amount</label>
                 <input type="text"
                     value="{{ old('total_amt', $count_s_d2 == 0 ? '' : number_format($item->total_amt, 2, '.', ',')) }}"
                     data-type='currency0' readonly title="No Of Container Type 1"
@@ -413,6 +442,8 @@
         let fchsub_code = ".fchsub-code";
         let dueSub = ".due-select";
         let amt = ".amt";
+        let idr_amt = ".idr-amt";
+        let unit_rate = ".unit-rate";
         let countParseSub = [];
         let countParseSubArray = [];
 
@@ -469,8 +500,6 @@
                 fieldSub.find(currencySub).empty();
                 fieldSub.find(uomSub).empty();
                 fieldSub.find(vatSub).empty();
-                fieldSub.find(qtyInputSub).attr("id", "qty-input-" + countSub);
-
                 fieldSub.find(itemSelectSub).attr("id", "item-select-" + countSub).select2({
                     placeholder: 'Search...',
                     width: "100%",
@@ -497,35 +526,55 @@
                 fieldSub.find(itemDescSub).attr("id", "item-desc-" + countSub);
 
                 if (total_line > 0) {
-                    let fchsubcode = $(`#fchsub-code-${row_number}`).val();
-
-                    fieldSub.find("#add-button-1").attr("id", "add-button-" + row_number).removeAttr("onclick").attr(
+                    let fchsubcode = $(`#fchsub-code-${obj.split("-")[2]}`).val();
+                    fieldSub.find(addButton).attr("id", "add-button-" + obj.split("-")[2]).removeAttr("onclick").attr(
                         "onclick",
-                        `addNewField(this, '#wrapper-row-list-fch-${row_number}')`);
-                    fieldSub.find(amt).attr("id", "amt" + row_number).removeAttr("onchange").attr("onchange",
-                        `sumofunittotal(${row_number})`);
-                    fieldSub.find(curr_rate).attr("data-curr", row_number).removeAttr("onchange").attr("onchange",
-                        `sumofunittotal(${row_number})`);
-                    fieldSub.find(fchsub_code).attr("id", "fchsub-code-" + countSub).val(fchsubcode);
+                        `addNewField(this.id, '#wrapper-row-list-fch-${obj.split("-")[2]}')`);
+
+                    fieldSub.find(qtyInputSub).attr("id", "qty-input-" + countSub).removeAttr("onchange").attr("onchange",
+                        `sum_idr(${countSub}, ${obj.split("-")[2]})`);
+                    fieldSub.find(curr_rate).attr("id", "curr-rate" + countSub).removeAttr("onchange").attr("onchange",
+                        `sum_idr(${countSub}, ${obj.split("-")[2]})`);
+                    fieldSub.find(unit_rate).attr("id", "unit-rate" + countSub).removeAttr("onchange").attr("onchange",
+                        `sum_idr(${countSub}, ${obj.split("-")[2]})`);
+                    fieldSub.find(min_amt).attr("id", "min-amt" + countSub).removeAttr("onchange").attr("onchange",
+                        `sum_idr(${countSub}, ${obj.split("-")[2]})`);
+                    fieldSub.find(idr_amt).attr("id", "idr-amt" + countSub).attr("data-idr", obj.split("-")[2]);
+
+                    fieldSub.find(fchsub_code).attr("id", "fchsub-code-" + countSub).val(fchsubcode)
                 } else {
                     <?php if($count_s_d2 > 0): ?>
                     let fchsubcode = $(`#fchsub-code-${obj.split("-")[2]}`).val();
-
-                    fieldSub.find(amt).attr("id", "amt" + obj.split("-")[2]).removeAttr("onchange").attr("onchange",
-                        `sumofunittotal(${obj.split("-")[2]})`);
-                    fieldSub.find(curr_rate).attr("data-curr", obj.split("-")[2]).removeAttr("onchange").attr("onchange",
-                        `sumofunittotal(${obj.split("-")[2]})`);
-                    fieldSub.find(`#add-button-1`).attr("id", "add-button-" + obj.split("-")[2]).removeAttr("onclick").attr(
+                    fieldSub.find(addButton).attr("id", "add-button-" + obj.split("-")[2]).removeAttr("onclick").attr(
                         "onclick",
                         `addNewField(this.id, '#wrapper-row-list-fch-${obj.split("-")[2]}')`);
+
+                    fieldSub.find(qtyInputSub).attr("id", "qty-input-" + countSub).removeAttr("onchange").attr("onchange",
+                        `sum_idr(${countSub}, ${obj.split("-")[2]})`);
+                    fieldSub.find(curr_rate).attr("id", "curr-rate" + countSub).removeAttr("onchange").attr("onchange",
+                        `sum_idr(${countSub}, ${obj.split("-")[2]})`);
+                    fieldSub.find(unit_rate).attr("id", "unit-rate" + countSub).removeAttr("onchange").attr("onchange",
+                        `sum_idr(${countSub}, ${obj.split("-")[2]})`);
+                    fieldSub.find(min_amt).attr("id", "min-amt" + countSub).removeAttr("onchange").attr("onchange",
+                        `sum_idr(${countSub}, ${obj.split("-")[2]})`);
+                    fieldSub.find(idr_amt).attr("id", "idr-amt" + countSub).attr("data-idr", obj.split("-")[2]);
+
+                    fieldSub.find(fchsub_code).attr("id", "fchsub-code-" + countSub).val(fchsubcode)
                     <?php else: ?>
                     let fchsubcode = $(`#fchsub-code-1`).val();
-                    <?php endif; ?>
-
                     fieldSub.find(fchsub_code).attr("id", "fchsub-code-" + countSub).val(fchsubcode);
-                }
 
-                fieldSub.find(curr_rate).attr("id", "curr-rate" + countSub);
+                    fieldSub.find(qtyInputSub).attr("id", "qty-input-" + countSub).removeAttr("onchange").attr("onchange",
+                        `sum_idr(${countSub}, 1)`);
+                    fieldSub.find(curr_rate).attr("id", "curr-rate" + countSub).removeAttr("onchange").attr("onchange",
+                        `sum_idr(${countSub}, 1)`);
+                    fieldSub.find(unit_rate).attr("id", "unit-rate" + countSub).removeAttr("onchange").attr("onchange",
+                        `sum_idr(${countSub}, 1)`);
+                    fieldSub.find(min_amt).attr("id", "min-amt" + countSub).removeAttr("onchange").attr("onchange",
+                        `sum_idr(${countSub}, 1)`);
+                    fieldSub.find(idr_amt).attr("id", "idr-amt" + countSub).attr("data-idr", 1);
+                    <?php endif; ?>
+                }
 
                 fieldSub.find(removeButton).attr("id", "remove-button-" + countSub);
 
@@ -693,23 +742,48 @@
             }
         }
 
+        function sum_idr(evt = null, evt2 = null) {
+            let curr = parseFloat($(`#curr-rate${evt}`).val().split(',').join(""));
+            let qty = ($(`#qty-input-${evt}`).val().split(',').join("") == '' || $(`#qty-input-${evt}`).val().split(',')
+                .join("") == '0.0000') ? 1 : parseFloat($(`#qty-input-${evt}`).val().split(',').join(""));
+            let min = ($(`#min-amt${evt}`).val().split(',').join("") == '' || $(`#min-amt${evt}`).val().split(',').join(
+                "") == '0.00') ? 0 : parseFloat($(`#min-amt${evt}`).val().split(',').join(""));
+            let unit = parseFloat($(`#unit-rate${evt}`).val().split(',').join(""));
+            let idr = parseFloat($(`#idr-amt${evt}`).val().split(',').join(""));
+
+            let count_idr = unit * (curr * qty);
+
+            let val_idr = count_idr > min ? count_idr : min;
+
+            $.ajax({
+                type: "post",
+                url: '{{ route('format.currency') }}',
+                data: {
+                    total: val_idr
+                },
+                dataType: "json",
+                success: function(response) {
+                    document.getElementById(`idr-amt${evt}`).value = response;
+
+                    if (evt2 != '') {
+                        sumofunittotal(evt2);
+                    }
+                }
+            });
+
+        }
+
         function sumofunittotal(num = null) {
             var total = 0;
             var amt = 0
-            var curr = 0
-            var sum = 0
-            var curr_num = $(`*[data-curr="${num}"]`);
-            var amt_num = document.querySelectorAll(`#amt${num}`);
+            var curr_num = $(`*[data-idr="${num}"]`);
 
-            for (var i = 0; i < amt_num.length; ++i) {
-                if (!isNaN(parseFloat(amt_num[i].value.split(',').join("")))) {
-                    curr = parseFloat(amt_num[i].value.split(',').join(""));
-                }
+            for (var i = 0; i < curr_num.length; ++i) {
                 if (!isNaN(parseFloat(curr_num[i].value.split(',').join("")))) {
                     amt = parseFloat(curr_num[i].value.split(',').join(""));
-                    sum = curr * amt;
+                    total += amt;
                 }
-                total += sum;
+
             }
 
             $.ajax({

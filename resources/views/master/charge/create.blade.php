@@ -427,7 +427,7 @@
                         </div>
                         <div class="row my-3">
                             <div class="col-md-12">
-                                <a href="{{ route('charge_code.index') }}" class="btn btn-danger">Back</a>
+                                <a href="{{ route('charge_code.index') }}" class="btn btn-danger btn-back">Back</a>
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </div>
                         </div>
@@ -910,7 +910,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.description}`,
                                     id: item.id,
                                     custom_attribute: item.description
                                 }
@@ -934,7 +934,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.description}`,
                                     id: item.id,
                                     custom_attribute: item.description
                                 }
@@ -958,7 +958,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.description}`,
                                     id: item.id,
                                     custom_attribute: item.description
                                 }
@@ -1005,7 +1005,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.description}`,
                                     id: item.id,
                                     custom_attribute: item.description
                                 }
@@ -1029,7 +1029,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.description}`,
                                     id: item.code,
                                     custom_attribute: item.description
                                 }

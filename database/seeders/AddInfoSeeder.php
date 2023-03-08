@@ -15,11 +15,14 @@ class AddInfoSeeder extends Seeder
      */
     public function run()
     {
+        AddInfo::truncate();
         AddInfo::insert([
             [
                 'trx_type'  => 'SQ',
                 'kb1'  => 'FUMIGASI',
                 'kb2'  => 'INSURANCE',
+                'ks1'   => NULL,
+                'kd1'   => NULL,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -27,6 +30,26 @@ class AddInfoSeeder extends Seeder
                 'trx_type'  => 'AQ',
                 'kb1'  => 'FUMIGASI',
                 'kb2'  => 'INSURANCE',
+                'ks1'   => NULL,
+                'kd1'   => NULL,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'trx_type'  => 'SEB',
+                'kb1'  => NULL,
+                'kb2'  => NULL,
+                'ks1'   => 'SERIAL DOC NUMBER',
+                'kd1'   => 'SEND DATE MANIFEST',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'trx_type'  => 'AEB',
+                'kb1'  => NULL,
+                'kb2'  => NULL,
+                'ks1'   => 'SERIAL DOC NUMBER',
+                'kd1'   => 'SEND DATE MANIFEST',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

@@ -3,13 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Uom;
-use App\Models\Role;
-use App\Models\User;
 use App\Models\WtCode;
 use App\Models\Airline;
 use App\Models\Airport;
-use App\Models\JobType;
-use App\Models\Salesman;
 use App\Models\Commodity;
 use App\Models\Container;
 use App\Models\PartyType;
@@ -51,7 +47,9 @@ class DatabaseSeeder extends Seeder
             CurrencySeeder::class,
             CurrencyD1Seeder::class,
             SystemNumberingSeeder::class,
-            VatCodeSeeder::class
+            VatCodeSeeder::class,
+            SalesmanSeeder::class,
+            JobTypeSeeder::class
         ]);
 
         Airline::insert([
@@ -155,52 +153,6 @@ class DatabaseSeeder extends Seeder
             ],
         ]);
 
-
-        JobType::insert([
-            [
-                'type'      => 'FI',
-                'description'   => 'SEA FCL IMPORT',
-                'module_code'   => 'SI',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'type'      => 'LI',
-                'description'   => 'SEA LCL IMPORT',
-                'module_code'   => 'SI',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'type'      => 'NJ',
-                'description'   => 'NON JOB',
-                'module_code'   => 'MS',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'type'      => 'FC',
-                'description'   => 'SEA FCL EXPORT',
-                'module_code'   => 'SE',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'type'      => 'GP',
-                'description'   => 'SEA CONSOL EXPORT',
-                'module_code'   => 'SE',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'type'      => 'AI',
-                'description'   => 'AIR IMPORT',
-                'module_code'   => 'AI',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ]);
-
         Uom::insert([
             [
                 'code'  => 'EA',
@@ -282,27 +234,6 @@ class DatabaseSeeder extends Seeder
             [
                 'type'      => 'OTH',
                 'type_name'   => 'OTHERS',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ]);
-
-        Salesman::insert([
-            [
-                'code'      => 'IMPORT',
-                'name'   => 'IMPORT SALES TEAM',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'code'      => 'EXPORT',
-                'name'   => 'EXPORT SALES TEAM',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'code'      => 'MGR/GM/DIR',
-                'name'   => 'ANNIE SUTRISNO',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

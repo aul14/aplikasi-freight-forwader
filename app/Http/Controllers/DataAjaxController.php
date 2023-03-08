@@ -2,33 +2,37 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Airline;
-use App\Models\Airport;
-use App\Models\BisnisParty;
 use App\Models\Uom;
 use App\Models\City;
 use App\Models\Port;
 use App\Models\Module;
 use App\Models\Vendor;
 use App\Models\WtCode;
+use App\Models\Airline;
+use App\Models\Airport;
+use App\Models\AirQuotationD1;
 use App\Models\Country;
 use App\Models\JobType;
 use App\Models\VatCode;
 use App\Models\Currency;
 use App\Models\Customer;
 use App\Models\Salesman;
-use App\Models\ChargeCode;
-use App\Models\ChargeTable;
 use App\Models\Commodity;
 use App\Models\Container;
-use App\Models\CurrencyDetailSatu;
+use App\Models\ChargeCode;
 use App\Models\VendorType;
+use App\Models\BisnisParty;
+use App\Models\ChargeTable;
 use App\Models\PaymentTerm;
 use App\Models\CustomerType;
 use App\Models\DeliveryType;
-use App\Models\QuotationType;
 use App\Models\ShippingLine;
 use Illuminate\Http\Request;
+use App\Models\QuotationType;
+use App\Models\SeaQuotationD1;
+use Yajra\DataTables\DataTables;
+use App\Models\CurrencyDetailSatu;
+use App\Models\Vessel;
 use Illuminate\Support\Facades\DB;
 
 class DataAjaxController extends Controller
@@ -157,6 +161,16 @@ class DataAjaxController extends Controller
         }
 
         return response()->json($ports);
+    }
+
+    public function ajax_by_code_city(Request $request)
+    {
+        $search = $request->code;
+        $query = '';
+        if ($request->ajax()) {
+            $query = City::where('code', $search)->first();
+        }
+        return response()->json($query);
     }
 
     public function ajax_get_city(Request $request)
@@ -352,96 +366,124 @@ class DataAjaxController extends Controller
     {
         $search = strtoupper($request->q);
 
-        $vat = [];
+        $customer = [];
         if ($request->ajax()) {
             if ($search == '') {
-                $vat = Customer::orderby('id', 'asc')->select('id', 'code', 'name')->limit(10)->get();
+                $customer = Customer::orderby('id', 'asc')->select('id', 'code', 'name')->limit(10)->get();
             } else {
-                $vat = Customer::orderby('id', 'asc')->select('id', 'code', 'name')->where('code', 'like', "%$search%")->orWhere('name', 'like', "%$search%")->limit(10)->get();
+                $customer = Customer::orderby('id', 'asc')->select('id', 'code', 'name')->where('code', 'like', "%$search%")->orWhere('name', 'like', "%$search%")->limit(10)->get();
             }
         }
 
-        return response()->json($vat);
+        return response()->json($customer);
+    }
+
+    public function ajax_get_vessel(Request $request)
+    {
+        $search = strtoupper($request->q);
+
+        $vessel = [];
+        if ($request->ajax()) {
+            if ($search == '') {
+                $vessel = Vessel::orderby('id', 'asc')->select('id', 'code', 'name')->limit(10)->get();
+            } else {
+                $vessel = Vessel::orderby('id', 'asc')->select('id', 'code', 'name')->where('code', 'like', "%$search%")->orWhere('name', 'like', "%$search%")->limit(10)->get();
+            }
+        }
+
+        return response()->json($vessel);
     }
 
     public function ajax_get_salesman(Request $request)
     {
         $search = strtoupper($request->q);
 
-        $vat = [];
+        $salesman = [];
         if ($request->ajax()) {
-            if ($search == '') {
-                $vat = Salesman::orderby('id', 'asc')->select('id', 'code', 'name')->limit(10)->get();
+            if (auth()->user()->is_mng_sales == true || auth()->user()->is_sales == true) {
+                if ($search == '') {
+                    $salesman = Salesman::orderby('id', 'asc')->select('id', 'code', 'name')->whereIn('code', explode(",", auth()->user()->salesman_code))->limit(10)->get();
+                } else {
+                    $salesman = Salesman::orderby('id', 'asc')->select('id', 'code', 'name')->whereIn('code', explode(",", auth()->user()->salesman_code))
+                        ->where(function ($query) use ($search) {
+                            $query->where('code', 'like', "%$search%")->orWhere('name', 'like', "%$search%");
+                        })
+                        ->limit(10)->get();
+                }
             } else {
-                $vat = Salesman::orderby('id', 'asc')->select('id', 'code', 'name')->where('code', 'like', "%$search%")->orWhere('name', 'like', "%$search%")->limit(10)->get();
+                if ($search == '') {
+                    $salesman = Salesman::orderby('id', 'asc')->select('id', 'code', 'name')->limit(10)->get();
+                } else {
+                    $salesman = Salesman::orderby('id', 'asc')->select('id', 'code', 'name')->where('code', 'like', "%$search%")->orWhere('name', 'like', "%$search%")->limit(10)->get();
+                }
             }
         }
 
-        return response()->json($vat);
+        return response()->json($salesman);
     }
 
     public function ajax_get_vendor(Request $request)
     {
         $search = strtoupper($request->q);
 
-        $vat = [];
+        $vendor = [];
         if ($request->ajax()) {
             if ($search == '') {
-                $vat = Vendor::orderby('id', 'asc')->select('id', 'code', 'name')->limit(10)->get();
+                $vendor = Vendor::orderby('id', 'asc')->select('id', 'code', 'name')->limit(10)->get();
             } else {
-                $vat = Vendor::orderby('id', 'asc')->select('id', 'code', 'name')->where('code', 'like', "%$search%")->orWhere('name', 'like', "%$search%")->limit(10)->get();
+                $vendor = Vendor::orderby('id', 'asc')->select('id', 'code', 'name')->where('code', 'like', "%$search%")->orWhere('name', 'like', "%$search%")->limit(10)->get();
             }
         }
 
-        return response()->json($vat);
+        return response()->json($vendor);
     }
 
     public function ajax_get_shipline(Request $request)
     {
         $search = strtoupper($request->q);
 
-        $vat = [];
+        $shipline = [];
         if ($request->ajax()) {
             if ($search == '') {
-                $vat = ShippingLine::orderby('id', 'asc')->select('id', 'code', 'name')->limit(10)->get();
+                $shipline = ShippingLine::orderby('id', 'asc')->select('id', 'code', 'name')->limit(10)->get();
             } else {
-                $vat = ShippingLine::orderby('id', 'asc')->select('id', 'code', 'name')->where('code', 'like', "%$search%")->orWhere('name', 'like', "%$search%")->limit(10)->get();
+                $shipline = ShippingLine::orderby('id', 'asc')->select('id', 'code', 'name')->where('code', 'like', "%$search%")->orWhere('name', 'like', "%$search%")->limit(10)->get();
             }
         }
 
-        return response()->json($vat);
+        return response()->json($shipline);
     }
 
     public function ajax_get_payment_term(Request $request)
     {
         $search = strtoupper($request->q);
 
-        $vat = [];
+        $pay_term = [];
         if ($request->ajax()) {
             if ($search == '') {
-                $vat = PaymentTerm::orderby('id', 'asc')->select('id', 'code', 'description')->limit(10)->get();
+                $pay_term = PaymentTerm::orderby('id', 'asc')->select('id', 'code', 'description')->limit(10)->get();
             } else {
-                $vat = PaymentTerm::orderby('id', 'asc')->select('id', 'code', 'description')->where('code', 'like', "%$search%")->orWhere('description', 'like', "%$search%")->limit(10)->get();
+                $pay_term = PaymentTerm::orderby('id', 'asc')->select('id', 'code', 'description')->where('code', 'like', "%$search%")->orWhere('description', 'like', "%$search%")->limit(10)->get();
             }
         }
 
-        return response()->json($vat);
+        return response()->json($pay_term);
     }
 
     public function ajax_get_cus_type(Request $request)
     {
         $search = strtoupper($request->q);
 
-        $vat = [];
+        $cus_type = [];
         if ($request->ajax()) {
             if ($search == '') {
-                $vat = CustomerType::orderby('id', 'asc')->select('id', 'type', 'type_name')->limit(10)->get();
+                $cus_type = CustomerType::orderby('id', 'asc')->select('id', 'type', 'type_name')->limit(10)->get();
             } else {
-                $vat = CustomerType::orderby('id', 'asc')->select('id', 'type', 'type_name')->where('type', 'like', "%$search%")->orWhere('type_name', 'like', "%$search%")->limit(10)->get();
+                $cus_type = CustomerType::orderby('id', 'asc')->select('id', 'type', 'type_name')->where('type', 'like', "%$search%")->orWhere('type_name', 'like', "%$search%")->limit(10)->get();
             }
         }
 
-        return response()->json($vat);
+        return response()->json($cus_type);
     }
 
     public function ajax_get_bisnis_party(Request $request)
@@ -450,10 +492,22 @@ class DataAjaxController extends Controller
 
         $vat = [];
         if ($request->ajax()) {
-            if ($search == '') {
-                $vat = BisnisParty::orderby('id', 'asc')->limit(10)->get();
+            if (auth()->user()->is_mng_sales == true || auth()->user()->is_sales == true) {
+                if ($search == '') {
+                    $vat = BisnisParty::orderby('id', 'asc')->whereIn('salesman_code', explode(",", auth()->user()->salesman_code))->limit(10)->get();
+                } else {
+                    $vat = BisnisParty::orderby('id', 'asc')->whereIn('salesman_code', explode(",", auth()->user()->salesman_code))
+                        ->where(function ($query) use ($search) {
+                            $query->where('code', 'like', "%$search%")->orWhere('name', 'like', "%$search%");
+                        })
+                        ->limit(10)->get();
+                }
             } else {
-                $vat = BisnisParty::orderby('id', 'asc')->where('code', 'like', "%$search%")->orWhere('name', 'like', "%$search%")->limit(10)->get();
+                if ($search == '') {
+                    $vat = BisnisParty::orderby('id', 'asc')->limit(10)->get();
+                } else {
+                    $vat = BisnisParty::orderby('id', 'asc')->where('code', 'like', "%$search%")->orWhere('name', 'like', "%$search%")->limit(10)->get();
+                }
             }
         }
 
@@ -474,6 +528,289 @@ class DataAjaxController extends Controller
         }
 
         return response()->json($vat);
+    }
+
+    public function ajax_table_air_quotation(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = AirQuotationD1::with('air_quotation.quotation')->whereHas('air_quotation.quotation', function ($query) {
+                $query->where('expiry_date', '>=', date('Y-m-d', strtotime(now())))
+                    ->where('effective_date', '<=', date('Y-m-d', strtotime(now())));
+            })->select('*');
+
+            return DataTables::of($query)
+                ->addColumn('action', function ($query) {
+                    return "<input type='radio' class='input_check' name='input_check' value='{$query->id}' data-air_quotation_id='{$query->air_quotation_id}'/>";
+                })
+                ->rawColumns(['action'])
+                ->addIndexColumn()
+                ->make(true);
+        }
+    }
+
+    public function ajax_search_air_quotation(Request $request)
+    {
+        $id = $request->id;
+        $air_quotation_id = $request->air_quotation_id;
+
+        if ($request->ajax()) {
+            $query = AirQuotationD1::with('air_quotation.quotation')->whereHas('air_quotation.quotation', function ($query) {
+                $query->where('expiry_date', '>=', date('Y-m-d', strtotime(now())))
+                    ->where('effective_date', '<=', date('Y-m-d', strtotime(now())));
+            })
+                ->where('id', $id)
+                ->where('air_quotation_id', $air_quotation_id)
+                ->select('*')->first();
+        }
+        return response()->json($query);
+    }
+
+    public function ajax_table_air_customer(Request $request)
+    {
+        if ($request->ajax()) {
+            $search = str_replace("'", "", strtoupper($_POST['search']['value']));
+            $searchTerms = explode(" ",  $search);
+
+            $array = [];
+            if ($searchTerms) {
+                foreach ($searchTerms as $searchTerm) {
+                    $array['search'] = $searchTerm;
+                }
+            }
+
+            $query = DB::table('bisnis_party as bp')
+                ->select('bp.id', 'air_quotation_d1.id as air_quotation_d1_id', 'air_quotation_d1.air_quotation_id', 'bp.code', 'bp.name', 'quotations.air_quot_no', 'quotations.contact_name', 'quotations.reference_no', 'quotations.telp', 'quotations.fax', 'quotations.email', 'quotations.total_gross', 'quotations.total_volume', 'quotations.pcs', 'quotations.salesman_code', 'quotations.salesman', 'quotations.delivery_type_code', 'quotations.delivery_type', 'quotations.commodity_code', 'quotations.commodity', 'quotations.uom_code', 'quotations.uom', 'air_dept_code', 'air_dept_name', 'air_dest_code', 'air_dest_name')
+                ->leftJoin('quotations', function ($join) {
+                    $join->on('quotations.customer_code', '=', 'bp.code')
+                        ->whereNull('sea_quot_no');
+                })
+                ->leftJoin('air_quotations', 'air_quotations.air_quot_no', '=', 'quotations.air_quot_no')
+                ->leftJoin('air_quotation_d1', 'air_quotation_d1.air_quotation_id', '=', 'air_quotations.id')
+                ->groupBy(['bp.id', 'air_quotation_d1.id', 'air_quotation_d1.air_quotation_id', 'bp.code', 'bp.name', 'quotations.air_quot_no', 'quotations.contact_name', 'quotations.reference_no', 'quotations.telp', 'quotations.fax', 'quotations.email', 'quotations.total_gross', 'quotations.total_volume', 'quotations.pcs', 'quotations.salesman_code', 'quotations.salesman', 'quotations.delivery_type_code', 'quotations.delivery_type', 'quotations.commodity_code', 'quotations.commodity', 'quotations.uom_code', 'quotations.uom', 'air_dept_code', 'air_dept_name', 'air_dest_code', 'air_dest_name']);
+
+            if ($array['search'] != '') {
+                $query->where('bp.name', 'like', "%" . $array['search'] . "%");
+
+                $query->orWhere('quotations.air_quot_no', 'like', "%" . $array['search'] . "%");
+
+                $query->orWhere('air_quotation_d1.air_dept_name', 'like', "%" . $array['search'] . "%");
+
+                $query->orWhere('air_quotation_d1.air_dest_name', 'like', "%" . $array['search'] . "%");
+            }
+
+            return DataTables::of($query)
+                ->addColumn('action', function ($query) {
+                    $air_quotation_d1_id = !empty($query->air_quotation_d1_id) ? $query->air_quotation_d1_id : 0;
+                    $air_quotation_id = !empty($query->air_quotation_id) ? $query->air_quotation_id : 0;
+                    return "<input type='radio' class='input_check' name='input_check' value='{$query->id}' data-air_quotation_d1_id='{$air_quotation_d1_id}' data-air_quotation_id='{$air_quotation_id}'/>";
+                })
+                ->filter(
+                    function ($query) {
+                        if (request()->has('name')) {
+                            $query->where('bp.name', 'like', "%" . request('name') . "%");
+                        }
+
+                        if (request()->has('air_quot_no')) {
+                            $query->where('quotations.air_quot_no', 'like', "%" . request('air_quot_no') . "%");
+                        }
+
+                        if (request()->has('air_dept_name')) {
+                            $query->where('air_quotation_d1.air_dept_name', 'like', "%" . request('air_dept_name') . "%");
+                        }
+
+                        if (request()->has('air_dest_name')) {
+                            $query->where('air_quotation_d1.air_dest_name', 'like', "%" . request('air_dest_name') . "%");
+                        }
+                    }
+                )
+                ->smart(false)
+                ->rawColumns(['action'])
+                ->addIndexColumn()
+                ->toJson();
+        }
+    }
+
+    public function ajax_search_air_customer(Request $request)
+    {
+        $id = $request->id;
+        $air_quotation_id = $request->air_quotation_id;
+        $air_quotation_d1_id = $request->air_quotation_d1_id;
+
+        if ($request->ajax()) {
+            $query = DB::table('bisnis_party as bp')
+                ->select('bp.id', 'air_quotation_d1.id as air_quotation_d1_id', 'air_quotation_d1.air_quotation_id', 'bp.code', 'bp.name', 'quotations.air_quot_no', 'quotations.contact_name', 'quotations.reference_no', 'quotations.telp', 'quotations.fax', 'quotations.email', 'quotations.total_gross', 'quotations.total_volume', 'quotations.pcs', 'quotations.salesman_code', 'quotations.salesman', 'quotations.delivery_type_code', 'quotations.delivery_type', 'quotations.commodity_code', 'quotations.commodity', 'quotations.uom_code', 'quotations.uom', 'air_dept_code', 'air_dept_name', 'air_dest_code', 'air_dest_name')
+                ->leftJoin('quotations', function ($join) {
+                    $join->on('quotations.customer_code', '=', 'bp.code')
+                        ->whereNull('sea_quot_no');
+                })
+                ->leftJoin('air_quotations', 'air_quotations.air_quot_no', '=', 'quotations.air_quot_no')
+                ->leftJoin('air_quotation_d1', 'air_quotation_d1.air_quotation_id', '=', 'air_quotations.id')
+                ->groupBy(['bp.id', 'air_quotation_d1.id', 'air_quotation_d1.air_quotation_id', 'bp.code', 'bp.name', 'quotations.air_quot_no', 'quotations.contact_name', 'quotations.reference_no', 'quotations.telp', 'quotations.fax', 'quotations.email', 'quotations.total_gross', 'quotations.total_volume', 'quotations.pcs', 'quotations.salesman_code', 'quotations.salesman', 'quotations.delivery_type_code', 'quotations.delivery_type', 'quotations.commodity_code', 'quotations.commodity', 'quotations.uom_code', 'quotations.uom', 'air_dept_code', 'air_dept_name', 'air_dest_code', 'air_dest_name'])
+                ->where('bp.id', $id);
+
+            if ($air_quotation_id == 0) {
+                $query->whereNull('air_quotation_d1.air_quotation_id');
+            } else {
+                $query->where('air_quotation_d1.air_quotation_id', $air_quotation_id);
+            }
+
+            if ($air_quotation_d1_id == 0) {
+                $query->whereNull('air_quotation_d1.id');
+            } else {
+                $query->where('air_quotation_d1.id', $air_quotation_d1_id);
+            }
+
+            $end_query = $query->first();
+        }
+        return response()->json($end_query);
+    }
+
+    public function ajax_table_sea_quotation(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = SeaQuotationD1::with('sea_quotation.quotation')->whereHas('sea_quotation.quotation', function ($query) {
+                $query->where('expiry_date', '>=', date('Y-m-d', strtotime(now())))
+                    ->where('effective_date', '<=', date('Y-m-d', strtotime(now())));
+            })->select('*');
+
+            return DataTables::of($query)
+                ->addColumn('action', function ($query) {
+                    return "<input type='radio' class='input_check' name='input_check' value='{$query->id}' data-sea_quotation_id='{$query->sea_quotation_id}'/>";
+                })
+                ->rawColumns(['action'])
+                ->addIndexColumn()
+                ->make(true);
+        }
+    }
+
+    public function ajax_search_sea_quotation(Request $request)
+    {
+        $id = $request->id;
+        $sea_quotation_id = $request->sea_quotation_id;
+
+        if ($request->ajax()) {
+            $query = SeaQuotationD1::with('sea_quotation.quotation')->whereHas('sea_quotation.quotation', function ($query) {
+                $query->where('expiry_date', '>=', date('Y-m-d', strtotime(now())))
+                    ->where('effective_date', '<=', date('Y-m-d', strtotime(now())));
+            })
+                ->where('id', $id)
+                ->where('sea_quotation_id', $sea_quotation_id)
+                ->select('*')->first();
+        }
+        return response()->json($query);
+    }
+
+    public function ajax_search_sea_customer(Request $request)
+    {
+        $id = $request->id;
+        $sea_quotation_id = $request->sea_quotation_id;
+        $sea_quotation_d1_id = $request->sea_quotation_d1_id;
+
+        if ($request->ajax()) {
+            $query = DB::table('bisnis_party as bp')
+                ->select('bp.id', 'sea_quotation_d1.id as sea_quotation_d1_id', 'sea_quotation_d1.sea_quotation_id', 'bp.code', 'bp.name', 'quotations.sea_quot_no', 'quotations.contact_name', 'quotations.reference_no', 'quotations.telp', 'quotations.fax', 'quotations.email', 'quotations.total_gross', 'quotations.total_volume', 'quotations.pcs', 'quotations.salesman_code', 'quotations.salesman', 'quotations.delivery_type_code', 'quotations.delivery_type', 'quotations.commodity_code', 'quotations.commodity', 'quotations.uom_code', 'quotations.uom', 'port_loading_code', 'port_loading_name', 'port_discharge_code', 'port_discharge_name', 'origin_code', 'origin_name', 'dest_code', 'dest_name', 'sea_quotations.agent_code', 'sea_quotations.agent_name', 'sea_quotations.agent_address_1', 'sea_quotations.agent_address_2', 'sea_quotations.agent_address_3', 'sea_quotations.agent_address_4', 'sea_quotations.consignee_code', 'sea_quotations.consignee_name', 'sea_quotations.consignee_address_1', 'sea_quotations.consignee_address_2', 'sea_quotations.consignee_address_3', 'sea_quotations.consignee_address_4', 'sea_quotations.shipper_code', 'sea_quotations.shipper_name', 'sea_quotations.shipper_address_1', 'sea_quotations.shipper_address_2', 'sea_quotations.shipper_address_3', 'sea_quotations.shipper_address_4', 'via_port_code', 'via_port_name', 'shipping_line_code', 'shipping_line_name')
+                ->leftJoin('quotations', function ($join) {
+                    $join->on('quotations.customer_code', '=', 'bp.code')
+                        ->whereNull('air_quot_no');
+                })
+                ->leftJoin('sea_quotations', 'sea_quotations.sea_quot_no', '=', 'quotations.sea_quot_no')
+                ->leftJoin('sea_quotation_d1', 'sea_quotation_d1.sea_quotation_id', '=', 'sea_quotations.id')
+                ->groupBy(['bp.id', 'sea_quotation_d1.id', 'sea_quotation_d1.sea_quotation_id', 'bp.code', 'bp.name', 'quotations.sea_quot_no', 'quotations.contact_name', 'quotations.reference_no', 'quotations.telp', 'quotations.fax', 'quotations.email', 'quotations.total_gross', 'quotations.total_volume', 'quotations.pcs', 'quotations.salesman_code', 'quotations.salesman', 'quotations.delivery_type_code', 'quotations.delivery_type', 'quotations.commodity_code', 'quotations.commodity', 'quotations.uom_code', 'quotations.uom', 'port_loading_code', 'port_loading_name', 'port_discharge_code', 'port_discharge_name', 'origin_code', 'origin_name', 'dest_code', 'dest_name', 'sea_quotations.agent_code', 'sea_quotations.agent_name', 'sea_quotations.agent_address_1', 'sea_quotations.agent_address_2', 'sea_quotations.agent_address_3', 'sea_quotations.agent_address_4', 'sea_quotations.consignee_code', 'sea_quotations.consignee_name', 'sea_quotations.consignee_address_1', 'sea_quotations.consignee_address_2', 'sea_quotations.consignee_address_3', 'sea_quotations.consignee_address_4', 'sea_quotations.shipper_code', 'sea_quotations.shipper_name', 'sea_quotations.shipper_address_1', 'sea_quotations.shipper_address_2', 'sea_quotations.shipper_address_3', 'sea_quotations.shipper_address_4', 'via_port_code', 'via_port_name', 'shipping_line_code', 'shipping_line_name'])
+                ->where('bp.id', $id);
+
+            if ($sea_quotation_id == 0) {
+                $query->whereNull('sea_quotation_d1.sea_quotation_id');
+            } else {
+                $query->where('sea_quotation_d1.sea_quotation_id', $sea_quotation_id);
+            }
+
+            if ($sea_quotation_d1_id == 0) {
+                $query->whereNull('sea_quotation_d1.id');
+            } else {
+                $query->where('sea_quotation_d1.id', $sea_quotation_d1_id);
+            }
+
+            $end_query = $query->first();
+        }
+        return response()->json($end_query);
+    }
+
+    public function ajax_table_sea_customer(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $search = str_replace("'", "", strtoupper($_POST['search']['value']));
+            $searchTerms = explode(" ",  $search);
+
+            $array = [];
+            if ($searchTerms) {
+                foreach ($searchTerms as $searchTerm) {
+                    $array['search'] = $searchTerm;
+                }
+            }
+
+            $query = DB::table('bisnis_party as bp')
+                ->select('bp.id', 'sea_quotation_d1.id as sea_quotation_d1_id', 'sea_quotation_d1.sea_quotation_id', 'bp.code', 'bp.name', 'quotations.sea_quot_no', 'quotations.contact_name', 'quotations.reference_no', 'quotations.telp', 'quotations.fax', 'quotations.email', 'quotations.total_gross', 'quotations.total_volume', 'quotations.pcs', 'quotations.salesman_code', 'quotations.salesman', 'quotations.delivery_type_code', 'quotations.delivery_type', 'quotations.commodity_code', 'quotations.commodity', 'quotations.uom_code', 'quotations.uom', 'port_loading_code', 'port_loading_name', 'port_discharge_code', 'port_discharge_name', 'origin_code', 'origin_name', 'dest_code', 'dest_name')
+                ->leftJoin('quotations', function ($join) {
+                    $join->on('quotations.customer_code', '=', 'bp.code')
+                        ->whereNull('air_quot_no');
+                })
+                ->leftJoin('sea_quotations', 'sea_quotations.sea_quot_no', '=', 'quotations.sea_quot_no')
+                ->leftJoin('sea_quotation_d1', 'sea_quotation_d1.sea_quotation_id', '=', 'sea_quotations.id')
+                ->groupBy(['bp.id', 'sea_quotation_d1.id', 'sea_quotation_d1.sea_quotation_id', 'bp.code', 'bp.name', 'quotations.sea_quot_no', 'quotations.contact_name', 'quotations.reference_no', 'quotations.telp', 'quotations.fax', 'quotations.email', 'quotations.total_gross', 'quotations.total_volume', 'quotations.pcs', 'quotations.salesman_code', 'quotations.salesman', 'quotations.delivery_type_code', 'quotations.delivery_type', 'quotations.commodity_code', 'quotations.commodity', 'quotations.uom_code', 'quotations.uom', 'port_loading_code', 'port_loading_name', 'port_discharge_code', 'port_discharge_name', 'origin_code', 'origin_name', 'dest_code', 'dest_name']);
+
+            if ($array['search'] != '') {
+                $query->where('bp.name', 'like', "%" . $array['search'] . "%");
+
+                $query->orWhere('quotations.sea_quot_no', 'like', "%" . $array['search'] . "%");
+
+                $query->orWhere('sea_quotation_d1.port_loading_name', 'like', "%" . $array['search'] . "%");
+
+                $query->orWhere('sea_quotation_d1.port_discharge_name', 'like', "%" . $array['search'] . "%");
+
+                $query->orWhere('sea_quotation_d1.origin_name', 'like', "%" . $array['search'] . "%");
+
+                $query->orWhere('sea_quotation_d1.dest_name', 'like', "%" . $array['search'] . "%");
+            }
+
+            return DataTables::of($query)
+                ->addColumn('action', function ($query) {
+                    $sea_quotation_d1_id = !empty($query->sea_quotation_d1_id) ? $query->sea_quotation_d1_id : 0;
+                    $sea_quotation_id = !empty($query->sea_quotation_id) ? $query->sea_quotation_id : 0;
+                    return "<input type='radio' class='input_check' name='input_check' value='{$query->id}' data-sea_quotation_d1_id='{$sea_quotation_d1_id}' data-sea_quotation_id='{$sea_quotation_id}'/>";
+                })
+                ->filter(
+                    function ($query) {
+                        if (request()->has('name')) {
+                            $query->where('bp.name', 'like', "%" . request('name') . "%");
+                        }
+
+                        if (request()->has('sea_quot_no')) {
+                            $query->where('quotations.sea_quot_no', 'like', "%" . request('sea_quot_no') . "%");
+                        }
+
+                        if (request()->has('port_loading_name')) {
+                            $query->where('sea_quotation_d1.port_loading_name', 'like', "%" . request('port_loading_name') . "%");
+                        }
+
+                        if (request()->has('port_discharge_name')) {
+                            $query->where('sea_quotation_d1.port_discharge_name', 'like', "%" . request('port_discharge_name') . "%");
+                        }
+
+                        if (request()->has('origin_name')) {
+                            $query->where('sea_quotation_d1.origin_name', 'like', "%" . request('origin_name') . "%");
+                        }
+
+                        if (request()->has('dest_name')) {
+                            $query->where('sea_quotation_d1.dest_name', 'like', "%" . request('dest_name') . "%");
+                        }
+                    }
+                )
+                ->smart(false)
+                ->rawColumns(['action'])
+                ->addIndexColumn()
+                ->toJson();
+        }
     }
 
     public function ajax_store_short(Request $request)

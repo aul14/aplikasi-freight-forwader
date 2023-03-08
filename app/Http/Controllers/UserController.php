@@ -106,7 +106,7 @@ class UserController extends Controller
                 'role_id' => 'required'
             ]);
 
-            // dd($request);
+            // dd($request->salesman_code);
             DB::beginTransaction();
             try {
                 $user = new User();
@@ -117,6 +117,9 @@ class UserController extends Controller
                 $user->lastname = $request->lastname;
                 $user->address = $request->address;
                 $user->city = $request->city;
+                $user->is_mng_sales = $request->is_mng_sales == "yes" ? true : false;
+                $user->is_sales = $request->is_sales == "yes" ? true : false;
+                $user->salesman_code = ($request->is_mng_sales == "yes" || $request->is_sales == "yes") ? implode(",", $request->salesman_code) : null;
                 $user->save();
 
                 $role_user = new RoleUser();
@@ -192,6 +195,9 @@ class UserController extends Controller
                 $user->lastname = $request->lastname;
                 $user->address = $request->address;
                 $user->city = $request->city;
+                $user->is_mng_sales = $request->is_mng_sales == "yes" ? true : false;
+                $user->is_sales = $request->is_sales == "yes" ? true : false;
+                $user->salesman_code = ($request->is_mng_sales == "yes" || $request->is_sales == "yes") ? implode(",", $request->salesman_code) : null;
                 $user->update();
 
                 DB::table('role_user')->where('user_id', '=', $id)

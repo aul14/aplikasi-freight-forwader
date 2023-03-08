@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AirExportBookingController;
 use App\Http\Controllers\AirLineController;
 use App\Http\Controllers\AirPortController;
 use App\Http\Controllers\AirQuotationController;
@@ -34,6 +35,7 @@ use App\Http\Controllers\PortController;
 use App\Http\Controllers\QuotationTypeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SalesmanController;
+use App\Http\Controllers\SeaExportBookingController;
 use App\Http\Controllers\SeaQuotationController;
 use App\Http\Controllers\ShippingLineController;
 use App\Http\Controllers\SystemNumberingController;
@@ -102,6 +104,8 @@ Route::group(['middleware' => ['auth', 'prevent-back-history']], function () {
 	Route::resource('/sea_quot', SeaQuotationController::class);
 	Route::resource('/del_type', DeliveryTypeController::class);
 	Route::resource('/air_quot', AirQuotationController::class);
+	Route::resource('/sea_book', SeaExportBookingController::class);
+	Route::resource('/air_book', AirExportBookingController::class);
 	Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
 	Route::get('/pdf_sea_quot/{sea_quot}', [SeaQuotationController::class, 'pdf'])->name('pdf.sea');
 	Route::get('/pdf_air_quot/{air_quot}', [AirQuotationController::class, 'pdf'])->name('pdf.air');
@@ -115,10 +119,20 @@ Route::group(['middleware' => ['auth', 'prevent-back-history']], function () {
 	Route::post('/company', [CompanyController::class, 'store'])->name('company.store');
 	Route::post('/profile', [UserProfileController::class, 'update'])->name('profile.update');
 	Route::post('/update_template', [HomeController::class, 'update_template'])->name('update.template');
+	Route::post('/ajax_get_vessel', [DataAjaxController::class, 'ajax_get_vessel'])->name('get.vessel');
 	Route::post('/ajax_get_container', [DataAjaxController::class, 'ajax_get_container'])->name('get.container');
+	Route::post('/ajax_table_sea_quotation', [DataAjaxController::class, 'ajax_table_sea_quotation'])->name('get.table.sea_quot');
+	Route::post('/ajax_search_sea_quotation', [DataAjaxController::class, 'ajax_search_sea_quotation'])->name('search.sea_quot');
+	Route::post('/ajax_table_sea_customer', [DataAjaxController::class, 'ajax_table_sea_customer'])->name('get.table.sea_cus');
+	Route::post('/ajax_search_sea_customer', [DataAjaxController::class, 'ajax_search_sea_customer'])->name('search.sea_cus');
+	Route::post('/ajax_table_air_quotation', [DataAjaxController::class, 'ajax_table_air_quotation'])->name('get.table.air_quot');
+	Route::post('/ajax_search_air_quotation', [DataAjaxController::class, 'ajax_search_air_quotation'])->name('search.air_quot');
+	Route::post('/ajax_table_air_customer', [DataAjaxController::class, 'ajax_table_air_customer'])->name('get.table.air_cus');
+	Route::post('/ajax_search_air_customer', [DataAjaxController::class, 'ajax_search_air_customer'])->name('search.air_cus');
 	Route::post('/ajax_get_port', [DataAjaxController::class, 'ajax_get_port'])->name('get.port');
 	Route::post('/ajax_get_country', [DataAjaxController::class, 'ajax_get_country'])->name('get.country');
 	Route::post('/ajax_get_city', [DataAjaxController::class, 'ajax_get_city'])->name('get.city');
+	Route::post('/ajax_by_code_city', [DataAjaxController::class, 'ajax_by_code_city'])->name('by.code.city');
 	Route::post('/ajax_get_currency', [DataAjaxController::class, 'ajax_get_currency'])->name('get.currency');
 	Route::post('/ajax_get_detail_currency', [DataAjaxController::class, 'ajax_get_detail_currency'])->name('get.detail.currency');
 	Route::post('/ajax_get_uom', [DataAjaxController::class, 'ajax_get_uom'])->name('charge.uom');

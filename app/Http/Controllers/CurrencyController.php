@@ -127,7 +127,7 @@ class CurrencyController extends Controller
                     foreach ($request->date as $key => $val) {
                         $result[] = [
                             'currency_id' => $currency->id,
-                            'date'       => $val,
+                            'date'       => date('Y-m-d', strtotime(str_replace('/', '-', $val))),
                             'curr_rate'       => ($request->curr_rate[$key] != null) ? str_replace(",", "", $request->curr_rate[$key]) : 0,
                             'remark'       => ($request->remark[$key] != null) ? str_replace(",", "", $request->remark[$key]) : "",
                             'created_at' => now(),
@@ -221,7 +221,7 @@ class CurrencyController extends Controller
                     foreach ($request->date as $key => $val) {
                         $result[] = [
                             'currency_id' => $currency->id,
-                            'date'       => $val,
+                            'date'       => date('Y-m-d', strtotime(str_replace('/', '-', $val))),
                             'curr_rate'       => ($request->curr_rate[$key] != null) ? str_replace(",", "", $request->curr_rate[$key]) : 0,
                             'remark'       => ($request->remark[$key] != null) ? str_replace(",", "", $request->remark[$key]) : "",
                             'created_at' => now(),

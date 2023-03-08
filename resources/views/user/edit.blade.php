@@ -68,7 +68,67 @@
                                         </div>
                                     @enderror
                                 </div>
-
+                                <div class="form-group">
+                                    <label for="is_mng_sales">Is Manager Sales?</label>
+                                    <div class="col-md-6">
+                                        <input type="checkbox" id="is_mng_sales" name="is_mng_sales"
+                                            @checked(old('is_mng_sales', $user->is_mng_sales) == 'yes') value="yes" data-toggle="toggle" data-on="Yes"
+                                            data-off="No" data-onstyle="primary" data-offstyle="danger">
+                                        @error('is_mng_sales')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="is_sales">Is Sales?</label>
+                                    <div class="col-md-6">
+                                        <input type="checkbox" id="is_sales" name="is_sales" @checked(old('is_sales', $user->is_sales) == 'yes')
+                                            value="yes" data-toggle="toggle" data-on="Yes" data-off="No"
+                                            data-onstyle="primary" data-offstyle="danger">
+                                        @error('is_sales')
+                                            <div class="invalid-feedback">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                @if ($user->is_sales == 'yes' || $user->is_mng_sales == 'yes')
+                                    @if ($user->is_mng_sales == 'yes')
+                                        <div class="form-group select-sales">
+                                            <label for="salesman-code-1">Select Sales </label>
+                                            <select name="salesman_code[]" id="salesman-code-1" class="salesman-code"
+                                                multiple>
+                                                @if (!empty($user->salesman_code))
+                                                    @foreach (explode(',', $user->salesman_code) as $val)
+                                                        <option value="{{ $val }}" selected>
+                                                            {{ $val }}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    @else
+                                        <div class="form-group select-sales">
+                                            <label for="salesman-code-1">Select Sales </label>
+                                            <select name="salesman_code[]" id="salesman-code-1" class="salesman-code">
+                                                @if (!empty($user->salesman_code))
+                                                    @foreach (explode(',', $user->salesman_code) as $val)
+                                                        <option value="{{ $val }}" selected>
+                                                            {{ $val }}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    @endif
+                                @else
+                                    <div class="form-group select-sales" style="display: none;">
+                                        <label for="salesman-code-1">Select Sales </label>
+                                        <select name="salesman_code[]" id="salesman-code-1" class="salesman-code" multiple>
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                @endif
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -116,8 +176,10 @@
                                     @enderror
                                 </div>
                             </div>
+                        </div>
+                        <div class="row mt-3">
                             <div class="col-md-12">
-                                <a href="{{ route('users.index') }}" class="btn btn-danger">Back</a>
+                                <a href="{{ route('users.index') }}" class="btn btn-danger btn-back">Back</a>
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </div>
                         </div>
@@ -130,11 +192,137 @@
 @section('script')
     <script>
         $(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
             $('.role-id').select2({
                 placeholder: 'Search...',
                 width: "100%",
                 allowClear: true,
             });
+
+            $("#is_mng_sales").change(function(e) {
+                e.preventDefault();
+                isChecked = $(this).is(':checked');
+                if (isChecked) {
+                    $('.select-sales').show();
+                    $(`#salesman-code-1`).select2({
+                        placeholder: 'Select Sales...',
+                        width: "100%",
+                        allowClear: true,
+                        multiple: true,
+                        ajax: {
+                            url: '{{ route('get.salesman') }}',
+                            dataType: 'json',
+                            type: 'POST',
+                            delay: 0,
+                            processResults: function(data) {
+                                return {
+                                    results: $.map(data, function(item) {
+                                        return {
+                                            text: `${item.code} - ${item.name}`,
+                                            id: item.code,
+                                        }
+                                    })
+                                };
+                            },
+                            cache: false
+                        }
+                    });
+                } else {
+                    $('.select-sales').hide();
+                    $(`.salesman-code`).empty();
+                }
+            });
+
+
+            $("#is_sales").change(function(e) {
+                e.preventDefault();
+                isChecked = $(this).is(':checked');
+                if (isChecked) {
+                    $('.select-sales').show();
+                    $(`.salesman-code`).removeAttr('multiple');
+                    $(`#salesman-code-1`).select2({
+                        placeholder: 'Select Sales...',
+                        width: "100%",
+                        allowClear: true,
+                        ajax: {
+                            url: '{{ route('get.salesman') }}',
+                            dataType: 'json',
+                            type: 'POST',
+                            delay: 0,
+                            processResults: function(data) {
+                                return {
+                                    results: $.map(data, function(item) {
+                                        return {
+                                            text: `${item.code} - ${item.name}`,
+                                            id: item.code,
+                                        }
+                                    })
+                                };
+                            },
+                            cache: false
+                        }
+                    });
+                } else {
+                    $('.select-sales').hide();
+                    $(`.salesman-code`).attr('multiple', true);
+                    $(`.salesman-code`).empty();
+                }
+            });
+
+            <?php if($user->is_mng_sales == 'yes'): ?>
+            $(`#salesman-code-1`).select2({
+                placeholder: 'Select Sales...',
+                width: "100%",
+                allowClear: true,
+                multiple: true,
+                ajax: {
+                    url: '{{ route('get.salesman') }}',
+                    dataType: 'json',
+                    type: 'POST',
+                    delay: 0,
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data, function(item) {
+                                return {
+                                    text: `${item.code} - ${item.name}`,
+                                    id: item.code,
+                                }
+                            })
+                        };
+                    },
+                    cache: false
+                }
+            });
+            <?php else: ?>
+            $(`#salesman-code-1`).select2({
+                placeholder: 'Select Sales...',
+                width: "100%",
+                allowClear: true,
+                ajax: {
+                    url: '{{ route('get.salesman') }}',
+                    dataType: 'json',
+                    type: 'POST',
+                    delay: 0,
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data, function(item) {
+                                return {
+                                    text: `${item.code} - ${item.name}`,
+                                    id: item.code,
+                                }
+                            })
+                        };
+                    },
+                    cache: false
+                }
+            });
+            <?php endif; ?>
+
         });
     </script>
 @endsection

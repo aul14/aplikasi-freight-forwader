@@ -14,6 +14,7 @@ use App\Models\SeaQuotationD1;
 use App\Models\SeaQuotationD2;
 use App\Models\SeaQuotationSD1;
 use Barryvdh\DomPDF\PDF;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
@@ -30,13 +31,20 @@ class SeaQuotationController extends Controller
     {
         if (Auth::user()->hasPermission('manage-sea_quot')) {
             if ($request->ajax()) {
-                $sea_quot = SeaQuotation::with(['quotation', 'payment_term'])->orderBy('id', 'DESC')->select('*');
+                if (auth()->user()->is_mng_sales == true || auth()->user()->is_sales == true) {
+                    $sea_quot = SeaQuotation::with('quotation')->whereHas('quotation', function ($query) {
+                        $query->whereIn('salesman_code', explode(",", auth()->user()->salesman_code));
+                    })->orderBy('id', 'DESC')->select('*');
+                } else {
+                    $sea_quot = SeaQuotation::with('quotation')->orderBy('id', 'DESC')->select('*');
+                }
                 return DataTables::of($sea_quot)
                     ->addColumn('action', function ($sea_quot) {
-                        return view('datatable-modal._action', [
+                        return view('datatable-modal._action_trx', [
                             'row_id' => $sea_quot->id,
                             'edit_url' => route('sea_quot.edit', $sea_quot->id),
                             'delete_url' => route('sea_quot.destroy', $sea_quot->id),
+                            'pdf_url' => route('pdf.sea', $sea_quot->id),
                             'can_edit' => 'edit-sea_quot',
                             'can_delete' => 'delete-sea_quot'
                         ]);
@@ -117,7 +125,7 @@ class SeaQuotationController extends Controller
                 [
                     'sea_quot_no'    => 'required|max:15|unique:sea_quotations,sea_quot_no',
                     'quotation_type_id'  => 'required',
-                    'salesman_id'  => 'required',
+                    'salesman_code'  => 'required',
                 ],
             );
 
@@ -130,12 +138,22 @@ class SeaQuotationController extends Controller
                 $quot = new Quotation();
                 $quot->sea_quot_no = $sea_quot_no;
                 $quot->title = !empty($request->title) ? $request->title : null;
-                $quot->effective_date = !empty($request->effective_date) ? $request->effective_date : null;
-                $quot->expiry_date = !empty($request->expiry_date) ? $request->expiry_date : null;
+                $quot->effective_date = !empty($request->effective_date) ? date('Y-m-d', strtotime(str_replace('/', '-', $request->effective_date))) : null;
+                $quot->expiry_date = !empty($request->expiry_date) ? date('Y-m-d', strtotime(str_replace('/', '-', $request->expiry_date))) : null;
                 $quot->validity_day = !empty($request->validity_day) ? $request->validity_day : null;
                 $quot->quotation_type_id = !empty($request->quotation_type_id) ? $request->quotation_type_id : 0;
                 $quot->job_type_id = !empty($request->job_type_id) ? $request->job_type_id : 0;
-                $quot->bisnis_party_id = !empty($request->bisnis_party_id) ? $request->bisnis_party_id : 0;
+                $quot->salesman = !empty($request->salesman) ? $request->salesman : null;
+                $quot->customer_code = !empty($request->customer_code) ? $request->customer_code : null;
+                $quot->customer = !empty($request->customer) ? $request->customer : null;
+                $quot->commodity_code = !empty($request->commodity_code_name) ? $request->commodity_code_name : null;
+                $quot->commodity = !empty($request->commodity) ? $request->commodity : null;
+                $quot->delivery_type_code = !empty($request->delivery_type_code) ? $request->delivery_type_code : null;
+                $quot->delivery_type = !empty($request->delivery_type_name) ? $request->delivery_type_name : null;
+                $quot->term_code = !empty($request->term_code) ? $request->term_code : null;
+                $quot->term = !empty($request->term) ? $request->term : null;
+                $quot->uom_code = !empty($request->uom_code) ? $request->uom_code : null;
+                $quot->uom = !empty($request->uom_name) ? $request->uom_name : null;
                 $quot->address_1 = !empty($request->address_1) ? $request->address_1 : null;
                 $quot->address_2 = !empty($request->address_2) ? $request->address_2 : null;
                 $quot->address_3 = !empty($request->address_3) ? $request->address_3 : null;
@@ -144,7 +162,7 @@ class SeaQuotationController extends Controller
                 $quot->telp = !empty($request->telp) ? $request->telp : null;
                 $quot->fax = !empty($request->fax) ? $request->fax : null;
                 $quot->email = !empty($request->email) ? $request->email : null;
-                $quot->salesman_id = !empty($request->salesman_id) ? $request->salesman_id : null;
+                $quot->salesman_code = !empty($request->salesman_code) ? $request->salesman_code : null;
                 $quot->currency_id = !empty($request->currency_id) ? $request->currency_id : null;
                 $quot->delivery_type_id = !empty($request->delivery_type_id) ? $request->delivery_type_id : null;
                 $quot->reference_no = !empty($request->reference_no) ? $request->reference_no : null;
@@ -157,7 +175,6 @@ class SeaQuotationController extends Controller
 
                 // SAVE TO TABLE SEA QUOTATION
                 $sea_quot->quotation_id = $quot->id;
-                $sea_quot->payment_term_id = !empty($request->payment_term_id) ? $request->payment_term_id : null;
                 $sea_quot->sea_quot_no = $sea_quot_no;
                 $sea_quot->jml_container_type_1 = !empty($request->jml_container_type_1) ? $request->jml_container_type_1 : null;
                 $sea_quot->container_type_1 = !empty($request->container_type_1) ? $request->container_type_1 : null;
@@ -236,7 +253,7 @@ class SeaQuotationController extends Controller
                                     'qty'     => !empty($request->qty[$key2]) ? $request->qty[$key2] : null,
                                     'cargo'     => !empty($request->cargo[$key2]) ? $request->cargo[$key2] : null,
                                     'dg'     => !empty($request->dg[$key2]) ? $request->dg[$key2] : null,
-                                    'uom'     => !empty($request->uom[$key2]) ? $request->uom[$key2] : null,
+                                    'uom'     => !empty($request->uom_sub[$key2]) ? $request->uom_sub[$key2] : null,
                                     'chg'     => !empty($request->chg[$key2]) ? $request->chg[$key2] : null,
                                     'vat_code'     => !empty($request->vat_code[$key2]) ? $request->vat_code[$key2] : null,
                                     'p_c'     => !empty($request->p_c[$key2]) ? $request->p_c[$key2] : null,
@@ -248,6 +265,7 @@ class SeaQuotationController extends Controller
                                     'min_amt'     => !empty($request->min_amt[$key2]) ? str_replace(",", "", $request->min_amt[$key2])  : null,
                                     'unit_rate'     => !empty($request->unit_rate[$key2]) ?  str_replace(",", "", $request->unit_rate[$key2])  : null,
                                     'idr_amt'     => !empty($request->idr_amt[$key2]) ?  str_replace(",", "", $request->idr_amt[$key2])  : null,
+                                    'amt'     => !empty($request->amt[$key2]) ?  str_replace(",", "", $request->amt[$key2])  : null,
                                     'created_at' => now(),
                                     'updated_at' => now(),
                                 ];
@@ -281,6 +299,7 @@ class SeaQuotationController extends Controller
                             'unit_rate_d2'     => !empty($request->unit_rate_d2[$key3]) ? str_replace(",", "", $request->unit_rate_d2[$key3])  : null,
                             'min_amt_d2'     => !empty($request->min_amt_d2[$key3]) ? str_replace(",", "", $request->min_amt_d2[$key3])  : null,
                             'idr_amt_d2'     => !empty($request->idr_amt_d2[$key3]) ? str_replace(",", "", $request->idr_amt_d2[$key3])  : null,
+                            'amt_d2'     => !empty($request->amt_d2[$key3]) ? str_replace(",", "", $request->amt_d2[$key3])  : null,
                             'created_at' => now(),
                             'updated_at' => now(),
                         ];
@@ -301,30 +320,41 @@ class SeaQuotationController extends Controller
                 }
                 unset($data_info['id']);
 
-                if (!empty($data_info['vs1'])  || !empty($data_info['vs2']) || !empty($data_info['vs3']) || !empty($data_info['vs4']) || !empty($data_info['vn1']) || !empty($data_info['vn2']) || !empty($data_info['vt1']) || !empty($data_info['vt2']) || !empty($data_info['vb1']) || !empty($data_info['vb2']) || !empty($data_info['vd1']) || !empty($data_info['vd2']) || !empty($data_info['vdt1']) || !empty($data_info['vdt2'])) {
+                $cek_info_d1 = AddInfoD1::where('trx_id', $sea_quot->id)->first();
+                if ($cek_info_d1 == null) {
                     $add_info_d1 = new AddInfoD1();
-                    $add_info_d1->add_info_id = $add_info['id'];
-                    $add_info_d1->trx_type = 'SQ';
-                    $add_info_d1->trx_id = $sea_quot->id;
-                    $add_info_d1->vs1 = !empty($data_info['vs1']) ? $data_info['vs1'] : null;
-                    $add_info_d1->vs2 = !empty($data_info['vs2']) ? $data_info['vs2'] : null;
-                    $add_info_d1->vs3 = !empty($data_info['vs3']) ? $data_info['vs3'] : null;
-                    $add_info_d1->vs4 = !empty($data_info['vs4']) ? $data_info['vs4'] : null;
-                    $add_info_d1->vn1 = !empty($data_info['vn1']) ? $data_info['vn1'] : null;
-                    $add_info_d1->vn2 = !empty($data_info['vn2']) ? $data_info['vn2'] : null;
-                    $add_info_d1->vt1 = !empty($data_info['vt1']) ? $data_info['vt1'] : null;
-                    $add_info_d1->vt2 = !empty($data_info['vt2']) ? $data_info['vt2'] : null;
-                    $add_info_d1->vb1 = !empty($data_info['vb1']) ? $data_info['vb1'] : null;
-                    $add_info_d1->vb2 = !empty($data_info['vb2']) ? $data_info['vb2'] : null;
-                    $add_info_d1->vd1 = !empty($data_info['vd1']) ? $data_info['vd1'] : null;
-                    $add_info_d1->vd2 = !empty($data_info['vd2']) ? $data_info['vd2'] : null;
-                    $add_info_d1->vdt1 = !empty($data_info['vdt1']) ? $data_info['vdt1'] : null;
-                    $add_info_d1->vdt2 = !empty($data_info['vdt2']) ? $data_info['vdt2'] : null;
+                } else {
+                    $add_info_d1 = AddInfoD1::where('trx_id', $sea_quot->id)->first();
+                }
+                $add_info_d1->add_info_id = $add_info['id'];
+                $add_info_d1->trx_type = 'SQ';
+                $add_info_d1->trx_id = $sea_quot->id;
+                $add_info_d1->vs1 = !empty($data_info['vs1']) ? $data_info['vs1'] : null;
+                $add_info_d1->vs2 = !empty($data_info['vs2']) ? $data_info['vs2'] : null;
+                $add_info_d1->vs3 = !empty($data_info['vs3']) ? $data_info['vs3'] : null;
+                $add_info_d1->vs4 = !empty($data_info['vs4']) ? $data_info['vs4'] : null;
+                $add_info_d1->vn1 = !empty($data_info['vn1']) ? $data_info['vn1'] : null;
+                $add_info_d1->vn2 = !empty($data_info['vn2']) ? $data_info['vn2'] : null;
+                $add_info_d1->vt1 = !empty($data_info['vt1']) ? $data_info['vt1'] : null;
+                $add_info_d1->vt2 = !empty($data_info['vt2']) ? $data_info['vt2'] : null;
+                $add_info_d1->vb1 = !empty($data_info['vb1']) ? $data_info['vb1'] : null;
+                $add_info_d1->vb2 = !empty($data_info['vb2']) ? $data_info['vb2'] : null;
+                $add_info_d1->vd1 = !empty($data_info['vd1']) ? $data_info['vd1'] : null;
+                $add_info_d1->vd2 = !empty($data_info['vd2']) ? $data_info['vd2'] : null;
+                $add_info_d1->vdt1 = !empty($data_info['vdt1']) ? $data_info['vdt1'] : null;
+                $add_info_d1->vdt2 = !empty($data_info['vdt2']) ? $data_info['vdt2'] : null;
+                if ($cek_info_d1 == null) {
                     $add_info_d1->save();
+                } else {
+                    $add_info_d1->update();
                 }
 
                 DB::commit();
                 return to_route('sea_quot.index')->with('success', 'New Sea Freight Quotation has been added!');
+            } catch (QueryException $th) {
+                DB::rollback();
+
+                return redirect()->back()->withInput()->with('error', $th->getMessage());
             } catch (\Throwable $th) {
                 DB::rollback();
 
@@ -355,10 +385,9 @@ class SeaQuotationController extends Controller
     public function edit($id)
     {
         if (Auth::user()->hasPermission('edit-sea_quot')) {
-            $sea_quot = SeaQuotation::with(['quotation', 'payment_term', 'sea_quotation_d1', 'sea_quotation_d2'])->where('id', $id)->first();
+            $sea_quot = SeaQuotation::with(['quotation', 'sea_quotation_d1', 'sea_quotation_d2'])->where('id', $id)->first();
             $sq_d1 = SeaQuotationD1::with('sea_quotation_s_d1')->where('sea_quotation_id', $id)->get();
             $sq = $sea_quot;
-            // dd($sq_d1);
             $add_info_d1 = AddInfoD1::where('trx_id', $id)->first();
             $add_info = AddInfo::where('trx_type', 'SQ')->first()->makeHidden(['id', 'trx_type', 'created_at', 'updated_at'])->toarray();
             $add_info =  collect($add_info)->filter(function ($value) {
@@ -384,7 +413,7 @@ class SeaQuotationController extends Controller
                 [
                     'sea_quot_no'    => 'required|max:15|unique:sea_quotations,sea_quot_no,' . $id,
                     'quotation_type_id'  => 'required',
-                    'salesman_id'  => 'required',
+                    'salesman_code'  => 'required',
                 ],
             );
 
@@ -394,12 +423,22 @@ class SeaQuotationController extends Controller
                 // SAVE TO TABLE QUOTATION
                 $quot = Quotation::where('sea_quot_no', $sea_quot->sea_quot_no)->first();
                 $quot->title = !empty($request->title) ? $request->title : null;
-                $quot->effective_date = !empty($request->effective_date) ? $request->effective_date : null;
-                $quot->expiry_date = !empty($request->expiry_date) ? $request->expiry_date : null;
+                $quot->effective_date = !empty($request->effective_date) ? date('Y-m-d', strtotime(str_replace('/', '-', $request->effective_date)))  : null;
+                $quot->expiry_date = !empty($request->expiry_date) ? date('Y-m-d', strtotime(str_replace('/', '-', $request->expiry_date))) : null;
                 $quot->validity_day = !empty($request->validity_day) ? $request->validity_day : null;
                 $quot->quotation_type_id = !empty($request->quotation_type_id) ? $request->quotation_type_id : 0;
                 $quot->job_type_id = !empty($request->job_type_id) ? $request->job_type_id : 0;
-                $quot->bisnis_party_id = !empty($request->bisnis_party_id) ? $request->bisnis_party_id : 0;
+                $quot->salesman = !empty($request->salesman) ? $request->salesman : null;
+                $quot->customer_code = !empty($request->customer_code) ? $request->customer_code : null;
+                $quot->customer = !empty($request->customer) ? $request->customer : null;
+                $quot->commodity_code = !empty($request->commodity_code_name) ? $request->commodity_code_name : null;
+                $quot->commodity = !empty($request->commodity) ? $request->commodity : null;
+                $quot->delivery_type_code = !empty($request->delivery_type_code) ? $request->delivery_type_code : null;
+                $quot->delivery_type = !empty($request->delivery_type_name) ? $request->delivery_type_name : null;
+                $quot->term_code = !empty($request->term_code) ? $request->term_code : null;
+                $quot->term = !empty($request->term) ? $request->term : null;
+                $quot->uom_code = !empty($request->uom_code) ? $request->uom_code : null;
+                $quot->uom = !empty($request->uom_name) ? $request->uom_name : null;
                 $quot->address_1 = !empty($request->address_1) ? $request->address_1 : null;
                 $quot->address_2 = !empty($request->address_2) ? $request->address_2 : null;
                 $quot->address_3 = !empty($request->address_3) ? $request->address_3 : null;
@@ -408,7 +447,7 @@ class SeaQuotationController extends Controller
                 $quot->telp = !empty($request->telp) ? $request->telp : null;
                 $quot->fax = !empty($request->fax) ? $request->fax : null;
                 $quot->email = !empty($request->email) ? $request->email : null;
-                $quot->salesman_id = !empty($request->salesman_id) ? $request->salesman_id : null;
+                $quot->salesman_code = !empty($request->salesman_code) ? $request->salesman_code : null;
                 $quot->currency_id = !empty($request->currency_id) ? $request->currency_id : null;
                 $quot->delivery_type_id = !empty($request->delivery_type_id) ? $request->delivery_type_id : null;
                 $quot->reference_no = !empty($request->reference_no) ? $request->reference_no : null;
@@ -421,7 +460,7 @@ class SeaQuotationController extends Controller
 
                 // SAVE TO TABLE SEA QUOTATION
                 $sea_quot->quotation_id = $quot->id;
-                $sea_quot->payment_term_id = !empty($request->payment_term_id) ? $request->payment_term_id : null;
+
                 $sea_quot->jml_container_type_1 = !empty($request->jml_container_type_1) ? $request->jml_container_type_1 : null;
                 $sea_quot->container_type_1 = !empty($request->container_type_1) ? $request->container_type_1 : null;
                 $sea_quot->jml_container_type_2 = !empty($request->jml_container_type_2) ? $request->jml_container_type_2 : null;
@@ -501,7 +540,7 @@ class SeaQuotationController extends Controller
                                     'qty'     => !empty($request->qty[$key2]) ? $request->qty[$key2] : null,
                                     'cargo'     => !empty($request->cargo[$key2]) ? $request->cargo[$key2] : null,
                                     'dg'     => !empty($request->dg[$key2]) ? $request->dg[$key2] : null,
-                                    'uom'     => !empty($request->uom[$key2]) ? $request->uom[$key2] : null,
+                                    'uom'     => !empty($request->uom_sub[$key2]) ? $request->uom_sub[$key2] : null,
                                     'chg'     => !empty($request->chg[$key2]) ? $request->chg[$key2] : null,
                                     'vat_code'     => !empty($request->vat_code[$key2]) ? $request->vat_code[$key2] : null,
                                     'p_c'     => !empty($request->p_c[$key2]) ? $request->p_c[$key2] : null,
@@ -513,6 +552,7 @@ class SeaQuotationController extends Controller
                                     'min_amt'     => !empty($request->min_amt[$key2]) ? str_replace(",", "", $request->min_amt[$key2])  : null,
                                     'unit_rate'     => !empty($request->unit_rate[$key2]) ?  str_replace(",", "", $request->unit_rate[$key2])  : null,
                                     'idr_amt'     => !empty($request->idr_amt[$key2]) ?  str_replace(",", "", $request->idr_amt[$key2])  : null,
+                                    'amt'     => !empty($request->amt[$key2]) ?  str_replace(",", "", $request->amt[$key2])  : null,
                                     'created_at' => now(),
                                     'updated_at' => now(),
                                 ];
@@ -547,6 +587,7 @@ class SeaQuotationController extends Controller
                             'unit_rate_d2'     => !empty($request->unit_rate_d2[$key3]) ? str_replace(",", "", $request->unit_rate_d2[$key3])  : null,
                             'min_amt_d2'     => !empty($request->min_amt_d2[$key3]) ? str_replace(",", "", $request->min_amt_d2[$key3])  : null,
                             'idr_amt_d2'     => !empty($request->idr_amt_d2[$key3]) ? str_replace(",", "", $request->idr_amt_d2[$key3])  : null,
+                            'amt_d2'     => !empty($request->amt_d2[$key3]) ? str_replace(",", "", $request->amt_d2[$key3])  : null,
                             'created_at' => now(),
                             'updated_at' => now(),
                         ];
@@ -567,31 +608,41 @@ class SeaQuotationController extends Controller
                 }
                 unset($data_info['id']);
 
-                if (!empty($data_info['vs1'])  || !empty($data_info['vs2']) || !empty($data_info['vs3']) || !empty($data_info['vs4']) || !empty($data_info['vn1']) || !empty($data_info['vn2']) || !empty($data_info['vt1']) || !empty($data_info['vt2']) || !empty($data_info['vb1']) || !empty($data_info['vb2']) || !empty($data_info['vd1']) || !empty($data_info['vd2']) || !empty($data_info['vdt1']) || !empty($data_info['vdt2'])) {
+                $cek_info_d1 = AddInfoD1::where('trx_id', $sea_quot->id)->first();
+                if ($cek_info_d1 == null) {
+                    $add_info_d1 = new AddInfoD1();
+                } else {
                     $add_info_d1 = AddInfoD1::where('trx_id', $sea_quot->id)->first();
-                    $add_info_d1->add_info_id = $add_info['id'];
-                    $add_info_d1->trx_type = 'SQ';
-                    $add_info_d1->trx_id = $sea_quot->id;
-                    $add_info_d1->vs1 = !empty($data_info['vs1']) ? $data_info['vs1'] : null;
-                    $add_info_d1->vs2 = !empty($data_info['vs2']) ? $data_info['vs2'] : null;
-                    $add_info_d1->vs3 = !empty($data_info['vs3']) ? $data_info['vs3'] : null;
-                    $add_info_d1->vs4 = !empty($data_info['vs4']) ? $data_info['vs4'] : null;
-                    $add_info_d1->vn1 = !empty($data_info['vn1']) ? $data_info['vn1'] : null;
-                    $add_info_d1->vn2 = !empty($data_info['vn2']) ? $data_info['vn2'] : null;
-                    $add_info_d1->vt1 = !empty($data_info['vt1']) ? $data_info['vt1'] : null;
-                    $add_info_d1->vt2 = !empty($data_info['vt2']) ? $data_info['vt2'] : null;
-                    $add_info_d1->vb1 = !empty($data_info['vb1']) ? $data_info['vb1'] : null;
-                    $add_info_d1->vb2 = !empty($data_info['vb2']) ? $data_info['vb2'] : null;
-                    $add_info_d1->vd1 = !empty($data_info['vd1']) ? $data_info['vd1'] : null;
-                    $add_info_d1->vd2 = !empty($data_info['vd2']) ? $data_info['vd2'] : null;
-                    $add_info_d1->vdt1 = !empty($data_info['vdt1']) ? $data_info['vdt1'] : null;
-                    $add_info_d1->vdt2 = !empty($data_info['vdt2']) ? $data_info['vdt2'] : null;
+                }
+                $add_info_d1->add_info_id = $add_info['id'];
+                $add_info_d1->trx_type = 'SQ';
+                $add_info_d1->trx_id = $sea_quot->id;
+                $add_info_d1->vs1 = !empty($data_info['vs1']) ? $data_info['vs1'] : null;
+                $add_info_d1->vs2 = !empty($data_info['vs2']) ? $data_info['vs2'] : null;
+                $add_info_d1->vs3 = !empty($data_info['vs3']) ? $data_info['vs3'] : null;
+                $add_info_d1->vs4 = !empty($data_info['vs4']) ? $data_info['vs4'] : null;
+                $add_info_d1->vn1 = !empty($data_info['vn1']) ? $data_info['vn1'] : null;
+                $add_info_d1->vn2 = !empty($data_info['vn2']) ? $data_info['vn2'] : null;
+                $add_info_d1->vt1 = !empty($data_info['vt1']) ? $data_info['vt1'] : null;
+                $add_info_d1->vt2 = !empty($data_info['vt2']) ? $data_info['vt2'] : null;
+                $add_info_d1->vb1 = !empty($data_info['vb1']) ? $data_info['vb1'] : null;
+                $add_info_d1->vb2 = !empty($data_info['vb2']) ? $data_info['vb2'] : null;
+                $add_info_d1->vd1 = !empty($data_info['vd1']) ? $data_info['vd1'] : null;
+                $add_info_d1->vd2 = !empty($data_info['vd2']) ? $data_info['vd2'] : null;
+                $add_info_d1->vdt1 = !empty($data_info['vdt1']) ? $data_info['vdt1'] : null;
+                $add_info_d1->vdt2 = !empty($data_info['vdt2']) ? $data_info['vdt2'] : null;
+                if ($cek_info_d1 == null) {
+                    $add_info_d1->save();
+                } else {
                     $add_info_d1->update();
                 }
 
-
                 DB::commit();
                 return to_route('sea_quot.index')->with('success', 'Sea Freight Quotation has been updated!');
+            } catch (QueryException $th) {
+                DB::rollback();
+
+                return redirect()->back()->withInput()->with('error', $th->getMessage());
             } catch (\Throwable $th) {
                 DB::rollback();
 
@@ -617,7 +668,13 @@ class SeaQuotationController extends Controller
                 $sea_quot->quotation()->delete();
 
                 return to_route('sea_quot.index')->with('success', 'Sea Freight Quotation has been deleted!');
+            } catch (QueryException $th) {
+                DB::rollback();
+
+                return redirect()->back()->withInput()->with('error', $th->getMessage());
             } catch (\Throwable $th) {
+                DB::rollback();
+
                 return redirect()->back()->withInput()->with('error', $th->getMessage());
             }
         } else {
@@ -627,14 +684,16 @@ class SeaQuotationController extends Controller
 
     public function pdf($id)
     {
-        $sea_quot = SeaQuotation::with(['quotation', 'payment_term', 'sea_quotation_d1', 'sea_quotation_d2.vat.vat_code_detail_satu'])->where('id', $id)->first();
+        $sea_quot = SeaQuotation::with(['quotation', 'sea_quotation_d1', 'sea_quotation_d2.vat.vat_code_detail_satu'])->where('id', $id)->first();
         $sq_d1 = SeaQuotationD1::with('sea_quotation_s_d1.vat.vat_code_detail_satu')->where('sea_quotation_id', $id)->get()->toArray();
         $company = Company::with('company_detail_satu')->first();
+        $add_info_d1 = AddInfoD1::where('trx_id', $id)->first();
         $pdf = app('dompdf.wrapper');
         $pdf->loadView('trx.sea_quot.export_pdf', [
             'sq'    => $sea_quot,
             'sq_d1' => $sq_d1,
-            'company'   => $company
+            'company'   => $company,
+            'add_info_d1' => $add_info_d1,
         ])->setPaper('a4', 'portrait');
         return $pdf->stream('laporan.pdf');
     }

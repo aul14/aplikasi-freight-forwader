@@ -133,8 +133,8 @@ class ChargeTableController extends Controller
                 $charge_table->via_port_name = $request->via_port_name;
                 $charge_table->second_port_code = $request->second_port_code;
                 $charge_table->second_port_name = $request->second_port_name;
-                $charge_table->effective_date = $request->effective_date;
-                $charge_table->exp_date = $request->exp_date;
+                $charge_table->effective_date = !empty($request->effective_date) ? date('Y-m-d', strtotime(str_replace('/', '-', $request->effective_date)))  : null;
+                $charge_table->exp_date = !empty($request->exp_date) ? date('Y-m-d', strtotime(str_replace('/', '-', $request->exp_date)))  : null;
                 $charge_table->note = $request->note;
                 $charge_table->note_code = $request->note_code;
                 $charge_table->save();
@@ -245,8 +245,8 @@ class ChargeTableController extends Controller
                 $charge_table->via_port_name = $request->via_port_name;
                 $charge_table->second_port_code = $request->second_port_code;
                 $charge_table->second_port_name = $request->second_port_name;
-                $charge_table->effective_date = $request->effective_date;
-                $charge_table->exp_date = $request->exp_date;
+                $charge_table->effective_date = !empty($request->effective_date) ? date('Y-m-d', strtotime(str_replace('/', '-', $request->effective_date)))  : null;
+                $charge_table->exp_date = !empty($request->exp_date) ? date('Y-m-d', strtotime(str_replace('/', '-', $request->exp_date)))  : null;
                 $charge_table->note = $request->note;
                 $charge_table->note_code = $request->note_code;
                 $charge_table->update();

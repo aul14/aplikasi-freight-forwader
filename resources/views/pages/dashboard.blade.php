@@ -3,7 +3,7 @@
 @section('content')
     @include('layouts.navbars.auth.topnav', ['title' => 'Dashboard', 'title_2' => 'Dashboard'])
     <div class="row mt-1 px-1">
-        <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+        {{-- <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
             <div class="card">
                 <div class="card-body p-3">
                     <div class="row">
@@ -101,6 +101,10 @@
                     </div>
                 </div>
             </div>
+        </div> --}}
+        <div class="col-md-12">
+            <div class="calendar"></div>
+            <div class="box"></div>
         </div>
     </div>
 

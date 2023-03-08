@@ -445,7 +445,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <a href="{{ route('customer.index') }}" class="btn btn-danger">Back</a>
+                                <a href="{{ route('customer.index') }}" class="btn btn-danger btn-back">Back</a>
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </div>
                         </div>
@@ -674,7 +674,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.name}`,
                                     id: item.id,
                                     idd_name: item.idd,
                                     country_name: item.name
@@ -699,7 +699,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.name}`,
                                     id: item.id,
                                     custom_attribute: item.name
                                 }
@@ -723,7 +723,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.description}`,
                                     id: item.id,
                                     custom_attribute: item.description
                                 }
@@ -747,7 +747,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.name}`,
                                     id: item.id,
                                     custom_attribute: item.name
                                 }
@@ -771,7 +771,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.type}`,
+                                    text: `${item.type} - ${item.type_name}`,
                                     id: item.id,
                                     custom_attribute: item.type_name
                                 }
@@ -795,7 +795,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.description}`,
                                     id: item.id,
                                     custom_attribute: item.description
                                 }
@@ -819,7 +819,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.name}`,
                                     id: item.id,
                                     custom_attribute: item.name
                                 }

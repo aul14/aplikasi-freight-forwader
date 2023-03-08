@@ -20,7 +20,11 @@ class SalesmanController extends Controller
     {
         if (Auth::user()->hasPermission('manage-salesman')) {
             if ($request->ajax()) {
-                $salesman = Salesman::select('*');
+                if (auth()->user()->is_mng_sales == true || auth()->user()->is_sales == true) {
+                    $salesman = Salesman::select('*')->whereIn('code', explode(",", auth()->user()->salesman_code));
+                } else {
+                    $salesman = Salesman::select('*');
+                }
                 return DataTables::of($salesman)
                     ->addColumn('action', function ($salesman) {
                         return view('datatable-modal._action', [
@@ -123,8 +127,8 @@ class SalesmanController extends Controller
                 $salesman->email = $request->email;
                 $salesman->telp = $request->telp;
                 $salesman->hanphone = $request->hanphone;
-                $salesman->join_date = $request->join_date;
-                $salesman->resign_date = $request->resign_date;
+                $salesman->join_date = !empty($request->join_date) ? date('Y-m-d', strtotime(str_replace('/', '-', $request->join_date))) : null;
+                $salesman->resign_date = !empty($request->resign_date) ? date('Y-m-d', strtotime(str_replace('/', '-', $request->resign_date))) : null;
                 $salesman->save();
 
                 DB::commit();
@@ -200,8 +204,8 @@ class SalesmanController extends Controller
                 $salesman->email = $request->email;
                 $salesman->telp = $request->telp;
                 $salesman->hanphone = $request->hanphone;
-                $salesman->join_date = $request->join_date;
-                $salesman->resign_date = $request->resign_date;
+                $salesman->join_date = !empty($request->join_date) ? date('Y-m-d', strtotime(str_replace('/', '-', $request->join_date))) : null;
+                $salesman->resign_date = !empty($request->resign_date) ? date('Y-m-d', strtotime(str_replace('/', '-', $request->resign_date))) : null;
                 $salesman->update();
 
                 DB::commit();

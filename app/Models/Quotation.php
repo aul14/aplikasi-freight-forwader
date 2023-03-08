@@ -18,7 +18,8 @@ class Quotation extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $with = ['quotation_type', 'job_type', 'bisnis_party', 'salesman', 'currency', 'delivery_type', 'commodity', 'uom'];
+    protected $with = 'quotation_type';
+    // protected $with = ['quotation_type', 'job_type', 'bisnis_party', 'salesman', 'currency', 'delivery_type', 'commodity', 'uom', 'payment_term'];
 
     /**
      * The attributes that should be mutated to dates.
@@ -26,6 +27,11 @@ class Quotation extends Model
      * @var array
      */
     protected $dates = ['deleted_at'];
+
+    public function sea_quot()
+    {
+        return $this->hasOne(SeaQuotation::class)->withTrashed();
+    }
 
     public function quotation_type()
     {
@@ -39,12 +45,12 @@ class Quotation extends Model
 
     public function bisnis_party()
     {
-        return $this->belongsTo(BisnisParty::class)->withTrashed();
+        return $this->belongsTo(BisnisParty::class, 'customer_code', 'code')->withTrashed();
     }
 
-    public function salesman()
+    public function salesman_model()
     {
-        return $this->belongsTo(Salesman::class)->withTrashed();
+        return $this->belongsTo(Salesman::class, 'salesman_code', 'code')->withTrashed();
     }
 
     public function currency()
@@ -54,15 +60,20 @@ class Quotation extends Model
 
     public function delivery_type()
     {
-        return $this->belongsTo(DeliveryType::class)->withTrashed();
+        return $this->belongsTo(DeliveryType::class, 'delivery_type_code', 'type')->withTrashed();
     }
 
-    public function commodity()
+    public function commodity_model()
     {
-        return $this->belongsTo(Commodity::class)->withTrashed();
+        return $this->belongsTo(Commodity::class, 'commodity_code', 'code')->withTrashed();
     }
 
-    public function uom()
+    public function payment_term()
+    {
+        return $this->belongsTo(PaymentTerm::class, 'term_code', 'code')->withTrashed();
+    }
+
+    public function uom_model()
     {
         return $this->belongsTo(Uom::class)->withTrashed();
     }

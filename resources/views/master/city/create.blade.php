@@ -71,7 +71,7 @@
                             </div>
 
                             <div class="col-md-12">
-                                <a href="{{ route('city.index') }}" class="btn btn-danger">Back</a>
+                                <a href="{{ route('city.index') }}" class="btn btn-danger btn-back">Back</a>
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </div>
                         </div>

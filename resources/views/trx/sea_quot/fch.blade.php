@@ -308,11 +308,11 @@
         let obj_new = "";
 
         $(function() {
-            evtPort("#portloading-select-1", "#portloading-name-1")
-            evtPort("#portdischarge-select-1", "#portdischarge-name-1")
-            evtPort("#viaport-select-1", "#viaport-name-1")
-            evtPort("#secondport-select-1", "#secondport-name-1")
-            evtPort("#third-select-1", "#third-name-1")
+            evtPort("#portloading-select-1", "#portloading-name-1");
+            evtPort("#portdischarge-select-1", "#portdischarge-name-1");
+            evtPort("#viaport-select-1", "#viaport-name-1");
+            evtPort("#secondport-select-1", "#secondport-name-1");
+            evtPort("#third-select-1", "#third-name-1");
             evtCity("#origin-select-1", "#origin-name-1");
             evtCity("#dest-select-1", "#dest-name-1");
             evtShippline("#shipping-select-1", "#shipping-name-1");
@@ -382,7 +382,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.name}`,
                                         id: item.code,
                                         custom_attribute: item.name
                                     }
@@ -407,7 +407,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.name}`,
                                         id: item.code,
                                         custom_attribute: item.name
                                     }
@@ -432,7 +432,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.name}`,
                                         id: item.id,
                                         custom_attribute: item.name,
                                     }
@@ -457,7 +457,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.name}`,
                                         id: item.id,
                                         custom_attribute: item.name,
                                     }
@@ -482,7 +482,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.name}`,
                                         id: item.code,
                                         custom_attribute: item.name,
                                     }
@@ -507,7 +507,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.name}`,
                                         id: item.code,
                                         custom_attribute: item.name
                                     }
@@ -532,7 +532,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.name}`,
                                         id: item.code,
                                         custom_attribute: item.name
                                     }
@@ -557,7 +557,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.name}`,
                                         id: item.code,
                                         custom_attribute: item.name
                                     }
@@ -582,7 +582,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.description}`,
                                         id: item.code,
                                         custom_attribute: item.description,
                                     }
@@ -607,7 +607,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.type}`,
+                                        text: `${item.type} - ${item.description}`,
                                         id: item.type,
                                         custom_attribute: item.description,
                                     }
@@ -653,15 +653,16 @@
                 obj_new.find("#add-button-1").attr("id", "add-button-" + row_number);
                 obj_new.find("#remove-button-1").attr("id", "remove-button-" + row_number);
 
-                obj_new.find("#qty-input-1").attr("id", "qty-input-" + row_number).removeAttr("onchange").attr("onchange",
+                obj_new.find("#qty-input-1").attr("id", "qty-input-" + row_number).removeAttr("onkeyup").attr("onkeyup",
                     `sum_idr(${row_number}, ${row_number})`).attr('disabled', false);
-                obj_new.find("#curr-rate1").attr("id", "curr-rate" + row_number).removeAttr("onchange").attr("onchange",
+                obj_new.find("#curr-rate1").attr("id", "curr-rate" + row_number).removeAttr("onkeyup").attr("onkeyup",
                     `sum_idr(${row_number}, ${row_number})`);
-                obj_new.find("#unit-rate1").attr("id", "unit-rate" + row_number).removeAttr("onchange").attr("onchange",
+                obj_new.find("#unit-rate1").attr("id", "unit-rate" + row_number).removeAttr("onkeyup").attr("onkeyup",
                     `sum_idr(${row_number}, ${row_number})`);
-                obj_new.find("#min-amt1").attr("id", "min-amt" + row_number).removeAttr("onchange").attr("onchange",
+                obj_new.find("#min-amt1").attr("id", "min-amt" + row_number).removeAttr("onkeyup").attr("onkeyup",
                     `sum_idr(${row_number}, ${row_number})`);
                 obj_new.find("#idr-amt1").attr("id", "idr-amt" + row_number).attr("data-idr", row_number);
+                obj_new.find("#amt1").attr("id", "amt" + row_number);
 
                 obj_new.find("#chgunit-select-1").attr("id", "chgunit-selectsub-" + row_number).select2({
                     placeholder: 'Search...',
@@ -706,9 +707,9 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.description}`,
                                         id: item.code,
-                                        custom_attribute: item.description
+                                        custom_attribute: item.description,
                                     }
                                 })
                             };
@@ -729,9 +730,9 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.description}`,
                                         id: item.code,
-                                        custom_attribute: item.description
+                                        custom_attribute: item.description,
                                     }
                                 })
                             };
@@ -752,7 +753,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.type}`,
+                                        text: `${item.type} - ${item.description}`,
                                         id: item.type,
                                         custom_attribute: item.description
                                     }
@@ -775,9 +776,9 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.description}`,
                                         id: item.code,
-                                        custom_attribute: item.description
+                                        custom_attribute: item.description,
                                     }
                                 })
                             };
@@ -889,7 +890,7 @@
                     $(obj).closest(className).remove();
                 }
             } else {
-                alert("Minimal 1 baris");
+                alert("Minimum 1 line");
             }
 
             evtCountRowNumber();
@@ -919,7 +920,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.name}`,
                                     id: item.code,
                                     custom_attribute: item.name
                                 }
@@ -951,7 +952,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.name}`,
                                     id: item.code,
                                     custom_attribute: item.name,
                                 }
@@ -985,7 +986,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.name}`,
                                     id: item.code,
                                     custom_attribute: item.name,
                                 }
@@ -1019,7 +1020,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.description}`,
                                     id: item.code,
                                     custom_attribute: item.description,
                                 }
@@ -1052,7 +1053,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.type}`,
+                                    text: `${item.type} - ${item.description}`,
                                     id: item.type,
                                     custom_attribute: item.description,
                                 }
@@ -1133,7 +1134,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.description}`,
                                     id: item.code,
                                     custom_attribute: item.description
                                 }
@@ -1159,7 +1160,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.type}`,
+                                    text: `${item.type} - ${item.description}`,
                                     id: item.type,
                                     custom_attribute: item.description
                                 }
@@ -1218,7 +1219,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.description}`,
                                     id: item.code,
                                     custom_attribute: item.description
                                 }
@@ -1265,7 +1266,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.description}`,
                                     id: item.code,
                                     custom_attribute: item.description
                                 }

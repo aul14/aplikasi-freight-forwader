@@ -136,7 +136,7 @@
                     defaultContent: "-",
                     targets: "_all"
                 }],
-                initComplete: function() {
+                fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
                     this.api()
                         .columns('.select-filter')
                         .every(function() {

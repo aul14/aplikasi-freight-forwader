@@ -483,7 +483,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.name}`,
                                         id: item.code,
                                         custom_attribute: item.name
                                     }
@@ -508,7 +508,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.name}`,
                                         id: item.code,
                                         custom_attribute: item.name
                                     }
@@ -558,7 +558,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.airline_id}`,
+                                        text: `${item.airline_id} - ${item.name}`,
                                         id: item.airline_id,
                                         custom_attribute: item.name
                                     }
@@ -581,9 +581,9 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.description}`,
                                         id: item.code,
-                                        custom_attribute: item.description
+                                        custom_attribute: item.description,
                                     }
                                 })
                             };
@@ -627,15 +627,16 @@
                 obj_new.find("#add-button-1").attr("id", "add-button-" + row_number);
                 obj_new.find("#remove-button-1").attr("id", "remove-button-" + row_number);
 
-                obj_new.find("#qty-input-1").attr("id", "qty-input-" + row_number).removeAttr("onchange").attr("onchange",
+                obj_new.find("#qty-input-1").attr("id", "qty-input-" + row_number).removeAttr("onkeyup").attr("onkeyup",
                     `sum_idr(${row_number}, ${row_number})`).attr('disabled', false);
-                obj_new.find("#curr-rate1").attr("id", "curr-rate" + row_number).removeAttr("onchange").attr("onchange",
+                obj_new.find("#curr-rate1").attr("id", "curr-rate" + row_number).removeAttr("onkeyup").attr("onkeyup",
                     `sum_idr(${row_number}, ${row_number})`);
-                obj_new.find("#unit-rate1").attr("id", "unit-rate" + row_number).removeAttr("onchange").attr("onchange",
+                obj_new.find("#unit-rate1").attr("id", "unit-rate" + row_number).removeAttr("onkeyup").attr("onkeyup",
                     `sum_idr(${row_number}, ${row_number})`);
-                obj_new.find("#min-amt1").attr("id", "min-amt" + row_number).removeAttr("onchange").attr("onchange",
+                obj_new.find("#min-amt1").attr("id", "min-amt" + row_number).removeAttr("onkeyup").attr("onkeyup",
                     `sum_idr(${row_number}, ${row_number})`);
                 obj_new.find("#idr-amt1").attr("id", "idr-amt" + row_number).attr("data-idr", row_number);
+                obj_new.find("#amt1").attr("id", "amt" + row_number);
 
                 obj_new.find("#chgunit-select-1").attr("id", "chgunit-selectsub-" + row_number).select2({
                     placeholder: 'Search...',
@@ -675,9 +676,9 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.description}`,
                                         id: item.code,
-                                        custom_attribute: item.description
+                                        custom_attribute: item.description,
                                     }
                                 })
                             };
@@ -698,9 +699,9 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.description}`,
                                         id: item.code,
-                                        custom_attribute: item.description
+                                        custom_attribute: item.description,
                                     }
                                 })
                             };
@@ -721,7 +722,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.type}`,
+                                        text: `${item.type} - ${item.description}`,
                                         id: item.type,
                                         custom_attribute: item.description
                                     }
@@ -744,9 +745,9 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.description}`,
                                         id: item.code,
-                                        custom_attribute: item.description
+                                        custom_attribute: item.description,
                                     }
                                 })
                             };
@@ -850,7 +851,7 @@
                     $(obj).closest(className).remove();
                 }
             } else {
-                alert("Minimal 1 baris");
+                alert("Minimum 1 line");
             }
 
             evtCountRowNumber();
@@ -880,7 +881,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.name}`,
                                     id: item.code,
                                     custom_attribute: item.name
                                 }
@@ -907,11 +908,11 @@
                     $(`#chg-select${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
                     $(`#pc-select${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
                     $(`#container-select${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
-                    $(`#qty-input${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
+                    $(`#qty-input-${evt1}`).attr(`disabled`, false).attr('required', true);
                     $(`#cargo-select${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
                     $(`#uom-select${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
                 } else if (val == `SHIPMENT`) {
-                    $(`#qty-input${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
+                    $(`#qty-input-${evt1}`).attr(`disabled`, true).attr('required', false);
                     $(`#cargo-select${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
                     $(`#uom-select${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
                     $(`#container-select${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
@@ -919,14 +920,14 @@
                     $(`#pc-select${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
                 } else if (val == `VOLUME` || val == `WEIGHT` || val == `PCS`) {
                     $(`#container-select${evt2}-${evt1}`).attr(`disabled`, true).attr('required', false);
-                    $(`#qty-input${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
+                    $(`#qty-input-${evt1}`).attr(`disabled`, false).attr('required', true);
                     $(`#cargo-select${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
                     $(`#uom-select${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
                     $(`#chg-select${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
                     $(`#pc-select${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
                 } else {
                     $(`#container-select${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
-                    $(`#qty-input${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
+                    $(`#qty-input-${evt1}`).attr(`disabled`, false).attr('required', true);
                     $(`#cargo-select${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
                     $(`#uom-select${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
                     $(`#chg-select${evt2}-${evt1}`).attr(`disabled`, false).attr('required', true);
@@ -957,7 +958,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.description}`,
                                     id: item.code,
                                     custom_attribute: item.description
                                 }
@@ -1016,7 +1017,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.description}`,
                                     id: item.code,
                                     custom_attribute: item.description
                                 }
@@ -1063,7 +1064,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.description}`,
                                     id: item.code,
                                     custom_attribute: item.description
                                 }
@@ -1095,7 +1096,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.name}`,
                                     id: item.code,
                                     custom_attribute: item.name
                                 }
@@ -1127,7 +1128,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.airline_id}`,
+                                    text: `${item.airline_id} - ${item.name}`,
                                     id: item.airline_id,
                                     custom_attribute: item.name
                                 }

@@ -2839,6 +2839,12 @@ window.darkMode = function (el) {
       navbarBrand.src = navbarBrandImgNew;
     }
 
+    $('.calendar').pignoseCalendar({
+      lang: 'eng',
+      select: onClickHandler,
+      theme: 'dark' // light, dark, blue
+    });
+
     for (var i = 0; i < cardNavLinksIcons.length; i++) {
       if (cardNavLinksIcons[i].classList.contains('text-dark')) {
         cardNavLinksIcons[i].classList.remove('text-dark');
@@ -2936,6 +2942,12 @@ window.darkMode = function (el) {
     if (sidebar.classList.contains('bg-default')) {
       sidebar.classList.remove('bg-white');
     }
+
+    $('.calendar').pignoseCalendar({
+      lang: 'eng',
+      select: onClickHandler,
+      theme: 'light' // light, dark, blue
+    });
 
     if (navbarBrandImg.includes('logo-ct.png')) {
       var navbarBrandImgNew = navbarBrandImg.replace("logo-ct", "logo-ct-dark");

@@ -53,9 +53,8 @@
                             </div>
                             <div class="row my-2">
                                 <div class="col-md-12">
-                                    <a href="{{ route('sea_quot.index') }}" class="btn btn-danger">Back</a>
+                                    <a href="{{ route('sea_quot.index') }}" class="btn btn-danger btn-back">Back</a>
                                     <button type="submit" class="btn btn-primary">Submit</button>
-                                    <a href="{{ route('pdf.sea', $sq->id) }}" class="btn btn-warning">PDF</a>
                                 </div>
                             </div>
                         </div>

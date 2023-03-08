@@ -50,6 +50,7 @@ return new class extends Migration
             $table->string('telex', 30)->nullable();
             $table->string('note')->nullable();
             $table->foreignId('salesman_id')->nullable();
+            $table->string('salesman_code', 100)->nullable();
             $table->string('cr_roc_rob', 30)->nullable();
             $table->string('tax_id', 30)->nullable();
             $table->boolean('nomination')->nullable();

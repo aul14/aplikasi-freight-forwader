@@ -113,13 +113,13 @@
 
                     },
                     {
-                        data: 'quotation.bisnis_party.code',
-                        name: 'quotation.bisnis_party.code',
+                        data: 'quotation.customer_code',
+                        name: 'quotation.customer_code',
 
                     },
                     {
-                        data: 'quotation.salesman.code',
-                        name: 'quotation.salesman.code',
+                        data: 'quotation.salesman_code',
+                        name: 'quotation.salesman_code',
 
                     },
                     {
@@ -136,7 +136,7 @@
                     defaultContent: "-",
                     targets: "_all"
                 }],
-                initComplete: function() {
+                fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
                     this.api()
                         .columns('.select-filter')
                         .every(function() {

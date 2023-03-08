@@ -380,7 +380,7 @@
                         @permission('edit-company')
                             <div class="row">
                                 <div class="col-md-12">
-                                    <a href="{{ route('company') }}" class="btn btn-danger">Back</a>
+                                    <a href="{{ route('company') }}" class="btn btn-danger btn-back">Back</a>
                                     <button type="submit" class="btn btn-primary">Submit</button>
                                 </div>
                             </div>
@@ -427,7 +427,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.name}`,
                                     id: item.id,
                                     country_code: item.country.code,
                                     city_name: item.name
@@ -452,7 +452,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.name}`,
                                     id: item.id,
                                     idd_name: item.idd,
                                     country_name: item.name
@@ -477,7 +477,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.description}`,
                                     id: item.id,
                                     custom_attribute: item.description
                                 }

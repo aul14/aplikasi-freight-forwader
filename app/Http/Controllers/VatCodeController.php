@@ -124,7 +124,7 @@ class VatCodeController extends Controller
                     foreach ($request->date as $key => $val) {
                         $result[] = [
                             'vat_code_id' => $vat_code->id,
-                            'date'       => $val,
+                            'date'       => date('Y-m-d', strtotime(str_replace('/', '-', $val))),
                             'vat_rate'  => ($request->vat_rate_detail[$key] != null) ? str_replace(",", "", $request->vat_rate_detail[$key]) : 0,
                             'created_at' => now(),
                             'updated_at' => now(),
@@ -212,7 +212,7 @@ class VatCodeController extends Controller
                     foreach ($request->date as $key => $val) {
                         $result[] = [
                             'vat_code_id' => $vat_code->id,
-                            'date'       => $val,
+                            'date'       => date('Y-m-d', strtotime(str_replace('/', '-', $val))),
                             'vat_rate'  => ($request->vat_rate_detail[$key] != null) ? str_replace(",", "", $request->vat_rate_detail[$key]) : 0,
                             'created_at' => now(),
                             'updated_at' => now(),

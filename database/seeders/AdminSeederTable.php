@@ -1245,6 +1245,80 @@ class AdminSeederTable extends Seeder
             ]);
         }
 
+        // SEA EXPORT BOOKING
+        $moduleSeaBooking = Module::create([
+            'name' => 'Module Sea Export Booking'
+        ]);
+
+        $permissionmoduleSeaBooking = [
+            [
+                'name' => 'manage-sea_book',
+                'display_name' => 'Manage Sea Export Booking',
+                'description' => 'Can Manage Sea Export Booking'
+            ],
+            [
+                'name' => 'create-sea_book',
+                'display_name' => 'Create Sea Export Booking',
+                'description' => 'Can Create Sea Export Booking'
+            ],
+            [
+                'name' => 'edit-sea_book',
+                'display_name' => 'Edit Sea Export Booking',
+                'description' => 'Can Edit Sea Export Booking'
+            ],
+            [
+                'name' => 'delete-sea_book',
+                'display_name' => 'Delete Sea Export Booking',
+                'description' => 'Can Delete Sea Export Booking'
+            ]
+        ];
+
+        foreach ($permissionmoduleSeaBooking as $key) {
+            Permission::create([
+                'name' => $key['name'],
+                'display_name' => $key['display_name'],
+                'description' => $key['description'],
+                'module_id' => $moduleSeaBooking->id
+            ]);
+        }
+
+        // AIR EXPORT BOOKING
+        $moduleAirBooking = Module::create([
+            'name' => 'Module Air Export Booking'
+        ]);
+
+        $permissionmoduleAirBooking = [
+            [
+                'name' => 'manage-air_book',
+                'display_name' => 'Manage Air Export Booking',
+                'description' => 'Can Manage Air Export Booking'
+            ],
+            [
+                'name' => 'create-air_book',
+                'display_name' => 'Create Air Export Booking',
+                'description' => 'Can Create Air Export Booking'
+            ],
+            [
+                'name' => 'edit-air_book',
+                'display_name' => 'Edit Air Export Booking',
+                'description' => 'Can Edit Air Export Booking'
+            ],
+            [
+                'name' => 'delete-air_book',
+                'display_name' => 'Delete Air Export Booking',
+                'description' => 'Can Delete Air Export Booking'
+            ]
+        ];
+
+        foreach ($permissionmoduleAirBooking as $key) {
+            Permission::create([
+                'name' => $key['name'],
+                'display_name' => $key['display_name'],
+                'description' => $key['description'],
+                'module_id' => $moduleAirBooking->id
+            ]);
+        }
+
         // SUPER ADMIN RULES
         Role::create([
             'name' => 'super_admin',
@@ -1386,6 +1460,14 @@ class AdminSeederTable extends Seeder
             'create-air_quot',
             'edit-air_quot',
             'delete-air_quot',
+            'manage-sea_book',
+            'create-sea_book',
+            'edit-sea_book',
+            'delete-sea_book',
+            'manage-air_book',
+            'create-air_book',
+            'edit-air_book',
+            'delete-air_book',
         ];
 
         $userAdmin = User::create([
@@ -1545,6 +1627,14 @@ class AdminSeederTable extends Seeder
             'create-air_quot',
             'edit-air_quot',
             'delete-air_quot',
+            'manage-sea_book',
+            'create-sea_book',
+            'edit-sea_book',
+            'delete-sea_book',
+            'manage-air_book',
+            'create-air_book',
+            'edit-air_book',
+            'delete-air_book',
         ];
 
         $userOwner = User::create([

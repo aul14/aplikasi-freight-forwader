@@ -54,6 +54,24 @@ class SystemNumberingSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'module_id'    => 34,
+                'cycle'         => 'Y',
+                'next_number'   => 1,
+                'length_number'   => 2,
+                'prefix'   => 'WPCS,[YY],[MM],-',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'module_id'    => 35,
+                'cycle'         => 'Y',
+                'next_number'   => 1,
+                'length_number'   => 2,
+                'prefix'   => 'WPCBKA,[YY],[MM],-',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }

@@ -286,7 +286,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.type}`,
+                                        text: `${item.type} - ${item.description}`,
                                         id: item.type,
                                     }
                                 })
@@ -344,7 +344,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.type}`,
+                                        text: `${item.type} - ${item.description}`,
                                         id: item.type,
                                     }
                                 })
@@ -367,7 +367,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.type}`,
+                                        text: `${item.type} - ${item.description}`,
                                         id: item.type,
                                     }
                                 })
@@ -496,7 +496,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.type}`,
+                                    text: `${item.type} - ${item.description}`,
                                     id: item.type,
                                 }
                             })
@@ -543,7 +543,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.type}`,
+                                    text: `${item.type} - ${item.description}`,
                                     id: item.type,
                                 }
                             })

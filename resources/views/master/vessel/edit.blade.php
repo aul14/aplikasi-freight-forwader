@@ -207,7 +207,7 @@
 
                         <div class="row">
                             <div class="col-md-12">
-                                <a href="{{ route('vessel.index') }}" class="btn btn-danger">Back</a>
+                                <a href="{{ route('vessel.index') }}" class="btn btn-danger btn-back">Back</a>
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </div>
                         </div>
@@ -352,7 +352,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.name}`,
                                     id: item.id,
                                     custom_attr: item.name
                                 }
@@ -383,7 +383,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.name}`,
                                     id: item.id,
                                     custom_attr: item.name
                                 }
@@ -414,7 +414,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.name}`,
                                     id: item.id,
                                     idd_name: item.idd,
                                     country_name: item.name

@@ -23,7 +23,12 @@ class BisnisPartyController extends Controller
     {
         if (Auth::user()->hasPermission('manage-bisnis_party')) {
             if ($request->ajax()) {
-                $bisnis_party = BisnisParty::select('*');
+                if (auth()->user()->is_mng_sales == true || auth()->user()->is_sales == true) {
+                    $bisnis_party = BisnisParty::select('*')->whereIn('salesman_code', explode(",", auth()->user()->salesman_code));
+                } else {
+                    $bisnis_party = BisnisParty::select('*');
+                }
+
                 return DataTables::of($bisnis_party)
                     ->addColumn('action', function ($bisnis_party) {
                         return view('datatable-modal._action', [
@@ -161,7 +166,7 @@ class BisnisPartyController extends Controller
                 $bp->vendor_acc_code = $request->vendor_acc_code;
                 $bp->vat_code_id = $request->vat_code_id;
                 $bp->currency_id = $request->currency_id;
-                $bp->exp_date = $request->exp_date;
+                $bp->exp_date = !empty($request->exp_date) ? date('Y-m-d', strtotime(str_replace('/', '-', $request->exp_date)))  : null;
                 $bp->payment_term_id = $request->payment_term_id;
                 $bp->local_name = $request->local_name;
                 $bp->address_1 = $request->address_1;
@@ -182,7 +187,7 @@ class BisnisPartyController extends Controller
                 $bp->web_site = $request->web_site;
                 $bp->telex = $request->telex;
                 $bp->note = $request->note;
-                $bp->salesman_id = $request->salesman_id;
+                $bp->salesman_code = $request->salesman_code;
                 $bp->cr_roc_rob = $request->cr_roc_rob;
                 $bp->tax_id = $request->tax_id;
                 $bp->nomination = $request->nomination == "yes" ? true : false;
@@ -313,7 +318,7 @@ class BisnisPartyController extends Controller
                 $bp->vendor_acc_code = $request->vendor_acc_code;
                 $bp->vat_code_id = $request->vat_code_id;
                 $bp->currency_id = $request->currency_id;
-                $bp->exp_date = $request->exp_date;
+                $bp->exp_date = !empty($request->exp_date) ? date('Y-m-d', strtotime(str_replace('/', '-', $request->exp_date)))  : null;
                 $bp->payment_term_id = $request->payment_term_id;
                 $bp->local_name = $request->local_name;
                 $bp->address_1 = $request->address_1;
@@ -334,7 +339,7 @@ class BisnisPartyController extends Controller
                 $bp->web_site = $request->web_site;
                 $bp->telex = $request->telex;
                 $bp->note = $request->note;
-                $bp->salesman_id = $request->salesman_id;
+                $bp->salesman_code = $request->salesman_code;
                 $bp->cr_roc_rob = $request->cr_roc_rob;
                 $bp->tax_id = $request->tax_id;
                 $bp->nomination = $request->nomination == "yes" ? true : false;
@@ -419,8 +424,6 @@ class BisnisPartyController extends Controller
     {
         $format = $search;
         $data_customer = BisnisParty::select('customer_code')->where('customer_code', 'like', "%$format%")->count() + 1;
-        dd(strlen($data_customer));
-
         if (strlen($data_customer) <= 1) {
             $format .= "00{$data_customer}";
         } else if (strlen($data_customer) <= 2) {

@@ -29,11 +29,6 @@ class SeaQuotation extends Model
         return $this->belongsTo(Quotation::class)->withTrashed();
     }
 
-    public function payment_term()
-    {
-        return $this->belongsTo(PaymentTerm::class)->withTrashed();
-    }
-
     public function sea_quotation_d1()
     {
         return $this->hasMany(SeaQuotationD1::class)->withTrashed();

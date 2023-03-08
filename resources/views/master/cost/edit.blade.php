@@ -690,7 +690,7 @@
                         </div>
                         <div class="row my-3">
                             <div class="col-md-12">
-                                <a href="{{ route('cost_table.index') }}" class="btn btn-danger">Back</a>
+                                <a href="{{ route('cost_table.index') }}" class="btn btn-danger btn-back">Back</a>
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </div>
                         </div>
@@ -784,7 +784,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.type}`,
+                                        text: `${item.type} - ${item.description}`,
                                         id: item.id,
                                         custom_attribute: item.description
                                     }
@@ -807,7 +807,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.description}`,
                                         id: item.id,
                                         custom_attribute: item.description
                                     }
@@ -830,7 +830,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.description}`,
                                         id: item.id,
                                         custom_attribute: item.description
                                     }
@@ -854,7 +854,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.description}`,
                                         id: item.id,
                                         custom_attribute: item.description
                                     }
@@ -1036,7 +1036,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.description}`,
                                         id: item.id,
                                         custom_attribute: item.description
                                     }
@@ -1060,7 +1060,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.description}`,
                                         id: item.id,
                                         custom_attribute: item.description
                                     }
@@ -1084,7 +1084,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.description}`,
                                         id: item.id,
                                         custom_attribute: item.description
                                     }
@@ -1108,7 +1108,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.description}`,
                                         id: item.id,
                                         custom_attribute: item.description
                                     }
@@ -1132,7 +1132,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.description}`,
                                         id: item.id,
                                         custom_attribute: item.description
                                     }
@@ -1156,7 +1156,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.description}`,
                                         id: item.id,
                                         custom_attribute: item.description
                                     }
@@ -1181,7 +1181,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.type}`,
+                                        text: `${item.type} - ${item.description}`,
                                         id: item.id,
                                         custom_attribute: item.description
                                     }
@@ -1205,7 +1205,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.type}`,
+                                        text: `${item.type} - ${item.description}`,
                                         id: item.id,
                                         custom_attribute: item.description
                                     }
@@ -1684,7 +1684,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.name}`,
                                     id: item.id,
                                     custom_attribute: item.name
                                 }
@@ -1714,7 +1714,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.type}`,
+                                    text: `${item.type} - ${item.description}`,
                                     id: item.id,
                                     custom_attribute: item.description
                                 }
@@ -1770,7 +1770,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.name}`,
                                     id: item.id,
                                     custom_attribute: item.name,
                                 }
@@ -1802,7 +1802,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.name}`,
                                     id: item.id,
                                     custom_attribute: item.name
                                 }
@@ -1832,7 +1832,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.name}`,
                                     id: item.code,
                                     custom_attribute: item.name
                                 }
@@ -1862,7 +1862,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.name}`,
                                     id: item.code,
                                     custom_attribute: item.name
                                 }
@@ -1892,7 +1892,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.name}`,
                                     id: item.code,
                                     custom_attribute: item.name
                                 }
@@ -1922,7 +1922,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.name}`,
                                     id: item.code,
                                     custom_attribute: item.name
                                 }
@@ -1975,7 +1975,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.description}`,
                                     id: item.id,
                                     custom_attribute: item.description
                                 }
@@ -1999,7 +1999,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.description}`,
                                     id: item.id,
                                     custom_attribute: item.description
                                 }
@@ -2023,7 +2023,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.description}`,
                                     id: item.id,
                                     custom_attribute: item.description
                                 }

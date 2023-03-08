@@ -19,8 +19,8 @@
                     <th class="text-center" style="min-width: 200px;"> Currency </th>
                     <th class="text-center" style="min-width: 200px;"> Currency Rate </th>
                     <th class="text-center" style="min-width: 200px;"> Unit Rate </th>
-                    <th class="text-center" style="min-width: 200px;"> IDR Min Amount </th>
-                    {{-- <th class="text-center" style="min-width: 200px;"> Amount </th> --}}
+                    <th class="text-center" style="min-width: 200px;"> Min Amount </th>
+                    <th class="text-center" style="min-width: 200px;"> Amount </th>
                     <th class="text-center" style="min-width: 200px;"> IDR Amount </th>
                 </tr>
             </thead>
@@ -81,9 +81,9 @@
                                 <div class="form-group">
                                     <input type="text" class="form-control qty-inputd2" autocomplete="off"
                                         @disabled($item_d2->chg_unit_d2 == 'SHIPMENT') data-type='currency4'
-                                        value="{{ number_format($item_d2->qty_d2, 4, '.', ',') }}" name="qty_d2[]"
-                                        id="qty-inputd2-{{ $key_d2 + 1 }}"
-                                        onchange="sum_idr_d2({{ $key_d2 + 1 }}, 1)">
+                                        value="{{ number_format($item_d2->chg_unit_d2 == 'SHIPMENT' ? 1 : $item_d2->qty_d2, 4, '.', ',') }}"
+                                        name="qty_d2[]" id="qty-inputd2-{{ $key_d2 + 1 }}"
+                                        onkeyup="sum_idr_d2({{ $key_d2 + 1 }}, 1)">
                                 </div>
                             </td>
 
@@ -188,7 +188,7 @@
                                         id="curr-rated2{{ $key_d2 + 1 }}" autocomplete="off" data-type='currency'
                                         name="curr_rate_d2[]"
                                         value="{{ number_format($item_d2->curr_rate_d2, 2, '.', ',') }}"
-                                        onchange="sum_idr_d2({{ $key_d2 + 1 }}, 1)">
+                                        onkeyup="sum_idr_d2({{ $key_d2 + 1 }}, 1)">
                                 </div>
                             </td>
 
@@ -198,7 +198,7 @@
                                     <input type="text" class="form-control unit-rated2"
                                         id="unit-rated2{{ $key_d2 + 1 }}" autocomplete="off" data-type='currency'
                                         value="{{ number_format($item_d2->unit_rate_d2, 2, '.', ',') }}"
-                                        name="unit_rate_d2[]" onchange="sum_idr_d2({{ $key_d2 + 1 }}, 1)">
+                                        name="unit_rate_d2[]" onkeyup="sum_idr_d2({{ $key_d2 + 1 }}, 1)">
                                 </div>
                             </td>
 
@@ -207,7 +207,16 @@
                                     <input type="text" class="form-control min-amtd2"
                                         id="min-amtd2{{ $key_d2 + 1 }}" autocomplete="off" data-type='currency'
                                         value="{{ number_format($item_d2->min_amt_d2, 2, '.', ',') }}"
-                                        name="min_amt_d2[]" onchange="sum_idr_d2({{ $key_d2 + 1 }}, 1)">
+                                        name="min_amt_d2[]" onkeyup="sum_idr_d2({{ $key_d2 + 1 }}, 1)">
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="form-group">
+                                    <input type="text" class="form-control amtd2" id="amtd2{{ $key_d2 + 1 }}"
+                                        readonly autocomplete="off"
+                                        value="{{ number_format($item_d2->amt_d2, 2, '.', ',') }}"
+                                        data-type='currency_amt' name="amt_d2[]">
                                 </div>
                             </td>
 
@@ -272,7 +281,7 @@
                             <div class="form-group">
                                 <input type="text" class="form-control qty-inputd2" autocomplete="off"
                                     data-type='currency4' name="qty_d2[]" id="qty-inputd2-1"
-                                    onchange="sum_idr_d2(1, 1)">
+                                    onkeyup="sum_idr_d2(1, 1)">
                             </div>
                         </td>
 
@@ -365,7 +374,7 @@
                             <div class="form-group">
                                 <input type="text" class="form-control curr-rated2" id="curr-rated21"
                                     autocomplete="off" data-type='currency' name="curr_rate_d2[]"
-                                    onchange="sum_idr_d2(1, 1)">
+                                    onkeyup="sum_idr_d2(1, 1)">
                             </div>
                         </td>
 
@@ -374,7 +383,7 @@
                             <div class="form-group">
                                 <input type="text" class="form-control unit-rated2" id="unit-rated21"
                                     autocomplete="off" data-type='currency' name="unit_rate_d2[]"
-                                    onchange="sum_idr_d2(1, 1)">
+                                    onkeyup="sum_idr_d2(1, 1)">
                             </div>
                         </td>
 
@@ -382,7 +391,14 @@
                             <div class="form-group">
                                 <input type="text" class="form-control min-amtd2" id="min-amtd21"
                                     autocomplete="off" data-type='currency' name="min_amt_d2[]"
-                                    onchange="sum_idr_d2(1, 1)">
+                                    onkeyup="sum_idr_d2(1, 1)">
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="form-group">
+                                <input type="text" class="form-control amtd2" id="amtd21" readonly
+                                    autocomplete="off" data-type='currency_amt' name="amt_d2[]">
                             </div>
                         </td>
 
@@ -424,6 +440,7 @@
         let idr_amtD2 = ".idr-amtd2";
         let unit_rateD2 = ".unit-rated2";
         let min_amtD2 = ".min-amtd2";
+        let amtD2 = ".amtd2";
         let countParseD2 = [];
         let countParseD2Array = [];
 
@@ -440,7 +457,7 @@
                 `#chgunit-selectd2-{{ $key_d2 + 1 }}, #cargo-selectd2-{{ $key_d2 + 1 }}, #dg-selectd2-{{ $key_d2 + 1 }}, #chg-selectd2-{{ $key_d2 + 1 }}, #pc-selectd2-{{ $key_d2 + 1 }}, #rate-selectd2-{{ $key_d2 + 1 }}`
             );
             evtUomCode(`#uom-subd2-{{ $key_d2 + 1 }}`);
-            evtCurrencyCode(`#currency-subd2-{{ $key_d2 + 1 }}`);
+            evtCurrencyCode(`#currency-subd2-{{ $key_d2 + 1 }}`, null, true, "#curr-rated2{{ $key_d2 + 1 }}");
             evtContainer(`#container-selectd2-{{ $key_d2 + 1 }}`);
             evtVatCode(`#vat-selectd2-{{ $key_d2 + 1 }}`);
 
@@ -454,7 +471,7 @@
                 `#chgunit-selectd2-1, #cargo-selectd2-1, #dg-selectd2-1, #chg-selectd2-1, #pc-selectd2-1, #rate-selectd2-1`
             );
             evtUomCode(`#uom-subd2-1`);
-            evtCurrencyCode(`#currency-subd2-1`);
+            evtCurrencyCode(`#currency-subd2-1`, null, true, "#curr-rated21");
             evtContainer(`#container-selectd2-1`);
             evtVatCode(`#vat-selectd2-1`);
 
@@ -484,21 +501,21 @@
                 fieldD2.find(currencyD2).empty();
                 fieldD2.find(uomD2).empty();
                 fieldD2.find(vatD2).empty();
-                fieldD2.find(dueSelectD2).val('');
                 fieldD2.find(chgunitD2).val('');
                 fieldD2.find(pcD2).val('');
                 fieldD2.find(chgD2).val('');
                 fieldD2.find(rateD2).val('');
 
-                fieldD2.find(qtyInputD2).attr("id", "qty-inputd2-" + countD2).removeAttr("onchange").attr("onchange",
+                fieldD2.find(qtyInputD2).attr("id", "qty-inputd2-" + countD2).removeAttr("onkeyup").attr("onkeyup",
                     `sum_idr_d2(${countD2}, 1)`);
-                fieldD2.find(curr_rateD2).attr("id", "curr-rated2" + countD2).removeAttr("onchange").attr("onchange",
+                fieldD2.find(curr_rateD2).attr("id", "curr-rated2" + countD2).removeAttr("onkeyup").attr("onkeyup",
                     `sum_idr_d2(${countD2}, 1)`);
-                fieldD2.find(unit_rateD2).attr("id", "unit-rated2" + countD2).removeAttr("onchange").attr("onchange",
+                fieldD2.find(unit_rateD2).attr("id", "unit-rated2" + countD2).removeAttr("onkeyup").attr("onkeyup",
                     `sum_idr_d2(${countD2}, 1)`);
-                fieldD2.find(min_amtD2).attr("id", "min-amtd2" + countD2).removeAttr("onchange").attr("onchange",
+                fieldD2.find(min_amtD2).attr("id", "min-amtd2" + countD2).removeAttr("onkeyup").attr("onkeyup",
                     `sum_idr_d2(${countD2}, 1)`);
                 fieldD2.find(idr_amtD2).attr("id", "idr-amtd2" + countD2).attr("data-idrd2", 1);
+                fieldD2.find(amtD2).attr("id", "amtd2" + countD2);
 
                 fieldD2.find(itemSelectD2).attr("id", "item-selectd2-" + countD2).select2({
                     placeholder: 'Search...',
@@ -568,9 +585,9 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.description}`,
                                         id: item.code,
-                                        custom_attribute: item.description
+                                        custom_attribute: item.description,
                                     }
                                 })
                             };
@@ -591,9 +608,9 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.description}`,
                                         id: item.code,
-                                        custom_attribute: item.description
+                                        custom_attribute: item.description,
                                     }
                                 })
                             };
@@ -614,7 +631,7 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.type}`,
+                                        text: `${item.type} - ${item.description}`,
                                         id: item.type,
                                         custom_attribute: item.description
                                     }
@@ -637,9 +654,9 @@
                             return {
                                 results: $.map(data, function(item) {
                                     return {
-                                        text: `${item.code}`,
+                                        text: `${item.code} - ${item.description}`,
                                         id: item.code,
-                                        custom_attribute: item.description
+                                        custom_attribute: item.description,
                                     }
                                 })
                             };
@@ -660,8 +677,8 @@
                 );
                 evtUomCode(`#uom-subd2-1`);
                 evtUomCode(`#uom-subd2-${countD2}`);
-                evtCurrencyCode(`#currency-subd2-1`);
-                evtCurrencyCode(`#currency-subd2-${countD2}`);
+                evtCurrencyCode(`#currency-subd2-1`, null, true, "#curr-rated21");
+                evtCurrencyCode(`#currency-subd2-${countD2}`, null, true, `#curr-rated2${countD2}`);
                 evtContainer(`#container-selectd2-1`);
                 evtContainer(`#container-selectd2-${countD2}`);
                 evtVatCode(`#vat-selectd2-1`);
@@ -669,9 +686,6 @@
 
                 evtChangeChgUnitD2(countD2, '');
                 evtEnabledSubDetailD2(countD2, '');
-
-                $(`#item-selectd2-${countD2}, #chgunit-selectd2-${countD2}, #cargo-selectd2-${countD2}, #dg-selectd2-${countD2}, #chg-selectd2-${countD2}, #pc-selectd2-${countD2}, #rate-selectd2-${countD2}, #uom-subd2-${countD2}, #currency-subd2-${countD2}, #container-selectd2-${countD2}, #vat-selectd2-${countD2}`)
-                    .empty();
 
                 $("input[data-type='currency_amt']").on({
                     keyup: function() {
@@ -724,27 +738,26 @@
                     "") == '0.00') ? 0 : parseFloat($(`#min-amtd2${evt}`).val().split(',').join(""));
             let unitd2 = parseFloat($(`#unit-rated2${evt}`).val().split(',').join(""));
             let idrd2 = parseFloat($(`#idr-amtd2${evt}`).val().split(',').join(""));
+            let count_amtd2 = 0;
+            let count_idrd2 = 0;
 
-            let count_idrd2 = unitd2 * (currd2 * qtyd2);
+            // COUNT AMOUNT
+            if (!isNaN(unitd2)) {
+                count_amtd2 += unitd2 * qtyd2;
 
-            let val_idrd2 = count_idrd2 > mind2 ? count_idrd2 : mind2;
+                let val_amtd2 = count_amtd2 > mind2 ? count_amtd2 : mind2;
 
-            $.ajax({
-                type: "post",
-                url: '{{ route('format.currency') }}',
-                data: {
-                    total: val_idrd2
-                },
-                dataType: "json",
-                success: function(response) {
-                    document.getElementById(`idr-amtd2${evt}`).value = response;
+                document.getElementById(`amtd2${evt}`).value = numberFormatter(val_amtd2);
 
-                    // if (evt2 != '') {
-                    //     sumofunittotal(evt2);
-                    // }
-                }
-            });
+                // COUNT IDR
+                count_idrd2 += unitd2 * (currd2 * qtyd2);
 
+                document.getElementById(`idr-amtd2${evt}`).value = numberFormatter(count_idrd2);
+
+                // if (evt2 != '') {
+                //     sumofunittotal(evt2);
+                // }
+            }
         }
 
         function evtChangeChgUnitD2(evt1 = null, evt2 = null) {

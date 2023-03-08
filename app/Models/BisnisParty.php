@@ -34,6 +34,11 @@ class BisnisParty extends Model
      */
     protected $dates = ['deleted_at'];
 
+    public function quotation()
+    {
+        return $this->hasOne(Quotation::class, 'customer_code', 'code')->withTrashed();
+    }
+
     public function currency()
     {
         return $this->belongsTo(Currency::class)->withTrashed();
@@ -61,7 +66,7 @@ class BisnisParty extends Model
 
     public function salesman()
     {
-        return $this->belongsTo(Salesman::class)->withTrashed();
+        return $this->belongsTo(Salesman::class, 'salesman_code', 'code')->withTrashed();
     }
 
     public function vat_code()

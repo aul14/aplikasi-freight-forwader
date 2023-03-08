@@ -21,8 +21,8 @@
     <link rel="stylesheet" href="{{ asset('assets/css/fontawesome.min.css?v=1.0.0') }}">
     <link href="{{ asset('assets/css/nucleo-svg.css?v=1.0.0') }}" rel="stylesheet" />
     <!-- CSS Files -->
-    <link id="pagestyle" rel="stylesheet" href="{{ asset('assets/css/argon-dashboard.css?v=1.1.3') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/css/styles.css?v=1.2.2') }}">
+    <link id="pagestyle" rel="stylesheet" href="{{ asset('assets/css/argon-dashboard.css?v=1.1.4') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/css/styles.css?v=1.2.6') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css?v=1.0.0') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/jquery.toast.min.css?v=1.0.0') }}">
     {{-- Bootstrap Select --}}
@@ -37,7 +37,12 @@
         href="{{ asset('assets/plugins/bootstrap-datatable/css/buttons.bootstrap4.min.css?v=1.0.0') }}"
         type="text/css">
     {{-- Datepicker --}}
+    <link rel="stylesheet" href="{{ asset('assets/css/jquery.datetimepicker.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/datepicker.min.css?v=1.0.0') }}">
+    {{-- Calendar --}}
+    <link rel="stylesheet" href="{{ asset('assets/css/icons/icomoon/styles.css?v=1.0.0') }}">
+    <link rel="stylesheet" href="{{ asset('assets/calender/css/style.css?v=1.0.0') }}">
+    <link rel="stylesheet" href="{{ asset('assets/calender/css/pignose.calendar.css?v=1.0.0') }}">
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -86,6 +91,10 @@
     <script src="{{ asset('assets/js/bootstrap4-toggle.min.js') }}"></script>
     {{-- Datepicker --}}
     <script src="{{ asset('assets/js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.datetimepicker.full.min.js') }}"></script>
+    {{-- Calendar --}}
+    <script src="{{ asset('assets/js/moment.min.js') }}"></script>
+    <script src="{{ asset('assets/calender/js/pignose.calendar.js') }}"></script>
     <script>
         var win = navigator.platform.indexOf('Win') > -1;
         if (win && document.querySelector('#sidenav-scrollbar')) {
@@ -100,6 +109,20 @@
     <script src="{{ asset('assets/js/argon-dashboard.js') }}"></script>
     <script>
         $(document).ready(function() {
+            $('.btn-back').click(function(e) {
+                e.preventDefault();
+                let text = "Are you sure want to exit this menu?";
+                if (confirm(text) == true) {
+                    location.href = $(this).attr("href");
+                }
+            });
+
+            $('.calendar').pignoseCalendar({
+                lang: 'eng',
+                select: onClickHandler,
+                theme: 'light' // light, dark, blue
+            });
+
             $(".chosen-select").chosen({
                 width: "100%"
             });
@@ -108,6 +131,12 @@
                 format: 'dd/mm/yyyy',
                 autoclose: true,
                 todayHighlight: true
+            });
+
+            $('.date-time-picker').datetimepicker({
+                autoclose: true
+            }).on('change', function(e) {
+                $(this).datetimepicker('hide');
             });
             // setting dropdown di table responsive
             // hold onto the drop down menu                                             
@@ -144,6 +173,28 @@
                 $(this).val($(this).val().toUpperCase());
             });
         });
+
+        function onClickHandler(date, obj) {
+            var $calendar = obj.calendar;
+            var $box = $calendar.parent().siblings('.box').show();
+            var text = 'You selected date ';
+
+            if (date[0] !== null) {
+                text += date[0].format('DD MMMM YYYY');
+            }
+
+            if (date[0] !== null && date[1] !== null) {
+                text += ' ~ ';
+            } else if (date[0] === null && date[1] == null) {
+                text += 'tidak ada';
+            }
+
+            if (date[1] !== null) {
+                text += date[1].format('DD MMMM YYYY');
+            }
+
+            $box.text(text);
+        }
     </script>
     @yield('script')
     @yield('sub_script_1')
@@ -151,6 +202,8 @@
     @yield('sub_script_3')
     @yield('sub_script_4')
     @yield('sub_script_5')
+    @yield('sub_script_6')
+    @yield('sub_script_7')
 </body>
 
 </html>

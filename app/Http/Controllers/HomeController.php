@@ -26,30 +26,30 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $count =  History::where('user_id', auth()->user()->id)->count();
-        if ($count >= 3) {
-            $cek_double = History::where('user_id', auth()->user()->id)->where('menu', 'Dashboard')->count();
-            if ($cek_double > 1) {
-                History::where('user_id', auth()->user()->id)->where('menu', 'Dashboard')->limit(1)->delete();
-            } else {
-                History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
-            }
-            History::insert([
-                'user_id'   => auth()->user()->id,
-                'menu'      => 'Dashboard',
-                'url_menu'  => route('home'),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        } else {
-            History::insert([
-                'user_id'   => auth()->user()->id,
-                'menu'      => 'Dashboard',
-                'url_menu'  => route('home'),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
+        // $count =  History::where('user_id', auth()->user()->id)->count();
+        // if ($count >= 3) {
+        //     $cek_double = History::where('user_id', auth()->user()->id)->where('menu', 'Dashboard')->count();
+        //     if ($cek_double > 1) {
+        //         History::where('user_id', auth()->user()->id)->where('menu', 'Dashboard')->limit(1)->delete();
+        //     } else {
+        //         History::where('user_id', auth()->user()->id)->orderBy('created_at', 'asc')->limit(1)->delete();
+        //     }
+        //     History::insert([
+        //         'user_id'   => auth()->user()->id,
+        //         'menu'      => 'Dashboard',
+        //         'url_menu'  => route('home'),
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ]);
+        // } else {
+        //     History::insert([
+        //         'user_id'   => auth()->user()->id,
+        //         'menu'      => 'Dashboard',
+        //         'url_menu'  => route('home'),
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ]);
+        // }
 
         return view('pages.dashboard');
     }

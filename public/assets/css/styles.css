@@ -1,3 +1,10 @@
+input[required] {
+    background-color: khaki !important;
+}
+select[required]~.select2-container--default .select2-selection--single { 
+    background-color: khaki !important;
+}
+
 /* STYLE TAB */
 .tabset>input[type="radio"] {
     position: absolute;
@@ -13,7 +20,9 @@
 .tabset>input:nth-child(5):checked~.tab-panels>.tab-panel:nth-child(3),
 .tabset>input:nth-child(7):checked~.tab-panels>.tab-panel:nth-child(4),
 .tabset>input:nth-child(9):checked~.tab-panels>.tab-panel:nth-child(5),
-.tabset>input:nth-child(11):checked~.tab-panels>.tab-panel:nth-child(6) {
+.tabset>input:nth-child(11):checked~.tab-panels>.tab-panel:nth-child(6),
+.tabset>input:nth-child(13):checked~.tab-panels>.tab-panel:nth-child(7),
+.tabset>input:nth-child(15):checked~.tab-panels>.tab-panel:nth-child(8) {
     display: block;
 }
 
@@ -67,9 +76,9 @@
     box-sizing: border-box;
 }
 
-.tabset {
+/* .tabset {
     max-width: 65em;
-}
+} */
 /* END STYLE TAB */
 
 /* STYLE HEIGHT SELECT2 */
@@ -190,6 +199,84 @@ table.my-tableview tr td
 }
 
 /* /my table */
+/* modal table  */
+.modal-tableview td.title-on-first {
+    width: 25% !important;
+}
+
+.modal-tableview td.item-of-table {
+    width: 5% !important
+}
+
+.modal-tableview td.item-of-table-lg {
+    width: 30% !important;
+}
+
+table.modal-tableview {
+    border-spacing: 0;
+}
+
+.modal-tableview {
+    width: 100%;
+}
+
+.modal-tableview thead tr th, 
+.modal-tableview tfoot tr th {
+    /* padding: 6px 40px 6px !important; */
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.modal-tableview thead{
+    background-color: var(--bs-primary);
+    color: #fff;
+}
+
+.modal-tableview thead tr th {
+    text-transform: capitalize;
+}
+
+.modal-tableview tbody tr td {
+    text-transform: uppercase;
+}
+
+.modal-tableview tbody td {
+    /* padding-top: 0px !important;
+    padding-bottom: 0px !important;
+    padding-left: 6px !important;
+    padding-right: 0px !important; */
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.modal-tableview.modal-table-striped tbody tr:nth-of-type(odd):hover,
+.modal-tableview.modal-table-striped tbody tr:nth-of-type(even):hover {
+    background-color: #ebe1e1;
+}
+
+.dataTables_scrollBody thead tr {
+    visibility: collapse;
+}
+
+
+.modal-tableview.td-first-title tbody td:first-child {
+    text-transform: capitalize;
+    width: 15%;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.modal-tableview.td-first-title tbody td:nth-child(2) {
+    text-transform: capitalize;
+    width: 1%;
+}
+/* END MODAL TABLE */
 html {
     overflow: scroll;
     overflow-x: hidden;

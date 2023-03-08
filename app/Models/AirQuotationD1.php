@@ -24,14 +24,14 @@ class AirQuotationD1 extends Model
      */
     protected $dates = ['deleted_at'];
 
-    public function air_quotation_s_d1()
-    {
-        return $this->belongsTo(AirQuotationSD1::class, 'code', 'air_quotation_d1_code')->withTrashed();
-    }
-
     public function air_quotation()
     {
         return $this->belongsTo(AirQuotation::class)->withTrashed()->withTrashed();
+    }
+
+    public function air_quotation_s_d1()
+    {
+        return $this->belongsTo(AirQuotationSD1::class, 'code', 'air_quotation_d1_code')->withTrashed();
     }
 
     public function air_quotation_s_d2()

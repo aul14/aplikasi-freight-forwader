@@ -33,6 +33,7 @@ return new class extends Migration
             $table->string('fax', 30)->nullable();
             $table->string('email')->nullable();
             $table->foreignId('salesman_id')->nullable();
+            $table->string('salesman_code', 100)->nullable();
             $table->foreignId('currency_id')->nullable();
             $table->double('curr_rate')->nullable();
             $table->foreignId('delivery_type_id')->nullable();

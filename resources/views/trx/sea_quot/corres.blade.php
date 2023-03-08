@@ -103,12 +103,13 @@
         <div class="row mt-2">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="salesman_id">Salesman <span style="color: red;">*</span></label>
-                    <select class="salesman-select" required name="salesman_id">
-                        <option></option>
+                    <label for="salesman_code">Salesman <span style="color: red;">*</span></label>
+                    <select class="salesman-select @error('salesman_code') is-invalid @enderror" required
+                        name="salesman_code">
+                        <option value="{{ old('salesman_code') }}">{{ old('salesman_code') }}</option>
                     </select>
 
-                    @error('salesman_id')
+                    @error('salesman_code')
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>
@@ -117,22 +118,21 @@
             </div>
             <div class="col-md-8">
                 <div class="form-group">
-                    <label for="salesman_desc"> </label>
-                    <input type="text" value="{{ old('salesman_desc') }}" disabled class="form-control"
-                        name="salesman_desc" id="salesman_desc">
+                    <label for="salesman"> </label>
+                    <input type="text" value="{{ old('salesman') }}" readonly class="form-control" name="salesman"
+                        id="salesman">
                 </div>
             </div>
         </div>
         <div class="row mt-2">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="bisnis_party_id">Customer Code </label>
-                    <select class="customer-select @error('bisnis_party_id') is-invalid @enderror"
-                        name="bisnis_party_id">
-                        <option value=""></option>
+                    <label for="customer_code">Customer Code </label>
+                    <select class="customer-select @error('customer_code') is-invalid @enderror" name="customer_code">
+                        <option value="{{ old('customer_code') }}">{{ old('customer_code') }}</option>
                     </select>
 
-                    @error('bisnis_party_id')
+                    @error('customer_code')
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>
@@ -141,9 +141,9 @@
             </div>
             <div class="col-md-8">
                 <div class="form-group">
-                    <label for="bisnis_party_name"> </label>
-                    <input type="text" value="{{ old('bisnis_party_name') }}" readonly class="form-control"
-                        name="bisnis_party_name" id="bisnis_party_name">
+                    <label for="customer"> </label>
+                    <input type="text" value="{{ old('customer') }}" readonly class="form-control"
+                        name="customer" id="customer">
                 </div>
             </div>
         </div>
@@ -152,7 +152,7 @@
                 <div class="form-group">
                     <label for="currency_id">Currency </label>
                     <select class="currency-select @error('currency_id') is-invalid @enderror" name="currency_id">
-                        <option></option>
+                        <option value="{{ old('currency_id') }}">{{ old('currency_id') }}</option>
                     </select>
 
                     @error('currency_id')
@@ -172,13 +172,13 @@
         <div class="row mt-1">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="delivery_type_id">Delivery Type </label>
-                    <select class="deltype-select @error('delivery_type_id') is-invalid @enderror"
-                        name="delivery_type_id">
-                        <option></option>
+                    <label for="delivery_type_code">Delivery Type </label>
+                    <select class="deltype-select @error('delivery_type_code') is-invalid @enderror"
+                        name="delivery_type_code">
+                        <option value="{{ old('delivery_type_code') }}">{{ old('delivery_type_code') }}</option>
                     </select>
 
-                    @error('delivery_type_id')
+                    @error('delivery_type_code')
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>
@@ -188,20 +188,20 @@
             <div class="col-md-8">
                 <div class="form-group">
                     <label for="delivery_type_name"> </label>
-                    <input type="text" disabled class="form-control" name="delivery_type_name"
-                        id="delivery_type_name">
+                    <input type="text" readonly class="form-control" value="{{ old('delivery_type_name') }}"
+                        name="delivery_type_name" id="delivery_type_name">
                 </div>
             </div>
         </div>
         <div class="row mt-1">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="payment_term_id">Payment Term </label>
-                    <select class="term-select @error('payment_term_id') is-invalid @enderror" name="payment_term_id">
-                        <option></option>
+                    <label for="term_code">Payment Term </label>
+                    <select class="term-select @error('term_code') is-invalid @enderror" name="term_code">
+                        <option value="{{ old('term_code') }}">{{ old('term_code') }}</option>
                     </select>
 
-                    @error('payment_term_id')
+                    @error('term_code')
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>
@@ -210,9 +210,9 @@
             </div>
             <div class="col-md-8">
                 <div class="form-group">
-                    <label for="term_desc"> </label>
-                    <input type="text" value="{{ old('term_desc') }}" disabled class="form-control"
-                        name="term_desc" id="term_desc">
+                    <label for="term"> </label>
+                    <input type="text" value="{{ old('term') }}" readonly class="form-control" name="term"
+                        id="term">
                 </div>
             </div>
         </div>
@@ -315,12 +315,13 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="commodity_id">Commodity </label>
-                    <select class="commodity-select @error('commodity_id') is-invalid @enderror" name="commodity_id">
+                    <label for="commodity_code_name">Commodity </label>
+                    <select class="commodity-select @error('commodity_code_name') is-invalid @enderror"
+                        name="commodity_code_name">
                         <option></option>
                     </select>
 
-                    @error('commodity_id')
+                    @error('commodity_code_name')
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>
@@ -329,9 +330,9 @@
             </div>
             <div class="col-md-8">
                 <div class="form-group">
-                    <label for="commodity_desc"> </label>
-                    <input type="text" value="{{ old('commodity_desc') }}" disabled class="form-control"
-                        name="commodity_desc" id="commodity_desc">
+                    <label for="commodity"> </label>
+                    <input type="text" value="{{ old('commodity') }}" readonly class="form-control"
+                        name="commodity" id="commodity">
                 </div>
             </div>
         </div>
@@ -358,7 +359,7 @@
                 <div class="p-1 my-2">X</div>
                 <div class="p-2" style="width: 12%">
                     <select name="container_type_1" class="cont-1 @error('container_type_1') is-invalid @enderror">
-                        <option value="">Search</option>
+                        <option value="{{ old('container_type_1') }}">{{ old('container_type_1') }}</option>
                     </select>
                     @error('container_type_1')
                         <div class="invalid-feedback">
@@ -382,7 +383,7 @@
                 <div class="p-1 my-2">X</div>
                 <div class="p-2" style="width: 12%">
                     <select name="container_type_2" class="cont-1 @error('container_type_2') is-invalid @enderror">
-                        <option value="">Search</option>
+                        <option value="{{ old('container_type_2') }}">{{ old('container_type_2') }}</option>
                     </select>
                     @error('container_type_2')
                         <div class="invalid-feedback">
@@ -406,7 +407,7 @@
                 <div class="p-1 my-2">X</div>
                 <div class="p-2" style="width: 12%">
                     <select name="container_type_3" class="cont-1 @error('container_type_3') is-invalid @enderror">
-                        <option value="">Search</option>
+                        <option value="{{ old('container_type_3') }}">{{ old('container_type_3') }}</option>
                     </select>
                     @error('container_type_3')
                         <div class="invalid-feedback">
@@ -429,7 +430,7 @@
                 <div class="p-1 my-2">X</div>
                 <div class="p-2" style="width: 12%">
                     <select name="container_type_4" class="cont-1 @error('container_type_4') is-invalid @enderror">
-                        <option value="">Search</option>
+                        <option value="{{ old('container_type_4') }}">{{ old('container_type_4') }}</option>
                     </select>
                     @error('container_type_4')
                         <div class="invalid-feedback">
@@ -461,17 +462,17 @@
                     @enderror
                 </div>
                 <div class="p-2" style="width: 12%">
-                    <select name="uom_id" class="uom-select @error('uom_id') is-invalid @enderror">
+                    <select name="uom_code" class="uom-select @error('uom_code') is-invalid @enderror">
                         <option value="">Search</option>
                     </select>
-                    @error('uom_id')
+                    @error('uom_code')
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>
                     @enderror
                 </div>
                 <div class="p-2" style="width: 20%">
-                    <input type="text" class="form-control" disabled name="uom_desc" id="uom_desc">
+                    <input type="text" class="form-control" readonly name="uom_name" id="uom_name">
                 </div>
                 <div class="p-1 my-2">/</div>
                 <div class="p-2" style="width: 20%">
@@ -857,6 +858,19 @@
                                     @enderror
                                 </div>
                             </div>
+                        @elseif (strstr($key, 'kdt'))
+                            <div class="col-md-7 mt-2">
+                                <div class="form-group">
+                                    <input type="text" value="{{ old(str_replace('k', 'v', $key)) }}"
+                                        class="form-control @error(str_replace('k', 'v', $key)) is-invalid @enderror date-time-picker"
+                                        autocomplete="off" name="{{ str_replace('k', 'v', $key) }}">
+                                    @error(str_replace('k', 'v', $key))
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                            </div>
                         @elseif (strstr($key, 'kn'))
                             <div class="col-md-7 mt-2">
                                 <div class="form-group">
@@ -909,7 +923,7 @@
                 });
             });
 
-            evtUom(".uom-select", "input[name=uom_desc]");
+            evtUom(".uom-select", "input[name=uom_name]");
             evtCurrency(".currency-select", "input[name=currency_desc]");
 
             $(`.cont-1`).select2({
@@ -925,7 +939,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.type}`,
+                                    text: `${item.type} - ${item.description}`,
                                     id: item.type,
                                 }
                             })
@@ -949,7 +963,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.type}`,
+                                    text: `${item.type} - ${item.description}`,
                                     id: item.id,
                                     custom_attribute: item.description
                                 }
@@ -979,8 +993,8 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
-                                    id: item.id,
+                                    text: `${item.code} - ${item.name}`,
+                                    id: item.code,
                                     custom_attribute: item.name
                                 }
                             })
@@ -993,7 +1007,7 @@
             $(".salesman-select").change(function(e) {
                 e.preventDefault();
                 let desc = $(this).select2('data')[0].custom_attribute;
-                $("input[name=salesman_desc]").val(desc);
+                $("input[name=salesman]").val(desc);
             });
 
             $(`.job-type`).select2({
@@ -1032,8 +1046,8 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
-                                    id: item.id,
+                                    text: `${item.code} - ${item.name}`,
+                                    id: item.code,
                                     custom_attribute: item.name,
                                     address_1: item.address_1,
                                     address_2: item.address_2,
@@ -1075,8 +1089,8 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
-                                    id: item.id,
+                                    text: `${item.code} - ${item.name}`,
+                                    id: item.code,
                                     custom_attribute: item.name,
                                     address_1: item.address_1,
                                     address_2: item.address_2,
@@ -1118,8 +1132,8 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
-                                    id: item.id,
+                                    text: `${item.code} - ${item.name}`,
+                                    id: item.code,
                                     custom_attribute: item.name,
                                     address_1: item.address_1,
                                     address_2: item.address_2,
@@ -1132,7 +1146,6 @@
                     cache: false
                 }
             });
-
 
             $('.shipper-select').change(function(e) {
                 e.preventDefault();
@@ -1162,8 +1175,8 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
-                                    id: item.id,
+                                    text: `${item.code} - ${item.name}`,
+                                    id: item.code,
                                     custom_attribute: item.name
                                 }
                             })
@@ -1176,7 +1189,7 @@
             $(".customer-select").change(function(e) {
                 e.preventDefault();
                 let desc = $(this).select2('data')[0].custom_attribute;
-                $("input[name=bisnis_party_name]").val(desc);
+                $("input[name=customer]").val(desc);
             });
 
             $('.deltype-select').select2({
@@ -1192,8 +1205,8 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.type}`,
-                                    id: item.id,
+                                    text: `${item.type} - ${item.description}`,
+                                    id: item.type,
                                     custom_attribute: item.description
                                 }
                             })
@@ -1222,8 +1235,8 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
-                                    id: item.id,
+                                    text: `${item.code} - ${item.description}`,
+                                    id: item.code,
                                     custom_attribute: item.description
                                 }
                             })
@@ -1236,7 +1249,7 @@
             $(".commodity-select").change(function(e) {
                 e.preventDefault();
                 let desc = $(this).select2('data')[0].custom_attribute;
-                $("input[name=commodity_desc]").val(desc);
+                $("input[name=commodity]").val(desc);
             });
 
             $('.term-select').select2({
@@ -1252,8 +1265,8 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
-                                    id: item.id,
+                                    text: `${item.code} - ${item.description}`,
+                                    id: item.code,
                                     custom_attribute: item.description,
                                 }
                             })
@@ -1266,7 +1279,7 @@
             $(".term-select").change(function(e) {
                 e.preventDefault();
                 let desc = $(this).select2('data')[0].custom_attribute;
-                $("input[name=term_desc]").val(desc);
+                $("input[name=term]").val(desc);
             });
 
         });
@@ -1285,7 +1298,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
+                                    text: `${item.code} - ${item.description}`,
                                     id: item.id,
                                     custom_attribute: item.description
                                 }
@@ -1318,8 +1331,8 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.code}`,
-                                    id: item.id,
+                                    text: `${item.code} - ${item.description}`,
+                                    id: item.code,
                                     custom_attribute: item.description
                                 }
                             })

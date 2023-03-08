@@ -4,19 +4,20 @@ namespace App\Http\Controllers;
 
 use CodeNumbering;
 use App\Models\AddInfo;
+use App\Models\Company;
 use App\Models\History;
 use App\Models\AddInfoD1;
 use App\Models\Quotation;
 use App\Models\AirQuotation;
+use Illuminate\Http\Request;
 use App\Models\AirQuotationD1;
 use App\Models\AirQuotationD2;
 use App\Models\AirQuotationSD1;
 use App\Models\AirQuotationSD2;
-use App\Models\Company;
-use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\QueryException;
 
 class AirQuotationController extends Controller
 {
@@ -29,13 +30,20 @@ class AirQuotationController extends Controller
     {
         if (Auth::user()->hasPermission('manage-air_quot')) {
             if ($request->ajax()) {
-                $air_quot = AirQuotation::with('quotation')->orderBy('id', 'DESC')->select('*');
+                if (auth()->user()->is_mng_sales == true || auth()->user()->is_sales == true) {
+                    $air_quot = AirQuotation::with('quotation')->whereHas('quotation', function ($query) {
+                        $query->whereIn('salesman_code', explode(",", auth()->user()->salesman_code));
+                    })->orderBy('id', 'DESC')->select('*');
+                } else {
+                    $air_quot = AirQuotation::with('quotation')->orderBy('id', 'DESC')->select('*');
+                }
                 return DataTables::of($air_quot)
                     ->addColumn('action', function ($air_quot) {
-                        return view('datatable-modal._action', [
+                        return view('datatable-modal._action_trx', [
                             'row_id' => $air_quot->id,
                             'edit_url' => route('air_quot.edit', $air_quot->id),
                             'delete_url' => route('air_quot.destroy', $air_quot->id),
+                            'pdf_url' => route('pdf.air', $air_quot->id),
                             'can_edit' => 'edit-air_quot',
                             'can_delete' => 'delete-air_quot'
                         ]);
@@ -115,7 +123,7 @@ class AirQuotationController extends Controller
                 [
                     'air_quot_no'    => 'required|max:15|unique:air_quotations,air_quot_no',
                     'quotation_type_id'  => 'required',
-                    'salesman_id'  => 'required',
+                    'salesman_code'  => 'required',
                 ],
             );
 
@@ -128,11 +136,19 @@ class AirQuotationController extends Controller
                 $quot = new Quotation();
                 $quot->air_quot_no = $air_quot_no;
                 $quot->title = !empty($request->title) ? $request->title : null;
-                $quot->effective_date = !empty($request->effective_date) ? $request->effective_date : null;
-                $quot->expiry_date = !empty($request->expiry_date) ? $request->expiry_date : null;
+                $quot->effective_date = !empty($request->effective_date) ? date('Y-m-d', strtotime(str_replace('/', '-', $request->effective_date)))  : null;
+                $quot->expiry_date = !empty($request->expiry_date) ? date('Y-m-d', strtotime(str_replace('/', '-', $request->expiry_date))) : null;
                 $quot->validity_day = !empty($request->validity_day) ? $request->validity_day : null;
                 $quot->quotation_type_id = !empty($request->quotation_type_id) ? $request->quotation_type_id : 0;
-                $quot->bisnis_party_id = !empty($request->bisnis_party_id) ? $request->bisnis_party_id : 0;
+                $quot->salesman = !empty($request->salesman) ? $request->salesman : null;
+                $quot->customer_code = !empty($request->customer_code) ? $request->customer_code : null;
+                $quot->customer = !empty($request->customer) ? $request->customer : null;
+                $quot->commodity_code = !empty($request->commodity_code_name) ? $request->commodity_code_name : null;
+                $quot->commodity = !empty($request->commodity) ? $request->commodity : null;
+                $quot->delivery_type_code = !empty($request->delivery_type_code) ? $request->delivery_type_code : null;
+                $quot->delivery_type = !empty($request->delivery_type_name) ? $request->delivery_type_name : null;
+                $quot->uom_code = !empty($request->uom_code) ? $request->uom_code : null;
+                $quot->uom = !empty($request->uom_name) ? $request->uom_name : null;
                 $quot->address_1 = !empty($request->address_1) ? $request->address_1 : null;
                 $quot->address_2 = !empty($request->address_2) ? $request->address_2 : null;
                 $quot->address_3 = !empty($request->address_3) ? $request->address_3 : null;
@@ -141,7 +157,7 @@ class AirQuotationController extends Controller
                 $quot->telp = !empty($request->telp) ? $request->telp : null;
                 $quot->fax = !empty($request->fax) ? $request->fax : null;
                 $quot->email = !empty($request->email) ? $request->email : null;
-                $quot->salesman_id = !empty($request->salesman_id) ? $request->salesman_id : null;
+                $quot->salesman_code = !empty($request->salesman_code) ? $request->salesman_code : null;
                 $quot->currency_id = !empty($request->currency_id) ? $request->currency_id : null;
                 $quot->delivery_type_id = !empty($request->delivery_type_id) ? $request->delivery_type_id : null;
                 $quot->reference_no = !empty($request->reference_no) ? $request->reference_no : null;
@@ -241,7 +257,6 @@ class AirQuotationController extends Controller
                                     'item_code_s_d2'     => !empty($request->item_code_s_d2[$key2]) ? $request->item_code_s_d2[$key2] : null,
                                     'item_desc_s_d2'     => !empty($request->item_desc_s_d2[$key2]) ? $request->item_desc_s_d2[$key2] : null,
                                     'qty_s_d2'     => !empty($request->qty_s_d2[$key2]) ? $request->qty_s_d2[$key2] : null,
-                                    'awb_code_s_d2'     => !empty($request->awb_code_s_d2[$key2]) ? $request->awb_code_s_d2[$key2] : null,
                                     'uom_s_d2'     => !empty($request->uom_s_d2[$key2]) ? $request->uom_s_d2[$key2] : null,
                                     'chg_s_d2'     => !empty($request->chg_s_d2[$key2]) ? $request->chg_s_d2[$key2] : null,
                                     'vat_code_s_d2'     => !empty($request->vat_code_s_d2[$key2]) ? $request->vat_code_s_d2[$key2] : null,
@@ -254,6 +269,7 @@ class AirQuotationController extends Controller
                                     'min_amt_s_d2'     => !empty($request->min_amt_s_d2[$key2]) ? str_replace(",", "", $request->min_amt_s_d2[$key2])  : null,
                                     'unit_rate_s_d2'     => !empty($request->unit_rate_s_d2[$key2]) ?  str_replace(",", "", $request->unit_rate_s_d2[$key2])  : null,
                                     'idr_amt_s_d2'     => !empty($request->idr_amt_s_d2[$key2]) ?  str_replace(",", "", $request->idr_amt_s_d2[$key2])  : null,
+                                    'amt_s_d2'     => !empty($request->amt_s_d2[$key2]) ?  str_replace(",", "", $request->amt_s_d2[$key2])  : null,
                                     'created_at' => now(),
                                     'updated_at' => now(),
                                 ];
@@ -274,7 +290,6 @@ class AirQuotationController extends Controller
                             'item_code_d2'     => $val3,
                             'item_desc_d2'     => !empty($request->item_desc_d2[$key3]) ? $request->item_desc_d2[$key3] : null,
                             'qty_d2'     => !empty($request->qty_d2[$key3]) ? $request->qty_d2[$key3] : null,
-                            'awb_code_d2'     => !empty($request->awb_code_d2[$key3]) ? $request->awb_code_d2[$key3] : null,
                             'uom_d2'     => !empty($request->uom_d2[$key3]) ? $request->uom_d2[$key3] : null,
                             'chg_d2'     => !empty($request->chg_d2[$key3]) ? $request->chg_d2[$key3] : null,
                             'vat_code_d2'     => !empty($request->vat_code_d2[$key3]) ? $request->vat_code_d2[$key3] : null,
@@ -287,6 +302,7 @@ class AirQuotationController extends Controller
                             'unit_rate_d2'     => !empty($request->unit_rate_d2[$key3]) ? str_replace(",", "", $request->unit_rate_d2[$key3])  : null,
                             'min_amt_d2'     => !empty($request->min_amt_d2[$key3]) ? str_replace(",", "", $request->min_amt_d2[$key3])  : null,
                             'idr_amt_d2'     => !empty($request->idr_amt_d2[$key3]) ? str_replace(",", "", $request->idr_amt_d2[$key3])  : null,
+                            'amt_d2'     => !empty($request->amt_d2[$key3]) ? str_replace(",", "", $request->amt_d2[$key3])  : null,
                             'created_at' => now(),
                             'updated_at' => now(),
                         ];
@@ -295,7 +311,7 @@ class AirQuotationController extends Controller
                 }
 
                 //SAVE TO TABLE ADDITIONAL INFO OR Extra Info OR REMARK
-                $add_info = AddInfo::where('trx_type', 'AQ')->first()->makeHidden(['trx_type', 'created_at', 'updated_at'])->toarray();
+                $add_info = AddInfo::where('trx_type', 'SQ')->first()->makeHidden(['trx_type', 'created_at', 'updated_at'])->toarray();
                 $add_info =  collect($add_info)->filter(function ($value) {
                     return !is_null($value);
                 });
@@ -307,30 +323,41 @@ class AirQuotationController extends Controller
                 }
                 unset($data_info['id']);
 
-                if (!empty($data_info['vs1'])  || !empty($data_info['vs2']) || !empty($data_info['vs3']) || !empty($data_info['vs4']) || !empty($data_info['vn1']) || !empty($data_info['vn2']) || !empty($data_info['vt1']) || !empty($data_info['vt2']) || !empty($data_info['vb1']) || !empty($data_info['vb2']) || !empty($data_info['vd1']) || !empty($data_info['vd2']) || !empty($data_info['vdt1']) || !empty($data_info['vdt2'])) {
+                $cek_info_d1 = AddInfoD1::where('trx_id', $air_quot->id)->first();
+                if ($cek_info_d1 == null) {
                     $add_info_d1 = new AddInfoD1();
-                    $add_info_d1->add_info_id = $add_info['id'];
-                    $add_info_d1->trx_type = 'AQ';
-                    $add_info_d1->trx_id = $air_quot->id;
-                    $add_info_d1->vs1 = !empty($data_info['vs1']) ? $data_info['vs1'] : null;
-                    $add_info_d1->vs2 = !empty($data_info['vs2']) ? $data_info['vs2'] : null;
-                    $add_info_d1->vs3 = !empty($data_info['vs3']) ? $data_info['vs3'] : null;
-                    $add_info_d1->vs4 = !empty($data_info['vs4']) ? $data_info['vs4'] : null;
-                    $add_info_d1->vn1 = !empty($data_info['vn1']) ? $data_info['vn1'] : null;
-                    $add_info_d1->vn2 = !empty($data_info['vn2']) ? $data_info['vn2'] : null;
-                    $add_info_d1->vt1 = !empty($data_info['vt1']) ? $data_info['vt1'] : null;
-                    $add_info_d1->vt2 = !empty($data_info['vt2']) ? $data_info['vt2'] : null;
-                    $add_info_d1->vb1 = !empty($data_info['vb1']) ? $data_info['vb1'] : null;
-                    $add_info_d1->vb2 = !empty($data_info['vb2']) ? $data_info['vb2'] : null;
-                    $add_info_d1->vd1 = !empty($data_info['vd1']) ? $data_info['vd1'] : null;
-                    $add_info_d1->vd2 = !empty($data_info['vd2']) ? $data_info['vd2'] : null;
-                    $add_info_d1->vdt1 = !empty($data_info['vdt1']) ? $data_info['vdt1'] : null;
-                    $add_info_d1->vdt2 = !empty($data_info['vdt2']) ? $data_info['vdt2'] : null;
+                } else {
+                    $add_info_d1 = AddInfoD1::where('trx_id', $air_quot->id)->first();
+                }
+                $add_info_d1->add_info_id = $add_info['id'];
+                $add_info_d1->trx_type = 'SQ';
+                $add_info_d1->trx_id = $air_quot->id;
+                $add_info_d1->vs1 = !empty($data_info['vs1']) ? $data_info['vs1'] : null;
+                $add_info_d1->vs2 = !empty($data_info['vs2']) ? $data_info['vs2'] : null;
+                $add_info_d1->vs3 = !empty($data_info['vs3']) ? $data_info['vs3'] : null;
+                $add_info_d1->vs4 = !empty($data_info['vs4']) ? $data_info['vs4'] : null;
+                $add_info_d1->vn1 = !empty($data_info['vn1']) ? $data_info['vn1'] : null;
+                $add_info_d1->vn2 = !empty($data_info['vn2']) ? $data_info['vn2'] : null;
+                $add_info_d1->vt1 = !empty($data_info['vt1']) ? $data_info['vt1'] : null;
+                $add_info_d1->vt2 = !empty($data_info['vt2']) ? $data_info['vt2'] : null;
+                $add_info_d1->vb1 = !empty($data_info['vb1']) ? $data_info['vb1'] : null;
+                $add_info_d1->vb2 = !empty($data_info['vb2']) ? $data_info['vb2'] : null;
+                $add_info_d1->vd1 = !empty($data_info['vd1']) ? $data_info['vd1'] : null;
+                $add_info_d1->vd2 = !empty($data_info['vd2']) ? $data_info['vd2'] : null;
+                $add_info_d1->vdt1 = !empty($data_info['vdt1']) ? $data_info['vdt1'] : null;
+                $add_info_d1->vdt2 = !empty($data_info['vdt2']) ? $data_info['vdt2'] : null;
+                if ($cek_info_d1 == null) {
                     $add_info_d1->save();
+                } else {
+                    $add_info_d1->update();
                 }
 
                 DB::commit();
                 return to_route('air_quot.index')->with('success', 'New Air Freight Quotation has been added!');
+            } catch (QueryException $th) {
+                DB::rollback();
+
+                return redirect()->back()->withInput()->with('error', $th->getMessage());
             } catch (\Throwable $th) {
                 DB::rollback();
 
@@ -390,7 +417,7 @@ class AirQuotationController extends Controller
                 [
                     'air_quot_no'    => 'required|max:15|unique:air_quotations,air_quot_no,' . $id,
                     'quotation_type_id'  => 'required',
-                    'salesman_id'  => 'required',
+                    'salesman_code'  => 'required',
                 ],
             );
 
@@ -401,11 +428,19 @@ class AirQuotationController extends Controller
                 // SAVE TO TABLE QUOTATION
                 $quot = Quotation::where('air_quot_no', $air_quot->air_quot_no)->first();
                 $quot->title = !empty($request->title) ? $request->title : null;
-                $quot->effective_date = !empty($request->effective_date) ? $request->effective_date : null;
-                $quot->expiry_date = !empty($request->expiry_date) ? $request->expiry_date : null;
+                $quot->effective_date = !empty($request->effective_date) ? date('Y-m-d', strtotime(str_replace('/', '-', $request->effective_date)))  : null;
+                $quot->expiry_date = !empty($request->expiry_date) ? date('Y-m-d', strtotime(str_replace('/', '-', $request->expiry_date))) : null;
                 $quot->validity_day = !empty($request->validity_day) ? $request->validity_day : null;
                 $quot->quotation_type_id = !empty($request->quotation_type_id) ? $request->quotation_type_id : 0;
-                $quot->bisnis_party_id = !empty($request->bisnis_party_id) ? $request->bisnis_party_id : 0;
+                $quot->salesman = !empty($request->salesman) ? $request->salesman : null;
+                $quot->customer_code = !empty($request->customer_code) ? $request->customer_code : null;
+                $quot->customer = !empty($request->customer) ? $request->customer : null;
+                $quot->commodity_code = !empty($request->commodity_code_name) ? $request->commodity_code_name : null;
+                $quot->commodity = !empty($request->commodity) ? $request->commodity : null;
+                $quot->delivery_type_code = !empty($request->delivery_type_code) ? $request->delivery_type_code : null;
+                $quot->delivery_type = !empty($request->delivery_type_name) ? $request->delivery_type_name : null;
+                $quot->uom_code = !empty($request->uom_code) ? $request->uom_code : null;
+                $quot->uom = !empty($request->uom_name) ? $request->uom_name : null;
                 $quot->address_1 = !empty($request->address_1) ? $request->address_1 : null;
                 $quot->address_2 = !empty($request->address_2) ? $request->address_2 : null;
                 $quot->address_3 = !empty($request->address_3) ? $request->address_3 : null;
@@ -414,7 +449,7 @@ class AirQuotationController extends Controller
                 $quot->telp = !empty($request->telp) ? $request->telp : null;
                 $quot->fax = !empty($request->fax) ? $request->fax : null;
                 $quot->email = !empty($request->email) ? $request->email : null;
-                $quot->salesman_id = !empty($request->salesman_id) ? $request->salesman_id : null;
+                $quot->salesman_code = !empty($request->salesman_code) ? $request->salesman_code : null;
                 $quot->currency_id = !empty($request->currency_id) ? $request->currency_id : null;
                 $quot->delivery_type_id = !empty($request->delivery_type_id) ? $request->delivery_type_id : null;
                 $quot->reference_no = !empty($request->reference_no) ? $request->reference_no : null;
@@ -515,7 +550,6 @@ class AirQuotationController extends Controller
                                     'item_code_s_d2'     => !empty($request->item_code_s_d2[$key2]) ? $request->item_code_s_d2[$key2] : null,
                                     'item_desc_s_d2'     => !empty($request->item_desc_s_d2[$key2]) ? $request->item_desc_s_d2[$key2] : null,
                                     'qty_s_d2'     => !empty($request->qty_s_d2[$key2]) ? $request->qty_s_d2[$key2] : null,
-                                    'awb_code_s_d2'     => !empty($request->awb_code_s_d2[$key2]) ? $request->awb_code_s_d2[$key2] : null,
                                     'uom_s_d2'     => !empty($request->uom_s_d2[$key2]) ? $request->uom_s_d2[$key2] : null,
                                     'chg_s_d2'     => !empty($request->chg_s_d2[$key2]) ? $request->chg_s_d2[$key2] : null,
                                     'vat_code_s_d2'     => !empty($request->vat_code_s_d2[$key2]) ? $request->vat_code_s_d2[$key2] : null,
@@ -528,6 +562,7 @@ class AirQuotationController extends Controller
                                     'min_amt_s_d2'     => !empty($request->min_amt_s_d2[$key2]) ? str_replace(",", "", $request->min_amt_s_d2[$key2])  : null,
                                     'unit_rate_s_d2'     => !empty($request->unit_rate_s_d2[$key2]) ?  str_replace(",", "", $request->unit_rate_s_d2[$key2])  : null,
                                     'idr_amt_s_d2'     => !empty($request->idr_amt_s_d2[$key2]) ?  str_replace(",", "", $request->idr_amt_s_d2[$key2])  : null,
+                                    'amt_s_d2'     => !empty($request->amt_s_d2[$key2]) ?  str_replace(",", "", $request->amt_s_d2[$key2])  : null,
                                     'created_at' => now(),
                                     'updated_at' => now(),
                                 ];
@@ -549,7 +584,6 @@ class AirQuotationController extends Controller
                             'item_code_d2'     => $val3,
                             'item_desc_d2'     => !empty($request->item_desc_d2[$key3]) ? $request->item_desc_d2[$key3] : null,
                             'qty_d2'     => !empty($request->qty_d2[$key3]) ? $request->qty_d2[$key3] : null,
-                            'awb_code_d2'     => !empty($request->awb_code_d2[$key3]) ? $request->awb_code_d2[$key3] : null,
                             'uom_d2'     => !empty($request->uom_d2[$key3]) ? $request->uom_d2[$key3] : null,
                             'chg_d2'     => !empty($request->chg_d2[$key3]) ? $request->chg_d2[$key3] : null,
                             'vat_code_d2'     => !empty($request->vat_code_d2[$key3]) ? $request->vat_code_d2[$key3] : null,
@@ -562,6 +596,7 @@ class AirQuotationController extends Controller
                             'unit_rate_d2'     => !empty($request->unit_rate_d2[$key3]) ? str_replace(",", "", $request->unit_rate_d2[$key3])  : null,
                             'min_amt_d2'     => !empty($request->min_amt_d2[$key3]) ? str_replace(",", "", $request->min_amt_d2[$key3])  : null,
                             'idr_amt_d2'     => !empty($request->idr_amt_d2[$key3]) ? str_replace(",", "", $request->idr_amt_d2[$key3])  : null,
+                            'amt_d2'     => !empty($request->amt_d2[$key3]) ? str_replace(",", "", $request->amt_d2[$key3])  : null,
                             'created_at' => now(),
                             'updated_at' => now(),
                         ];
@@ -570,7 +605,7 @@ class AirQuotationController extends Controller
                 }
 
                 //SAVE TO TABLE ADDITIONAL INFO OR Extra Info OR REMARK
-                $add_info = AddInfo::where('trx_type', 'AQ')->first()->makeHidden(['trx_type', 'created_at', 'updated_at'])->toarray();
+                $add_info = AddInfo::where('trx_type', 'SQ')->first()->makeHidden(['trx_type', 'created_at', 'updated_at'])->toarray();
                 $add_info =  collect($add_info)->filter(function ($value) {
                     return !is_null($value);
                 });
@@ -582,30 +617,41 @@ class AirQuotationController extends Controller
                 }
                 unset($data_info['id']);
 
-                if (!empty($data_info['vs1'])  || !empty($data_info['vs2']) || !empty($data_info['vs3']) || !empty($data_info['vs4']) || !empty($data_info['vn1']) || !empty($data_info['vn2']) || !empty($data_info['vt1']) || !empty($data_info['vt2']) || !empty($data_info['vb1']) || !empty($data_info['vb2']) || !empty($data_info['vd1']) || !empty($data_info['vd2']) || !empty($data_info['vdt1']) || !empty($data_info['vdt2'])) {
+                $cek_info_d1 = AddInfoD1::where('trx_id', $air_quot->id)->first();
+                if ($cek_info_d1 == null) {
+                    $add_info_d1 = new AddInfoD1();
+                } else {
                     $add_info_d1 = AddInfoD1::where('trx_id', $air_quot->id)->first();
-                    $add_info_d1->add_info_id = $add_info['id'];
-                    $add_info_d1->trx_type = 'AQ';
-                    $add_info_d1->trx_id = $air_quot->id;
-                    $add_info_d1->vs1 = !empty($data_info['vs1']) ? $data_info['vs1'] : null;
-                    $add_info_d1->vs2 = !empty($data_info['vs2']) ? $data_info['vs2'] : null;
-                    $add_info_d1->vs3 = !empty($data_info['vs3']) ? $data_info['vs3'] : null;
-                    $add_info_d1->vs4 = !empty($data_info['vs4']) ? $data_info['vs4'] : null;
-                    $add_info_d1->vn1 = !empty($data_info['vn1']) ? $data_info['vn1'] : null;
-                    $add_info_d1->vn2 = !empty($data_info['vn2']) ? $data_info['vn2'] : null;
-                    $add_info_d1->vt1 = !empty($data_info['vt1']) ? $data_info['vt1'] : null;
-                    $add_info_d1->vt2 = !empty($data_info['vt2']) ? $data_info['vt2'] : null;
-                    $add_info_d1->vb1 = !empty($data_info['vb1']) ? $data_info['vb1'] : null;
-                    $add_info_d1->vb2 = !empty($data_info['vb2']) ? $data_info['vb2'] : null;
-                    $add_info_d1->vd1 = !empty($data_info['vd1']) ? $data_info['vd1'] : null;
-                    $add_info_d1->vd2 = !empty($data_info['vd2']) ? $data_info['vd2'] : null;
-                    $add_info_d1->vdt1 = !empty($data_info['vdt1']) ? $data_info['vdt1'] : null;
-                    $add_info_d1->vdt2 = !empty($data_info['vdt2']) ? $data_info['vdt2'] : null;
+                }
+                $add_info_d1->add_info_id = $add_info['id'];
+                $add_info_d1->trx_type = 'SQ';
+                $add_info_d1->trx_id = $air_quot->id;
+                $add_info_d1->vs1 = !empty($data_info['vs1']) ? $data_info['vs1'] : null;
+                $add_info_d1->vs2 = !empty($data_info['vs2']) ? $data_info['vs2'] : null;
+                $add_info_d1->vs3 = !empty($data_info['vs3']) ? $data_info['vs3'] : null;
+                $add_info_d1->vs4 = !empty($data_info['vs4']) ? $data_info['vs4'] : null;
+                $add_info_d1->vn1 = !empty($data_info['vn1']) ? $data_info['vn1'] : null;
+                $add_info_d1->vn2 = !empty($data_info['vn2']) ? $data_info['vn2'] : null;
+                $add_info_d1->vt1 = !empty($data_info['vt1']) ? $data_info['vt1'] : null;
+                $add_info_d1->vt2 = !empty($data_info['vt2']) ? $data_info['vt2'] : null;
+                $add_info_d1->vb1 = !empty($data_info['vb1']) ? $data_info['vb1'] : null;
+                $add_info_d1->vb2 = !empty($data_info['vb2']) ? $data_info['vb2'] : null;
+                $add_info_d1->vd1 = !empty($data_info['vd1']) ? $data_info['vd1'] : null;
+                $add_info_d1->vd2 = !empty($data_info['vd2']) ? $data_info['vd2'] : null;
+                $add_info_d1->vdt1 = !empty($data_info['vdt1']) ? $data_info['vdt1'] : null;
+                $add_info_d1->vdt2 = !empty($data_info['vdt2']) ? $data_info['vdt2'] : null;
+                if ($cek_info_d1 == null) {
+                    $add_info_d1->save();
+                } else {
                     $add_info_d1->update();
                 }
 
                 DB::commit();
                 return to_route('air_quot.index')->with('success', 'Air Freight Quotation has been updated!');
+            } catch (QueryException $th) {
+                DB::rollback();
+
+                return redirect()->back()->withInput()->with('error', $th->getMessage());
             } catch (\Throwable $th) {
                 DB::rollback();
 
@@ -631,7 +677,13 @@ class AirQuotationController extends Controller
                 $air_quot->quotation()->delete();
 
                 return to_route('air_quot.index')->with('success', 'Air Freight Quotation has been deleted!');
+            } catch (QueryException $th) {
+                DB::rollback();
+
+                return redirect()->back()->withInput()->with('error', $th->getMessage());
             } catch (\Throwable $th) {
+                DB::rollback();
+
                 return redirect()->back()->withInput()->with('error', $th->getMessage());
             }
         } else {
@@ -644,11 +696,13 @@ class AirQuotationController extends Controller
         $air_quot = AirQuotation::with(['quotation',  'air_quotation_d1', 'air_quotation_d2.vat.vat_code_detail_satu'])->where('id', $id)->first();
         $aq_d1 = AirQuotationD1::with('air_quotation_s_d2.vat.vat_code_detail_satu')->where('air_quotation_id', $id)->get()->toArray();
         $company = Company::with('company_detail_satu')->first();
+        $add_info_d1 = AddInfoD1::where('trx_id', $id)->first();
         $pdf = app('dompdf.wrapper');
         $pdf->loadView('trx.air_quot.export_pdf', [
             'aq'    => $air_quot,
             'aq_d1' => $aq_d1,
-            'company'   => $company
+            'company'   => $company,
+            'add_info_d1' => $add_info_d1,
         ])->setPaper('a4', 'portrait');
         return $pdf->stream('laporan.pdf');
     }

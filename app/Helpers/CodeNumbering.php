@@ -24,7 +24,6 @@ class CodeNumbering
             $exp[array_search("[YY]", $exp)] = date('y');
         }
 
-        // dd($exp);
         if (in_array("[MM]", $exp)) {
             $exp[array_search("[MM]", $exp)] = ($cycle == "Y") ? '' :  date('m');
         }
@@ -33,12 +32,13 @@ class CodeNumbering
             $exp[array_search("[MMMM]", $exp)] = ($cycle == "Y") ? '' :  date('F');
         }
 
-        $imp_format = implode("", $exp);
+        // $imp_format = implode("", $exp);
 
+        $imp_format = preg_replace("/[^a-zA-Z0-9]/", "", implode("", $exp));
         $name_table = $table;
 
         // CEK CODE DARI DATABASE
-        $count_charge_table = $name_table::select("{$field}")->where("{$field}", 'like', "%$imp_format%")->withTrashed()->count();
+        $count_charge_table = $name_table::select("{$field}")->where("{$field}", 'like', "%{$imp_format}%")->withTrashed()->count();
 
         if ($count_charge_table == 0) {
             $data_format = 1;
@@ -51,11 +51,16 @@ class CodeNumbering
         // CEK MENGGUNAKAN CYCLE Y OR M
         if ($cycle == "Y") {
             if (in_array("[MM]", $exp_old) || in_array("[MMMM]", $exp_old)) {
-                $imp_format = implode("", $exp) . ($exp[array_search("[MM]", $exp)] ? date('m') : ($exp[array_search("[MMMM]", $exp)] ? date('F') : ''));
-            } else {
+                if (in_array("", $exp) == true) {
+                    $exp[array_search("", $exp)] = date("m");
+                }
                 $imp_format = implode("", $exp);
+            } else {
+                $imp_format = $imp_format;
             }
         }
+
+
 
         if ($count_length_number == 0) {
             $imp_format .= (string)$data_format;
@@ -266,6 +271,7 @@ class CodeNumbering
         } else {
             $imp_format .= (string)$data_format;
         }
+
 
         $data_code->update([
             'next_number'   => $data_format + 1

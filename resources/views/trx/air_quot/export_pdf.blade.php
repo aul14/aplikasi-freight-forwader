@@ -70,7 +70,7 @@
             </div>
             <div class="row float-right">
                 <strong>{{ $company->name }}</strong>
-                <p style="line-height: 15px;font-size: 12px">{!! implode('<br />', str_split($company->company_detail_satu[0]->address, 42)) !!}</p>
+                <p style="line-height: 15px;font-size: 12px">{!! implode('<br />', str_split($company->company_detail_satu[4]->address, 42)) !!}</p>
             </div>
             <br>
             <br>
@@ -78,65 +78,68 @@
             <div class="row">
                 <table>
                     <tr>
-                        <th colspan="5">TITLE</th>
+                        <th colspan="6">TITLE</th>
                         <th>QUOTE REFERENCE</th>
                         <th>TYPE</th>
                         <th>QUOTE DATE</th>
                     </tr>
                     <tr>
-                        <td colspan="5" style="text-align: left;">{{ $aq->quotation->title }}</td>
+                        <td colspan="6" style="text-align: left;">{{ $aq->quotation->title }}</td>
                         <td>{{ $aq->air_quot_no }}</td>
                         <td>AIR FREIGHT</td>
                         <td>{{ date('d-M-y', strtotime($aq->quotation->effective_date)) }}</td>
                     </tr>
                     <tr>
-                        <td colspan="8" style="text-align: left;">
+                        <td colspan="9" style="text-align: left;">
                             Thank you for the opportunity to present this rate quotation for your consideration. We are
                             pleased
                             to ofter the following rates for this job, based on the criteria listed below.
                         </td>
                     </tr>
                     <tr>
-                        <th colspan="5" style="text-align: left;">CUSTOMER</th>
+                        <th colspan="6" style="text-align: left;">CUSTOMER</th>
                         <th colspan="3" style="text-align: left;">ATTN</th>
                     </tr>
                     <tr>
-                        <td colspan="5" style="text-align: left;">
-                            {{ !empty($aq->quotation->bisnis_party_id) ? $aq->quotation->bisnis_party->name : '' }}</td>
+                        <td colspan="6" style="text-align: left;">
+                            {{ !empty($aq->quotation->customer) ? $aq->quotation->customer : '' }}</td>
                         <td colspan="3" style="text-align: left;">
                             {{ $aq->quotation->contact_name }}</td>
                     </tr>
                     <tr>
-                        <th colspan="5" style="text-align: left;">FROM</th>
+                        <th colspan="6" style="text-align: left;">FROM</th>
                         <th colspan="3" style="text-align: left;">FINAL DESTINATION</th>
                     </tr>
                     <tr>
-                        <td colspan="5" style="text-align: left;">
+                        <td colspan="6" style="text-align: left;">
                             {{ $item['air_dept_name'] }}</td>
                         <td colspan="3" style="text-align: left;">
                             {{ $item['air_dest_name'] }}</td>
                     </tr>
                     <tr>
-                        <th colspan="8" style="text-align: left;">
+                        <th colspan="9" style="text-align: left;">
                             DIMENSION
                         </th>
                     </tr>
                     <tr>
-                        <td colspan="8" style="text-align: left;">
+                        <td colspan="9" style="text-align: left;">
                             &nbsp;
                         </td>
                     </tr>
                     <tr>
-                        <th colspan="8" style="text-align: left;">
+                        <th colspan="9" style="text-align: left;">
                             DESCRIPTION OF GOODS
                         </th>
                     </tr>
                     <tr>
-                        <td colspan="8" style="text-align: left;">
+                        <td colspan="9" style="text-align: left;">
                             &nbsp;
                         </td>
                     </tr>
                     <tr>
+                        <th style="text-align: left;">
+                            COMMODITY
+                        </th>
                         <th style="text-align: left;">
                             QUANTITY
                         </th>
@@ -144,7 +147,7 @@
                             ACTUAL WEIGHT (KG)
                         </th>
                         <th style="text-align: left;">
-                            VOLUME (KG)
+                            VOLUME (M3)
                         </th>
                         <th colspan="3" style="text-align: left;">
                             CHARGEABLE WEIGHT (KG)
@@ -158,22 +161,25 @@
                     </tr>
                     <tr>
                         <td style="text-align: left;">
-                            &nbsp;
+                            {{ !empty($aq->quotation->commodity_code) ? $aq->quotation->commodity_code : '' }}
                         </td>
                         <td style="text-align: left;">
-                            &nbsp;
+                            {{ $aq->quotation->pcs }}
                         </td>
                         <td style="text-align: left;">
-                            &nbsp;
+                            {{ number_format($aq->quotation->total_gross, 4, '.', ',') }}
+                        </td>
+                        <td style="text-align: left;">
+                            {{ number_format($aq->quotation->total_volume, 4, '.', ',') }}
                         </td>
                         <td colspan="3" style="text-align: left;">
-                            &nbsp;
+                            {{ number_format(($aq->quotation->total_volume * 1000000) / 6000, 4, '.', ',') }}
                         </td>
                         <td style="text-align: left;">
-                            &nbsp;
+                            {{ !empty($add_info_d1->vb1) && $add_info_d1->vb1 == true ? 'YES' : '' }}
                         </td>
                         <td style="text-align: left;">
-                            &nbsp;
+                            {{ !empty($add_info_d1->vb2) && $add_info_d1->vb2 == true ? 'YES' : '' }}
                         </td>
                     </tr>
                 </table>
@@ -185,8 +191,9 @@
                             <th>CHARGES DESCRIPTION</th>
                             <th>VAT</th>
                             <th>QTY</th>
-                            <th width="80" style="text-align: left">CURRENCY</th>
-                            <th style="text-align: right">CHARGE</th>
+                            <th width="80" style="text-align: left">CURRENCY <p class="float-right">RATE</p>
+                            </th>
+                            <th style="text-align: right">AMOUNT</th>
                             <th style="text-align: right">TOTAL</th>
                         </tr>
                     </thead>
@@ -197,8 +204,8 @@
                         @endphp
                         @foreach ($item['air_quotation_s_d2'] as $item_d1)
                             @php
-                                $total_vat = (int) $item_d1['idr_amt_s_d2'] * ($item_d1['vat']['vat_code_detail_satu'][0]['vat_rate'] / 100);
-                                $total = $item_d1['idr_amt_s_d2'] + $total_vat;
+                                $total_vat = (int) $item_d1['amt_s_d2'] * ($item_d1['vat']['vat_code_detail_satu'][0]['vat_rate'] / 100);
+                                $total = $item_d1['amt_s_d2'] + $total_vat;
                                 $total_all += $total;
                                 $total_all_vat += $total_vat;
                             @endphp
@@ -210,17 +217,19 @@
                                 <td style="text-align: center">
                                     {{ number_format($item_d1['qty_s_d2'] == 0 ? 1 : $item_d1['qty_s_d2'], 2, '.', ',') }}
                                 </td>
-                                <td style="text-align: left">IDR</td>
+                                <td style="text-align: left">{{ $item_d1['currency_s_d2'] }} <p class="float-right">
+                                        {{ number_format($item_d1['curr_rate_s_d2'], 2, '.', ',') }}</p>
+                                </td>
                                 <td style="text-align: right">
-                                    {{ number_format($item_d1['idr_amt_s_d2'], 2, '.', ',') }}
+                                    {{ number_format($item_d1['amt_s_d2'], 2, '.', ',') }}
                                 </td>
                                 <td style="text-align: right">{{ number_format($total, 2, '.', ',') }}</td>
                             </tr>
                         @endforeach
                         @foreach ($aq['air_quotation_d2'] as $item_d2)
                             @php
-                                $total_vat = (int) $item_d2['idr_amt_d2'] * ($item_d2['vat']['vat_code_detail_satu'][0]['vat_rate'] / 100);
-                                $total = $item_d2['idr_amt_d2'] + $total_vat;
+                                $total_vat = (int) $item_d2['amt_d2'] * ($item_d2['vat']['vat_code_detail_satu'][0]['vat_rate'] / 100);
+                                $total = $item_d2['amt_d2'] + $total_vat;
                                 $total_all += $total;
                                 $total_all_vat += $total_vat;
                             @endphp
@@ -232,8 +241,10 @@
                                 <td style="text-align: center">
                                     {{ number_format($item_d2['qty_d2'] == 0 ? 1 : $item_d2['qty_d2'], 2, '.', ',') }}
                                 </td>
-                                <td style="text-align: left">IDR</td>
-                                <td style="text-align: right">{{ number_format($item_d2['idr_amt_d2'], 2, '.', ',') }}
+                                <td style="text-align: left">{{ $item_d2['currency_d2'] }} <p class="float-right">
+                                        {{ number_format($item_d2['curr_rate_d2'], 2, '.', ',') }}</p>
+                                </td>
+                                <td style="text-align: right">{{ number_format($item_d2['amt_d2'], 2, '.', ',') }}
                                 </td>
                                 <td style="text-align: right">{{ number_format($total, 2, '.', ',') }}</td>
                             </tr>
@@ -242,19 +253,20 @@
                             $grand_total = $total_all + $total_all_vat;
                         @endphp
                         <tr>
-                            <th rowspan="3" colspan="3">&nbsp;</th>
-                            <th style="text-align: left">TOTAL</th>
-                            <th style="text-align: right">IDR</th>
+                            <th rowspan="3" colspan="4">&nbsp;</th>
+                            <th style="text-align: left">TOTAL <p class="float-right">{{ $item_d1['currency_s_d2'] }}
+                            </th>
                             <th style="text-align: right">{{ number_format($total_all, 2, '.', ',') }}</th>
                         </tr>
                         <tr>
-                            <th style="text-align: left">VAT</th>
-                            <th style="text-align: right">IDR</th>
+                            <th style="text-align: left">VAT <p class="float-right">{{ $item_d1['currency_s_d2'] }}
+                            </th>
                             <th style="text-align: right">{{ number_format($total_all_vat, 2, '.', ',') }}</th>
                         </tr>
                         <tr>
-                            <th style="text-align: left">GRAND TOTAL</th>
-                            <th style="text-align: right">IDR</th>
+                            <th style="text-align: left">GRAND TOTAL <p class="float-right">
+                                    {{ $item_d1['currency_s_d2'] }}
+                            </th>
                             <th style="text-align: right">{{ number_format($grand_total, 2, '.', ',') }}</th>
                         </tr>
                     </tbody>

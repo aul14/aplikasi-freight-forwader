@@ -24,27 +24,27 @@ class AirQuotation extends Model
 
     public function quotation()
     {
-        return $this->belongsTo(Quotation::class);
+        return $this->belongsTo(Quotation::class)->withTrashed();
     }
 
     public function air_quotation_d1()
     {
-        return $this->hasMany(AirQuotationD1::class);
+        return $this->hasMany(AirQuotationD1::class)->withTrashed();
     }
 
     public function air_quotation_d2()
     {
-        return $this->hasMany(AirQuotationD2::class);
+        return $this->hasMany(AirQuotationD2::class)->withTrashed();
     }
 
     public function air_quotation_s_d1()
     {
-        return $this->hasMany(AirQuotationSD1::class);
+        return $this->hasMany(AirQuotationSD1::class)->withTrashed();
     }
 
     public function air_quotation_s_d2()
     {
-        return $this->hasMany(AirQuotationSD2::class);
+        return $this->hasMany(AirQuotationSD2::class)->withTrashed();
     }
 
     // this is the recommended way for declaring event handlers

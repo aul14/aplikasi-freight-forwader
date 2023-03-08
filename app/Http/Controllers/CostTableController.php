@@ -127,8 +127,8 @@ class CostTableController extends Controller
                 $cost_table->via_port_name = $request->via_port_name;
                 $cost_table->second_port_code = $request->second_port_code;
                 $cost_table->second_port_name = $request->second_port_name;
-                $cost_table->effective_date = $request->effective_date;
-                $cost_table->exp_date = $request->exp_date;
+                $cost_table->effective_date = !empty($request->effective_date) ? date('Y-m-d', strtotime(str_replace('/', '-', $request->effective_date)))  : null;
+                $cost_table->exp_date = !empty($request->exp_date) ? date('Y-m-d', strtotime(str_replace('/', '-', $request->exp_date)))  : null;
                 $cost_table->note = $request->note;
                 $cost_table->save();
 
@@ -236,8 +236,8 @@ class CostTableController extends Controller
                 $cost_table->via_port_name = $request->via_port_name;
                 $cost_table->second_port_code = $request->second_port_code;
                 $cost_table->second_port_name = $request->second_port_name;
-                $cost_table->effective_date = $request->effective_date;
-                $cost_table->exp_date = $request->exp_date;
+                $cost_table->effective_date = !empty($request->effective_date) ? date('Y-m-d', strtotime(str_replace('/', '-', $request->effective_date)))  : null;
+                $cost_table->exp_date = !empty($request->exp_date) ? date('Y-m-d', strtotime(str_replace('/', '-', $request->exp_date)))  : null;
                 $cost_table->note = $request->note;
                 $cost_table->update();
 

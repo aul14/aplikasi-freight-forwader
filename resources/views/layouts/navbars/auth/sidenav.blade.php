@@ -43,7 +43,7 @@
             </li>
 
             {{-- MENU PAGES --}}
-            <li class="nav-item ">
+            {{-- <li class="nav-item ">
                 <a aria-expanded="{{ str_contains(request()->url(), 'tables') == true ? 'true' : 'false' }}"
                     data-toggle="collapse" data-target="#collapseShow2" class="sidebar-menu-item nav-link ">
                     <div><span class="nav-link-text text-uppercase text-xs font-weight-bolder">Pages <b
@@ -66,8 +66,8 @@
                             </a>
                             <ul class="navbar-nav"></ul>
                         </li>
-                        {{-- EXAMPLE SUBMENU --}}
-                        {{-- <li class="nav-item ">
+                        EXAMPLE SUBMENU
+                        <li class="nav-item ">
                             <a aria-expanded="" data-toggle="collapse" data-target="#collapseShowSubmenu"
                                 class="sidebar-menu-item nav-link ">
                                 <i class="fa fa-s text-primary text-sm opacity-10"></i>
@@ -97,11 +97,11 @@
 
                                 </ul>
                             </div>
-                        </li> --}}
+                        </li>
 
                     </ul>
                 </div>
-            </li>
+            </li> --}}
 
             {{-- MENU MASTER --}}
             <li class="nav-item ">
@@ -481,14 +481,29 @@
 
             {{-- MENU TRANSACTION --}}
             <li class="nav-item ">
-                <a aria-expanded="{{ Request::is('sea_quot*') || Request::is('air_quot*') ? 'true' : 'false' }}"
+                <a aria-expanded="{{ Request::is('sea_quot*') || Request::is('air_quot*') || Request::is('sea_book*') || Request::is('air_book*') ? 'true' : 'false' }}"
                     data-toggle="collapse" data-target="#collapseShow4" class="sidebar-menu-item nav-link ">
                     <div><span class="nav-link-text text-uppercase text-xs font-weight-bolder">TRANSACTION <b
                                 class="caret"></b></span></div>
                 </a>
-                <div class="collapse {{ Request::is('sea_quot*') || Request::is('air_quot*') ? 'show' : '' }}"
+                <div class="collapse {{ Request::is('sea_quot*') || Request::is('air_quot*') || Request::is('sea_book*') || Request::is('air_book*') ? 'show' : '' }}"
                     id="collapseShow4">
                     <ul class="nav nav-sm flex-column">
+                        @permission('manage-air_book')
+                            <li class="nav-item">
+                                <!---->
+                                <div class="collapse ">
+                                    <ul class="nav nav-sm flex-column"></ul>
+                                </div> <a href="{{ route('air_book.index') }}"
+                                    class="nav-link {{ Request::is('air_book*') ? 'active' : '' }}">
+                                    <i class="fa fa-a text-primary text-sm opacity-10"></i>
+                                    <div>
+                                        <span class="nav-link-text">Air Export Booking</span>
+                                    </div>
+                                </a>
+                                <ul class="navbar-nav"></ul>
+                            </li>
+                        @endpermission
                         @permission('manage-air_quot')
                             <li class="nav-item">
                                 <!---->
@@ -499,6 +514,21 @@
                                     <i class="fa fa-a text-primary text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Air Freight Quotation</span>
+                                    </div>
+                                </a>
+                                <ul class="navbar-nav"></ul>
+                            </li>
+                        @endpermission
+                        @permission('manage-sea_book')
+                            <li class="nav-item">
+                                <!---->
+                                <div class="collapse ">
+                                    <ul class="nav nav-sm flex-column"></ul>
+                                </div> <a href="{{ route('sea_book.index') }}"
+                                    class="nav-link {{ Request::is('sea_book*') ? 'active' : '' }}">
+                                    <i class="fa fa-s text-primary text-sm opacity-10"></i>
+                                    <div>
+                                        <span class="nav-link-text">Sea Export Booking</span>
                                     </div>
                                 </a>
                                 <ul class="navbar-nav"></ul>

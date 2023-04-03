@@ -1319,6 +1319,43 @@ class AdminSeederTable extends Seeder
             ]);
         }
 
+        // SEA EXPORT JOB
+        $moduleSeaExJob = Module::create([
+            'name' => 'Module Sea Export Job'
+        ]);
+
+        $permissionmoduleSeaExJob = [
+            [
+                'name' => 'manage-sea_ex_job',
+                'display_name' => 'Manage Sea Export Job',
+                'description' => 'Can Manage Sea Export Job'
+            ],
+            [
+                'name' => 'create-sea_ex_job',
+                'display_name' => 'Create Sea Export Job',
+                'description' => 'Can Create Sea Export Job'
+            ],
+            [
+                'name' => 'edit-sea_ex_job',
+                'display_name' => 'Edit Sea Export Job',
+                'description' => 'Can Edit Sea Export Job'
+            ],
+            [
+                'name' => 'delete-sea_ex_job',
+                'display_name' => 'Delete Sea Export Job',
+                'description' => 'Can Delete Sea Export Job'
+            ]
+        ];
+
+        foreach ($permissionmoduleSeaExJob as $key) {
+            Permission::create([
+                'name' => $key['name'],
+                'display_name' => $key['display_name'],
+                'description' => $key['description'],
+                'module_id' => $moduleSeaExJob->id
+            ]);
+        }
+
         // SUPER ADMIN RULES
         Role::create([
             'name' => 'super_admin',
@@ -1468,6 +1505,10 @@ class AdminSeederTable extends Seeder
             'create-air_book',
             'edit-air_book',
             'delete-air_book',
+            'manage-sea_ex_job',
+            'create-sea_ex_job',
+            'edit-sea_ex_job',
+            'delete-sea_ex_job',
         ];
 
         $userAdmin = User::create([
@@ -1635,6 +1676,10 @@ class AdminSeederTable extends Seeder
             'create-air_book',
             'edit-air_book',
             'delete-air_book',
+            'manage-sea_ex_job',
+            'create-sea_ex_job',
+            'edit-sea_ex_job',
+            'delete-sea_ex_job',
         ];
 
         $userOwner = User::create([

@@ -1177,7 +1177,14 @@
                                 return {
                                     text: `${item.code} - ${item.name}`,
                                     id: item.code,
-                                    custom_attribute: item.name
+                                    custom_attribute: item.name,
+                                    address_1: item.address_1,
+                                    address_2: item.address_2,
+                                    address_3: item.address_3,
+                                    address_4: item.address_4,
+                                    telp: item.telp,
+                                    fax: item.fax,
+                                    email: item.email,
                                 }
                             })
                         };
@@ -1189,7 +1196,21 @@
             $(".customer-select").change(function(e) {
                 e.preventDefault();
                 let desc = $(this).select2('data')[0].custom_attribute;
+                let address_1 = $(this).select2('data')[0].address_1;
+                let address_2 = $(this).select2('data')[0].address_2;
+                let address_3 = $(this).select2('data')[0].address_3;
+                let address_4 = $(this).select2('data')[0].address_4;
+                let telp = $(this).select2('data')[0].telp;
+                let fax = $(this).select2('data')[0].fax;
+                let email = $(this).select2('data')[0].email;
                 $("input[name=customer]").val(desc);
+                $("input[name=address_1]").val(address_1);
+                $("input[name=address_2]").val(address_2);
+                $("input[name=address_3]").val(address_3);
+                $("input[name=address_4]").val(address_4);
+                $("input[name=telp]").val(telp);
+                $("input[name=fax]").val(fax);
+                $("input[name=email]").val(email);
             });
 
             $('.deltype-select').select2({

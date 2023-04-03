@@ -915,7 +915,6 @@
                                         text: `${item.code} - ${item.description}`,
                                         id: item.code,
                                         custom_attribute: item.description,
-                                        ,
                                     }
                                 })
                             };
@@ -1518,7 +1517,7 @@
                         return {
                             results: $.map(data, function(item) {
                                 return {
-                                    text: `${item.item_code}`,
+                                    text: `${item.item_code} - ${item.item_description}`,
                                     id: item.item_code,
                                     custom_attribute: item.item_description
                                 }

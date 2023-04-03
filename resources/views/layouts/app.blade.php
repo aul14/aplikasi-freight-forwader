@@ -93,6 +93,7 @@
     <script src="{{ asset('assets/js/bootstrap-datepicker.min.js') }}"></script>
     <script src="{{ asset('assets/js/jquery.datetimepicker.full.min.js') }}"></script>
     {{-- Calendar --}}
+    <script src="{{ asset('assets/js/date.js') }}"></script>
     <script src="{{ asset('assets/js/moment.min.js') }}"></script>
     <script src="{{ asset('assets/calender/js/pignose.calendar.js') }}"></script>
     <script>

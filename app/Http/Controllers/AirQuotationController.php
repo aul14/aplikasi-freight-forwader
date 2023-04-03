@@ -15,6 +15,7 @@ use App\Models\AirQuotationD2;
 use App\Models\AirQuotationSD1;
 use App\Models\AirQuotationSD2;
 use Yajra\DataTables\DataTables;
+use App\Models\CompanyDetailSatu;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
@@ -30,12 +31,12 @@ class AirQuotationController extends Controller
     {
         if (Auth::user()->hasPermission('manage-air_quot')) {
             if ($request->ajax()) {
-                if (auth()->user()->is_mng_sales == true || auth()->user()->is_sales == true) {
+                if (!empty(auth()->user()->salesman_code)) {
                     $air_quot = AirQuotation::with('quotation')->whereHas('quotation', function ($query) {
                         $query->whereIn('salesman_code', explode(",", auth()->user()->salesman_code));
-                    })->orderBy('id', 'DESC')->select('*');
+                    })->orderBy('air_quotations.id', 'DESC')->select('*');
                 } else {
-                    $air_quot = AirQuotation::with('quotation')->orderBy('id', 'DESC')->select('*');
+                    $air_quot = AirQuotation::with('quotation')->orderBy('air_quotations.id', 'DESC')->select('*');
                 }
                 return DataTables::of($air_quot)
                     ->addColumn('action', function ($air_quot) {
@@ -166,6 +167,7 @@ class AirQuotationController extends Controller
                 $quot->uom_id = !empty($request->uom_id) ? $request->uom_id : null;
                 $quot->total_gross = !empty($request->total_gross) ? str_replace(",", "", $request->total_gross)  : null;
                 $quot->total_volume = !empty($request->total_volume) ? str_replace(",", "", $request->total_volume) : null;
+                $quot->create_by = auth()->user()->firstname . " " . auth()->user()->lastname;
                 $quot->save();
 
                 // SAVE TO TABLE AIR QUOTATION
@@ -458,6 +460,7 @@ class AirQuotationController extends Controller
                 $quot->uom_id = !empty($request->uom_id) ? $request->uom_id : null;
                 $quot->total_gross = !empty($request->total_gross) ? str_replace(",", "", $request->total_gross)  : null;
                 $quot->total_volume = !empty($request->total_volume) ? str_replace(",", "", $request->total_volume) : null;
+                $quot->update_by = auth()->user()->firstname . " " . auth()->user()->lastname;
                 $quot->update();
 
                 // SAVE TO TABLE AIR QUOTATION
@@ -695,13 +698,15 @@ class AirQuotationController extends Controller
     {
         $air_quot = AirQuotation::with(['quotation',  'air_quotation_d1', 'air_quotation_d2.vat.vat_code_detail_satu'])->where('id', $id)->first();
         $aq_d1 = AirQuotationD1::with('air_quotation_s_d2.vat.vat_code_detail_satu')->where('air_quotation_id', $id)->get()->toArray();
-        $company = Company::with('company_detail_satu')->first();
+        $company = Company::first();
+        $company_detail = CompanyDetailSatu::where('company_id', $company->id)->where('type', 'Head Office')->first();
         $add_info_d1 = AddInfoD1::where('trx_id', $id)->first();
         $pdf = app('dompdf.wrapper');
         $pdf->loadView('trx.air_quot.export_pdf', [
             'aq'    => $air_quot,
             'aq_d1' => $aq_d1,
             'company'   => $company,
+            'company_detail'   => $company_detail,
             'add_info_d1' => $add_info_d1,
         ])->setPaper('a4', 'portrait');
         return $pdf->stream('laporan.pdf');

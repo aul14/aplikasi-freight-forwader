@@ -8,6 +8,8 @@ use App\Models\JobType;
 use App\Models\Quotation;
 use App\Models\SeaBooking;
 use App\Models\BisnisParty;
+use App\Models\Company;
+use App\Models\CompanyDetailSatu;
 use App\Models\SeaBookingD1;
 use App\Models\SeaBookingD2;
 use App\Models\SeaBookingD3;
@@ -33,17 +35,18 @@ class SeaExportBookingController extends Controller
     {
         if (Auth::user()->hasPermission('manage-sea_book')) {
             if ($request->ajax()) {
-                if (auth()->user()->is_mng_sales == true || auth()->user()->is_sales == true) {
+                if (!empty(auth()->user()->salesman_code)) {
                     $sea_book = SeaBooking::with(['sea_book_d1', 'sea_book_d2'])->where('salesman_code', explode(",", auth()->user()->salesman_code))->orderBy('id', 'DESC')->select('*');
                 } else {
                     $sea_book = SeaBooking::with(['sea_book_d1', 'sea_book_d2'])->orderBy('id', 'DESC')->select('*');
                 }
                 return DataTables::of($sea_book)
                     ->addColumn('action', function ($sea_book) {
-                        return view('datatable-modal._action', [
+                        return view('datatable-modal._action_trx', [
                             'row_id' => $sea_book->id,
                             'edit_url' => route('sea_book.edit', $sea_book->id),
                             'delete_url' => route('sea_book.destroy', $sea_book->id),
+                            'pdf_url' => route('pdf.sea_book', $sea_book->id),
                             'can_edit' => 'edit-sea_book',
                             'can_delete' => 'delete-sea_book'
                         ]);
@@ -189,6 +192,7 @@ class SeaExportBookingController extends Controller
                 $sea_book->footer_4 = !empty($request->footer_4) ? $request->footer_4 : null;
                 $sea_book->footer_5 = !empty($request->footer_5) ? $request->footer_5 : null;
                 $sea_book->footer_6 = !empty($request->footer_6) ? $request->footer_6 : null;
+                $sea_book->create_by = auth()->user()->firstname . " " . auth()->user()->lastname;
                 $sea_book->save();
 
                 $sea_d1 = new SeaBookingD1();
@@ -211,6 +215,12 @@ class SeaExportBookingController extends Controller
                 $sea_d1->consignee_address_2 = !empty($request->consignee_address_2) ? $request->consignee_address_2 : null;
                 $sea_d1->consignee_address_3 = !empty($request->consignee_address_3) ? $request->consignee_address_3 : null;
                 $sea_d1->consignee_address_4 = !empty($request->consignee_address_4) ? $request->consignee_address_4 : null;
+                $sea_d1->notify_code = !empty($request->notify_code) ? $request->notify_code : null;
+                $sea_d1->notify_name = !empty($request->notify_name) ? $request->notify_name : null;
+                $sea_d1->notify_address_1 = !empty($request->notify_address_1) ? $request->notify_address_1 : null;
+                $sea_d1->notify_address_2 = !empty($request->notify_address_2) ? $request->notify_address_2 : null;
+                $sea_d1->notify_address_3 = !empty($request->notify_address_3) ? $request->notify_address_3 : null;
+                $sea_d1->notify_address_4 = !empty($request->notify_address_4) ? $request->notify_address_4 : null;
                 $sea_d1->save();
 
                 $sea_d2 = new SeaBookingD2();
@@ -268,7 +278,7 @@ class SeaExportBookingController extends Controller
                 $sea_d3->stuff_agent_address_3 = !empty($request->stuff_agent_address_3) ? $request->stuff_agent_address_3 : null;
                 $sea_d3->stuff_agent_address_4 = !empty($request->stuff_agent_address_4) ? $request->stuff_agent_address_4 : null;
                 $sea_d3->stuff_agent_contact_name = !empty($request->stuff_agent_contact_name) ? $request->stuff_agent_contact_name : null;
-                $sea_d3->stuff = !empty($request->stuff) ? $request->stuff : null;
+                $sea_d3->stuff = !empty($request->stuff) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->stuff))) : null;
                 $sea_d3->smk_code = !empty($request->smk_code) ? $request->smk_code : null;
                 $sea_d3->cargo_receipt = !empty($request->cargo_receipt) ?  date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->cargo_receipt))) : null;
                 $sea_d3->yard_code = !empty($request->yard_code) ? $request->yard_code : null;
@@ -398,6 +408,8 @@ class SeaExportBookingController extends Controller
                             'good_desc_8'      => !empty($request->good_desc_8[$key]) ? $request->good_desc_8[$key] : null,
                             'good_desc_9'      => !empty($request->good_desc_9[$key]) ? $request->good_desc_9[$key] : null,
                             'good_desc_10'      => !empty($request->good_desc_10[$key]) ? $request->good_desc_10[$key] : null,
+                            'created_at' => now(),
+                            'updated_at' => now(),
                         ];
                     }
                     SeaBookingD6::insert($result_d6);
@@ -525,10 +537,10 @@ class SeaExportBookingController extends Controller
                 $sea_book->footer_4 = !empty($request->footer_4) ? $request->footer_4 : null;
                 $sea_book->footer_5 = !empty($request->footer_5) ? $request->footer_5 : null;
                 $sea_book->footer_6 = !empty($request->footer_6) ? $request->footer_6 : null;
+                $sea_book->update_by = auth()->user()->firstname . " " . auth()->user()->lastname;
                 $sea_book->update();
 
                 $sea_d1 = SeaBookingD1::where('sea_booking_id', $id)->first();
-                $sea_d1->sea_booking_id = $sea_book->id;
                 $sea_d1->agent_code = !empty($request->agent_code) ? $request->agent_code : null;
                 $sea_d1->agent_name = !empty($request->agent_name) ? $request->agent_name : null;
                 $sea_d1->agent_address_1 = !empty($request->agent_address_1) ? $request->agent_address_1 : null;
@@ -547,10 +559,15 @@ class SeaExportBookingController extends Controller
                 $sea_d1->consignee_address_2 = !empty($request->consignee_address_2) ? $request->consignee_address_2 : null;
                 $sea_d1->consignee_address_3 = !empty($request->consignee_address_3) ? $request->consignee_address_3 : null;
                 $sea_d1->consignee_address_4 = !empty($request->consignee_address_4) ? $request->consignee_address_4 : null;
+                $sea_d1->notify_code = !empty($request->notify_code) ? $request->notify_code : null;
+                $sea_d1->notify_name = !empty($request->notify_name) ? $request->notify_name : null;
+                $sea_d1->notify_address_1 = !empty($request->notify_address_1) ? $request->notify_address_1 : null;
+                $sea_d1->notify_address_2 = !empty($request->notify_address_2) ? $request->notify_address_2 : null;
+                $sea_d1->notify_address_3 = !empty($request->notify_address_3) ? $request->notify_address_3 : null;
+                $sea_d1->notify_address_4 = !empty($request->notify_address_4) ? $request->notify_address_4 : null;
                 $sea_d1->update();
 
                 $sea_d2 =  SeaBookingD2::where('sea_booking_id', $id)->first();
-                $sea_d2->sea_booking_id = $sea_book->id;
                 $sea_d2->shipment_type = !empty($request->shipment_type) ? $request->shipment_type : null;
                 $sea_d2->master_job_no = !empty($request->master_job_no) ? $request->master_job_no : null;
                 $sea_d2->eta_sub = !empty($request->eta_sub) ?  date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->eta_sub))) : null;
@@ -593,7 +610,6 @@ class SeaExportBookingController extends Controller
                 $sea_d2->update();
 
                 $sea_d3 = SeaBookingD3::where('sea_booking_id', $id)->first();
-                $sea_d3->sea_booking_id = $sea_book->id;
                 $sea_d3->principle_agent_code = !empty($request->principle_agent_code) ? $request->principle_agent_code : null;
                 $sea_d3->shippagent_code = !empty($request->shippagent_code) ? $request->shippagent_code : null;
                 $sea_d3->scn_code = !empty($request->scn_code) ? $request->scn_code : null;
@@ -604,7 +620,7 @@ class SeaExportBookingController extends Controller
                 $sea_d3->stuff_agent_address_3 = !empty($request->stuff_agent_address_3) ? $request->stuff_agent_address_3 : null;
                 $sea_d3->stuff_agent_address_4 = !empty($request->stuff_agent_address_4) ? $request->stuff_agent_address_4 : null;
                 $sea_d3->stuff_agent_contact_name = !empty($request->stuff_agent_contact_name) ? $request->stuff_agent_contact_name : null;
-                $sea_d3->stuff = !empty($request->stuff) ? $request->stuff : null;
+                $sea_d3->stuff = !empty($request->stuff) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->stuff))) : null;
                 $sea_d3->smk_code = !empty($request->smk_code) ? $request->smk_code : null;
                 $sea_d3->cargo_receipt = !empty($request->cargo_receipt) ?  date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->cargo_receipt))) : null;
                 $sea_d3->yard_code = !empty($request->yard_code) ? $request->yard_code : null;
@@ -630,7 +646,6 @@ class SeaExportBookingController extends Controller
                 $sea_d3->update();
 
                 $sea_d4 = SeaBookingD4::where('sea_booking_id', $id)->first();
-                $sea_d4->sea_booking_id = $sea_book->id;
                 $sea_d4->trans_company_code = !empty($request->trans_company_code) ? $request->trans_company_code : null;
                 $sea_d4->trans_company_name = !empty($request->trans_company_name) ? $request->trans_company_name : null;
                 $sea_d4->trans_company_address_1 = !empty($request->trans_company_address_1) ? $request->trans_company_address_1 : null;
@@ -676,7 +691,6 @@ class SeaExportBookingController extends Controller
                 $sea_d4->update();
 
                 $sea_d5 = SeaBookingD5::where('sea_booking_id', $id)->first();
-                $sea_d5->sea_booking_id = $sea_book->id;
                 $sea_d5->fumigation_code = !empty($request->fumigation_code) ? $request->fumigation_code : null;
                 $sea_d5->fumigation_name = !empty($request->fumigation_name) ? $request->fumigation_name : null;
                 $sea_d5->fumigation_address_1 = !empty($request->fumigation_address_1) ? $request->fumigation_address_1 : null;
@@ -735,6 +749,8 @@ class SeaExportBookingController extends Controller
                             'good_desc_8'      => !empty($request->good_desc_8[$key]) ? $request->good_desc_8[$key] : null,
                             'good_desc_9'      => !empty($request->good_desc_9[$key]) ? $request->good_desc_9[$key] : null,
                             'good_desc_10'      => !empty($request->good_desc_10[$key]) ? $request->good_desc_10[$key] : null,
+                            'created_at' => now(),
+                            'updated_at' => now(),
                         ];
                     }
                     SeaBookingD6::insert($result_d6);
@@ -783,5 +799,19 @@ class SeaExportBookingController extends Controller
         } else {
             abort(403);
         }
+    }
+
+    public function pdf($id)
+    {
+        $sea_book = SeaBooking::with(['sea_book_d1', 'sea_book_d2', 'sea_book_d6'])->where('sea_bookings.id', $id)->first();
+        $company = Company::first();
+        $company_detail = CompanyDetailSatu::where('company_id', $company->id)->where('type', 'Head Office')->first();
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('trx.sea_book.export_pdf', [
+            'sb'    => $sea_book,
+            'company'   => $company,
+            'company_detail'   => $company_detail,
+        ])->setPaper('a4', 'portrait');
+        return $pdf->stream('laporan.pdf');
     }
 }

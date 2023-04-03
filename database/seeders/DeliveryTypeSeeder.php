@@ -15,16 +15,29 @@ class DeliveryTypeSeeder extends Seeder
      */
     public function run()
     {
+        DeliveryType::truncate();
         DeliveryType::insert([
             [
-                'type'  => 'ATA',
-                'description'  => 'AIRPORT TO AIRPORT',
+                'type'  => 'EXW',
+                'description'  => 'EX WORKS',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'type'  => 'ATD',
-                'description'  => 'AIRPORT TO DOOR',
+                'type'  => 'FCA',
+                'description'  => 'FREE CARRIER',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'type'  => 'FAS',
+                'description'  => 'FREE ALONGSIDE SHIP',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'type'  => 'FOB',
+                'description'  => 'FREE ON BOARD',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -35,20 +48,38 @@ class DeliveryTypeSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'type'  => 'CIF',
+                'description'  => 'COST, INSURANCE & FREIGHT',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'type'  => 'CPT',
+                'description'  => 'COST PAID TO',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
                 'type'  => 'CIP',
-                'description'  => 'CARRIAGE INSURANCE PAID',
+                'description'  => 'CARRIER & INSURANCE PAID TO',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'type'  => 'DTA',
-                'description'  => 'DOOR TO AIRPORT',
+                'type'  => 'DPU',
+                'description'  => 'DELIVERED AT PLACE UNLOADED',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'type'  => 'DTD',
-                'description'  => 'DOOR TO DOOR',
+                'type'  => 'DPA',
+                'description'  => 'DELIVERED AT PLACE',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'type'  => 'DDP',
+                'description'  => 'DELIVERED DUTY PAID',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

@@ -26,7 +26,7 @@ return new class extends Migration
             $table->date('eta')->nullable();
             $table->date('dest_eta_date')->nullable();
             $table->dateTime('close_date_time')->nullable();
-            $table->string('place_of_receipt', 20)->nullable();
+            $table->string('place_of_receipt', 50)->nullable();
             $table->string('port_loading_code', 50)->nullable();
             $table->string('port_loading_name', 100)->nullable();
             $table->string('port_discharge_code', 50)->nullable();
@@ -34,7 +34,7 @@ return new class extends Migration
             $table->string('via_port_code', 50)->nullable();
             $table->string('via_port_name', 100)->nullable();
             $table->string('terminal', 50)->nullable();
-            $table->string('place_of_delivery', 20)->nullable();
+            $table->string('place_of_delivery', 50)->nullable();
             $table->string('vessel_code', 50)->nullable();
             $table->string('vessel_name', 100)->nullable();
             $table->string('voyage_no', 20)->nullable();

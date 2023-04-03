@@ -32,23 +32,26 @@ class CodeNumbering
             $exp[array_search("[MMMM]", $exp)] = ($cycle == "Y") ? '' :  date('F');
         }
 
-        // $imp_format = implode("", $exp);
+        $imp_format = implode("", $exp);
 
-        $imp_format = preg_replace("/[^a-zA-Z0-9]/", "", implode("", $exp));
+        // CEK MENGGUNAKAN CYCLE Y OR M
+        if ($cycle == "Y") {
+            if ((in_array("[MM]", $exp_old) || in_array("[MMMM]", $exp_old))) {
+                if ($data_code->module_id == 36) {
+                    $imp_format = str_replace("F", "", $imp_format);
+                    $imp_format = substr($imp_format, 0, 10);
+                } else {
+                    $imp_format = preg_replace("/[^a-zA-Z0-9]/", "", implode("", $exp));
+                }
+            } else {
+                $imp_format = $imp_format;
+            }
+        }
+
         $name_table = $table;
-
         // CEK CODE DARI DATABASE
         $count_charge_table = $name_table::select("{$field}")->where("{$field}", 'like', "%{$imp_format}%")->withTrashed()->count();
 
-        if ($count_charge_table == 0) {
-            $data_format = 1;
-        } else {
-            $data_format = $next_number;
-        }
-        $count_format = strlen($next_number);
-
-
-        // CEK MENGGUNAKAN CYCLE Y OR M
         if ($cycle == "Y") {
             if (in_array("[MM]", $exp_old) || in_array("[MMMM]", $exp_old)) {
                 if (in_array("", $exp) == true) {
@@ -60,6 +63,18 @@ class CodeNumbering
             }
         }
 
+        if ($data_code->module_id == 36) {
+            $imp_format = str_replace("F", "", $imp_format);
+        } else {
+            $imp_format = $imp_format;
+        }
+
+        if ($count_charge_table == 0) {
+            $data_format = 1;
+        } else {
+            $data_format = $next_number;
+        }
+        $count_format = strlen($next_number);
 
 
         if ($count_length_number == 0) {

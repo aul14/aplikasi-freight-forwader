@@ -1511,7 +1511,7 @@
                                                         <div class="form-group">
                                                             <label for="total_dimension">Total Dimension</label>
                                                             <input type="text" data-type='currency0' readonly
-                                                                title="Total Pcs"
+                                                                title="Total Dimension"
                                                                 class="form-control @error('total_dimension') is-invalid @enderror total-dimension"
                                                                 name="total_dimension" id="total-dimension-1"
                                                                 value="{{ old('total_dimension') }}">
@@ -1541,7 +1541,7 @@
                                                         <div class="form-group">
                                                             <label for="total_vol_wt">Total Volume Weight</label>
                                                             <input type="text" data-type='currency0' readonly
-                                                                title="Total Pcs"
+                                                                title="Total Volume Weight"
                                                                 class="form-control @error('total_vol_wt') is-invalid @enderror total-volwt"
                                                                 name="total_vol_wt" id="total-volwt-1"
                                                                 value="{{ old('total_vol_wt') }}">
@@ -2615,7 +2615,7 @@
                                 $("input[name=commodity]").val(res
                                     .commodity);
                             } else {
-                                $("select[name=commodity_code]").empty;
+                                $("select[name=commodity_code]").empty();
                                 $("input[name=commodity]").val("");
                             }
 

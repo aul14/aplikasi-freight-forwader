@@ -70,7 +70,7 @@
             </div>
             <div class="row float-right">
                 <strong>{{ $company->name }}</strong>
-                <p style="line-height: 15px;font-size: 12px">{!! implode('<br />', str_split($company->company_detail_satu[4]->address, 42)) !!}</p>
+                <p style="line-height: 15px;font-size: 12px">{!! implode('<br />', str_split($company_detail->address, 42)) !!}</p>
             </div>
             <br>
             <br>

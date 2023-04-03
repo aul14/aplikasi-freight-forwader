@@ -20,7 +20,7 @@
                         @method('POST')
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label for="username">Username <span style="color: red;">*</span></label>
                                     <input type="text" value="{{ old('username') }}"
                                         class="form-control @error('username') is-invalid @enderror" required
@@ -30,7 +30,7 @@
                                             {{ $message }}
                                         </div>
                                     @enderror
-                                </div>
+                                </div> --}}
                                 <div class="form-group">
                                     <label for="email">Email <span style="color: red;">*</span></label>
                                     <input type="email" value="{{ old('email') }}"
@@ -68,7 +68,7 @@
                                         </div>
                                     @enderror
                                 </div>
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label for="is_mng_sales">Is Manager Sales?</label>
                                     <div class="col-md-6">
                                         <input type="checkbox" id="is_mng_sales" name="is_mng_sales"
@@ -93,8 +93,8 @@
                                             </div>
                                         @enderror
                                     </div>
-                                </div>
-                                <div class="form-group select-sales" style="display: none;">
+                                </div> --}}
+                                <div class="form-group select-sales">
                                     <label for="salesman-code-1">Select Sales </label>
                                     <select name="salesman_code[]" id="salesman-code-1" class="salesman-code" multiple>
                                         <option value=""></option>
@@ -174,6 +174,30 @@
                 placeholder: 'Search...',
                 width: "100%",
                 allowClear: true,
+            });
+
+            $(`#salesman-code-1`).select2({
+                placeholder: 'Select Sales...',
+                width: "100%",
+                allowClear: true,
+                multiple: true,
+                ajax: {
+                    url: '{{ route('get.salesman') }}',
+                    dataType: 'json',
+                    type: 'POST',
+                    delay: 0,
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data, function(item) {
+                                return {
+                                    text: `${item.code} - ${item.name}`,
+                                    id: item.code,
+                                }
+                            })
+                        };
+                    },
+                    cache: false
+                }
             });
 
             $("#is_mng_sales").change(function(e) {

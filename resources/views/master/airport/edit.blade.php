@@ -69,7 +69,8 @@
                                     </div>
                                 </div>
                             </div>
-
+                        </div>
+                        <div class="row mt-2">
                             <div class="col-md-12">
                                 <a href="{{ route('airport.index') }}" class="btn btn-danger btn-back">Back</a>
                                 <button type="submit" class="btn btn-primary">Submit</button>

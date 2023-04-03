@@ -20,7 +20,7 @@ class SalesmanController extends Controller
     {
         if (Auth::user()->hasPermission('manage-salesman')) {
             if ($request->ajax()) {
-                if (auth()->user()->is_mng_sales == true || auth()->user()->is_sales == true) {
+                if (!empty(auth()->user()->salesman_code)) {
                     $salesman = Salesman::select('*')->whereIn('code', explode(",", auth()->user()->salesman_code));
                 } else {
                     $salesman = Salesman::select('*');

@@ -35,8 +35,8 @@
                                                     <div class="form-group">
                                                         <label for="code">Business Party Code <span
                                                                 style="color: red;">*</span></label>
-                                                        <input type="text" required name="code" id="code"
-                                                            readonly value="NEW" autocomplete="off"
+                                                        <input type="text" name="code" id="code" readonly
+                                                            value="NEW" autocomplete="off"
                                                             class="form-control @error('code') is-invalid @enderror">
                                                         @error('code')
                                                             <div class="invalid-feedback">
@@ -870,7 +870,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mt-2">
                             <div class="col-md-12">
                                 <a href="{{ route('bisnis_party.index') }}" class="btn btn-danger btn-back">Back</a>
                                 <button type="submit" class="btn btn-primary">Submit</button>

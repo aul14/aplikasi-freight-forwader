@@ -205,8 +205,8 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="code_customer">Customer Code</label>
-                    <input type="text" class="form-control @error('code_customer') is-invalid @enderror"
+                    <label for="code_customer">Customer Code <span style="color: red;">*</span></label>
+                    <input type="text" required class="form-control @error('code_customer') is-invalid @enderror"
                         name="code_customer" value="{{ old('code_customer', $sb->code_customer) }}"
                         id="code_customer">
                     @error('code_customer')
@@ -1079,7 +1079,7 @@
                                 $("input[name=commodity], #cargo-commodity-1").val(res
                                     .commodity);
                             } else {
-                                $("select[name=commodity_code], #cargo-select-1").empty;
+                                $("select[name=commodity_code], #cargo-select-1").empty();
                                 $("input[name=commodity], #cargo-commodity-1").val("");
                             }
 

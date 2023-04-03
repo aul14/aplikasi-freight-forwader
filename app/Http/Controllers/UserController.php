@@ -100,7 +100,7 @@ class UserController extends Controller
 
         if (Auth::user()->hasPermission('create-user')) {
             $request->validate([
-                'username'     => 'required|min:3|unique:users,username',
+                // 'username'     => 'required|min:3|unique:users,username',
                 'email'      => 'required|unique:users,email|email',
                 'password'   => 'required|min:4',
                 'role_id' => 'required'
@@ -110,16 +110,16 @@ class UserController extends Controller
             DB::beginTransaction();
             try {
                 $user = new User();
-                $user->username = $request->username;
+                $user->username = $request->email;
                 $user->email = $request->email;
                 $user->password = $request->password;
                 $user->firstname = $request->firstname;
                 $user->lastname = $request->lastname;
                 $user->address = $request->address;
                 $user->city = $request->city;
-                $user->is_mng_sales = $request->is_mng_sales == "yes" ? true : false;
-                $user->is_sales = $request->is_sales == "yes" ? true : false;
-                $user->salesman_code = ($request->is_mng_sales == "yes" || $request->is_sales == "yes") ? implode(",", $request->salesman_code) : null;
+                // $user->is_mng_sales = $request->is_mng_sales == "yes" ? true : false;
+                // $user->is_sales = $request->is_sales == "yes" ? true : false;
+                $user->salesman_code =  implode(",", $request->salesman_code);
                 $user->save();
 
                 $role_user = new RoleUser();
@@ -179,7 +179,7 @@ class UserController extends Controller
     {
         if (Auth::user()->hasPermission('edit-user')) {
             $request->validate([
-                'username'     => 'required|min:3|unique:users,username,' . $id,
+                // 'username'     => 'required|min:3|unique:users,username,' . $id,
                 'email'      => 'required|email|unique:users,email,' . $id,
                 'role_id' => 'required'
             ]);
@@ -188,16 +188,16 @@ class UserController extends Controller
             DB::beginTransaction();
             try {
                 $user = User::find($id);
-                $user->username = $request->username;
+                $user->username = $request->email;
                 $user->email = $request->email;
                 $user->password = $request->password;
                 $user->firstname = $request->firstname;
                 $user->lastname = $request->lastname;
                 $user->address = $request->address;
                 $user->city = $request->city;
-                $user->is_mng_sales = $request->is_mng_sales == "yes" ? true : false;
-                $user->is_sales = $request->is_sales == "yes" ? true : false;
-                $user->salesman_code = ($request->is_mng_sales == "yes" || $request->is_sales == "yes") ? implode(",", $request->salesman_code) : null;
+                // $user->is_mng_sales = $request->is_mng_sales == "yes" ? true : false;
+                // $user->is_sales = $request->is_sales == "yes" ? true : false;
+                $user->salesman_code =  implode(",", $request->salesman_code);
                 $user->update();
 
                 DB::table('role_user')->where('user_id', '=', $id)

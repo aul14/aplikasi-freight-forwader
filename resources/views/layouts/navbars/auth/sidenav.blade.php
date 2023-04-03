@@ -481,12 +481,12 @@
 
             {{-- MENU TRANSACTION --}}
             <li class="nav-item ">
-                <a aria-expanded="{{ Request::is('sea_quot*') || Request::is('air_quot*') || Request::is('sea_book*') || Request::is('air_book*') ? 'true' : 'false' }}"
+                <a aria-expanded="{{ Request::is('sea_quot*') || Request::is('air_quot*') || Request::is('sea_book*') || Request::is('air_book*') || Request::is('sea_ex_job*') ? 'true' : 'false' }}"
                     data-toggle="collapse" data-target="#collapseShow4" class="sidebar-menu-item nav-link ">
                     <div><span class="nav-link-text text-uppercase text-xs font-weight-bolder">TRANSACTION <b
                                 class="caret"></b></span></div>
                 </a>
-                <div class="collapse {{ Request::is('sea_quot*') || Request::is('air_quot*') || Request::is('sea_book*') || Request::is('air_book*') ? 'show' : '' }}"
+                <div class="collapse {{ Request::is('sea_quot*') || Request::is('air_quot*') || Request::is('sea_book*') || Request::is('air_book*') || Request::is('sea_ex_job*') ? 'show' : '' }}"
                     id="collapseShow4">
                     <ul class="nav nav-sm flex-column">
                         @permission('manage-air_book')
@@ -529,6 +529,21 @@
                                     <i class="fa fa-s text-primary text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Sea Export Booking</span>
+                                    </div>
+                                </a>
+                                <ul class="navbar-nav"></ul>
+                            </li>
+                        @endpermission
+                        @permission('manage-sea_ex_job')
+                            <li class="nav-item">
+                                <!---->
+                                <div class="collapse ">
+                                    <ul class="nav nav-sm flex-column"></ul>
+                                </div> <a href="{{ route('sea_ex_job.index') }}"
+                                    class="nav-link {{ Request::is('sea_ex_job*') ? 'active' : '' }}">
+                                    <i class="fa fa-s text-primary text-sm opacity-10"></i>
+                                    <div>
+                                        <span class="nav-link-text">Sea Export Job</span>
                                     </div>
                                 </a>
                                 <ul class="navbar-nav"></ul>

@@ -32,6 +32,7 @@ use App\Models\QuotationType;
 use App\Models\SeaQuotationD1;
 use Yajra\DataTables\DataTables;
 use App\Models\CurrencyDetailSatu;
+use App\Models\SeaBookingD6;
 use App\Models\Vessel;
 use Illuminate\Support\Facades\DB;
 
@@ -400,7 +401,7 @@ class DataAjaxController extends Controller
 
         $salesman = [];
         if ($request->ajax()) {
-            if (auth()->user()->is_mng_sales == true || auth()->user()->is_sales == true) {
+            if (!empty(auth()->user()->salesman_code)) {
                 if ($search == '') {
                     $salesman = Salesman::orderby('id', 'asc')->select('id', 'code', 'name')->whereIn('code', explode(",", auth()->user()->salesman_code))->limit(10)->get();
                 } else {
@@ -492,7 +493,7 @@ class DataAjaxController extends Controller
 
         $vat = [];
         if ($request->ajax()) {
-            if (auth()->user()->is_mng_sales == true || auth()->user()->is_sales == true) {
+            if (!empty(auth()->user()->salesman_code)) {
                 if ($search == '') {
                     $vat = BisnisParty::orderby('id', 'asc')->whereIn('salesman_code', explode(",", auth()->user()->salesman_code))->limit(10)->get();
                 } else {
@@ -811,6 +812,209 @@ class DataAjaxController extends Controller
                 ->addIndexColumn()
                 ->toJson();
         }
+    }
+
+    public function ajax_table_cus_ex_job(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $search = str_replace("'", "", strtoupper($_POST['search']['value']));
+            $searchTerms = explode(" ",  $search);
+
+            $array = [];
+            if ($searchTerms) {
+                foreach ($searchTerms as $searchTerm) {
+                    $array['search'] = $searchTerm;
+                }
+            }
+
+            $query = DB::table('bisnis_party as bp')
+                ->select('sb.id', 'bp.code', 'bp.name', 'sb.code as booking_no', 'sb.origin_code', 'sb.origin_name', 'sb.dest_code', 'sb.dest_name', 'sb_d1.shipper_code', 'sb_d1.shipper_name', 'sb_d1.consignee_code', 'sb_d1.consignee_name', 'sb_d1.notify_code', 'sb_d1.notify_name', 'sb_d2.port_loading_code', 'sb_d2.port_loading_name', 'sb_d2.port_discharge_code', 'sb_d2.port_discharge_name', 'sb_d2.coloader_ref_no', 'sb_d3.principle_agent_code', 'sb_d3.shippagent_code')
+                ->leftJoin('sea_bookings as sb', 'sb.code_customer', '=', 'bp.code')
+                ->leftJoin('sea_booking_d1 as sb_d1', 'sb_d1.sea_booking_id', '=', 'sb.id')
+                ->leftJoin('sea_booking_d2 as sb_d2', 'sb_d2.sea_booking_id', '=', 'sb.id')
+                ->leftJoin('sea_booking_d3 as sb_d3', 'sb_d3.sea_booking_id', '=', 'sb.id')
+                ->groupBy(['sb.id', 'bp.code', 'bp.name', 'sb.code', 'sb.origin_code', 'sb.origin_name', 'sb.dest_code', 'sb.dest_name', 'sb_d1.shipper_code', 'sb_d1.shipper_name', 'sb_d1.consignee_code', 'sb_d1.consignee_name', 'sb_d1.notify_code', 'sb_d1.notify_name', 'sb_d2.port_loading_code', 'sb_d2.port_loading_name', 'sb_d2.port_discharge_code', 'sb_d2.port_discharge_name', 'sb_d2.coloader_ref_no', 'sb_d3.principle_agent_code', 'sb_d3.shippagent_code']);
+
+            if ($array['search'] != '') {
+                $query->where('bp.name', 'like', "%" . $array['search'] . "%");
+
+                $query->orWhere('sb.code', 'like', "%" . $array['search'] . "%");
+
+                $query->orWhere('sb_d2.port_loading_name', 'like', "%" . $array['search'] . "%");
+
+                $query->orWhere('sb_d2.port_discharge_name', 'like', "%" . $array['search'] . "%");
+
+                $query->orWhere('sb.origin_name', 'like', "%" . $array['search'] . "%");
+
+                $query->orWhere('sb.dest_name', 'like', "%" . $array['search'] . "%");
+            }
+
+            return DataTables::of($query)
+                ->addColumn('action', function ($query) {
+                    $cus_code = !empty($query->code) ? $query->code : "";
+                    $booking_no = !empty($query->booking_no) ? $query->booking_no : 0;
+                    $id = !empty($query->id) ? $query->id : 0;
+                    return "<input type='radio' class='input_check' name='input_check' value='{$cus_code}' data-id='{$id}' data-booking_no='{$booking_no}'/>";
+                })
+                ->filter(
+                    function ($query) {
+                        if (request()->has('name')) {
+                            $query->where('bp.name', 'like', "%" . request('name') . "%");
+                        }
+
+                        if (request()->has('code')) {
+                            $query->where('sb.code', 'like', "%" . request('code') . "%");
+                        }
+
+                        if (request()->has('port_loading_name')) {
+                            $query->where('sb_d2.port_loading_name', 'like', "%" . request('port_loading_name') . "%");
+                        }
+
+                        if (request()->has('port_discharge_name')) {
+                            $query->where('sb_d2.port_discharge_name', 'like', "%" . request('port_discharge_name') . "%");
+                        }
+
+                        if (request()->has('origin_name')) {
+                            $query->where('sb.origin_name', 'like', "%" . request('origin_name') . "%");
+                        }
+
+                        if (request()->has('dest_name')) {
+                            $query->where('sb.dest_name', 'like', "%" . request('dest_name') . "%");
+                        }
+                    }
+                )
+                ->smart(false)
+                ->rawColumns(['action'])
+                ->addIndexColumn()
+                ->toJson();
+        }
+    }
+
+    public function ajax_search_cus_ex_job(Request $request)
+    {
+        $code = $request->code;
+        $booking_no = $request->booking_no;
+
+        if ($request->ajax()) {
+            $query = DB::table('bisnis_party as bp')
+                ->select('sb.id', 'bp.code', 'bp.name', 'sb.code as booking_no', 'sb.booking_date', 'sb.salesman_code', 'sb.salesman', 'sb.delivery_type_code', 'sb.delivery_type', 'sb.commodity_code', 'sb.commodity', 'sb.origin_code', 'sb.origin_name', 'sb.dest_code', 'sb.dest_name', 'sb_d1.shipper_code', 'sb_d1.shipper_name', 'sb_d1.shipper_address_1', 'sb_d1.shipper_address_2', 'sb_d1.shipper_address_3', 'sb_d1.shipper_address_4', 'sb_d1.consignee_code', 'sb_d1.consignee_name', 'sb_d1.consignee_address_1', 'sb_d1.consignee_address_2', 'sb_d1.consignee_address_3', 'sb_d1.consignee_address_4', 'sb_d1.notify_code', 'sb_d1.notify_name', 'sb_d1.notify_address_1', 'sb_d1.notify_address_2', 'sb_d1.notify_address_3', 'sb_d1.notify_address_4', 'sb_d2.eta_sub', 'sb_d2.etd_date', 'sb.etd', 'sb_d2.first_via_ata', 'sb_d2.first_via_eta', 'sb_d2.first_via_etd', 'sb_d2.eta', 'sb_d2.dest_eta_date', 'sb_d2.close_date_time', 'sb_d2.place_of_receipt', 'sb_d2.port_loading_code', 'sb_d2.port_loading_name', 'sb_d2.port_discharge_code', 'sb_d2.port_discharge_name', 'sb_d2.via_port_code', 'sb_d2.via_port_name', 'sb_d2.terminal', 'sb_d2.place_of_delivery', 'sb_d2.vessel_code', 'sb_d2.vessel_name', 'sb_d2.voyage_no', 'sb_d2.mother_vessel_name', 'sb_d2.mother_voyage', 'sb_d2.shippline_code', 'sb_d2.shippline_name', 'sb_d2.shippline_ref_no', 'sb_d2.shipmode', 'sb_d2.coloader_code', 'sb_d2.coloader_name', 'sb_d2.coloader_ref_no', 'sb_d3.principle_agent_code', 'sb_d3.shippagent_code', 'sb_d3.stuff_agent_code', 'sb_d3.stuff_agent_name', 'sb_d3.stuff_agent_address_1', 'sb_d3.stuff_agent_address_2', 'sb_d3.stuff_agent_address_3', 'sb_d3.stuff_agent_address_4', 'sb_d3.stuff_agent_contact_name', 'sb_d3.stuff as stuff_date', 'sb_d3.yard_code', 'sb_d3.yard_name', 'sb_d3.yard_address_1', 'sb_d3.yard_address_2', 'sb_d3.yard_address_3', 'sb_d3.yard_address_4', 'sb_d3.depot_code', 'sb_d3.depot_name', 'sb_d3.depot_address_1', 'sb_d3.depot_address_2', 'sb_d3.depot_address_3', 'sb_d3.depot_address_4')
+                ->leftJoin('sea_bookings as sb', 'sb.code_customer', '=', 'bp.code')
+                ->leftJoin('sea_booking_d1 as sb_d1', 'sb_d1.sea_booking_id', '=', 'sb.id')
+                ->leftJoin('sea_booking_d2 as sb_d2', 'sb_d2.sea_booking_id', '=', 'sb.id')
+                ->leftJoin('sea_booking_d3 as sb_d3', 'sb_d3.sea_booking_id', '=', 'sb.id')
+                ->groupBy(['sb.id', 'bp.code', 'bp.name', 'sb.code', 'sb.booking_date', 'sb.salesman_code', 'sb.salesman', 'sb.delivery_type_code', 'sb.delivery_type', 'sb.commodity_code', 'sb.commodity', 'sb.origin_code', 'sb.origin_name', 'sb.dest_code', 'sb.dest_name', 'sb_d1.shipper_code', 'sb_d1.shipper_name', 'sb_d1.shipper_address_1', 'sb_d1.shipper_address_2', 'sb_d1.shipper_address_3', 'sb_d1.shipper_address_4', 'sb_d1.consignee_code', 'sb_d1.consignee_name', 'sb_d1.consignee_address_1', 'sb_d1.consignee_address_2', 'sb_d1.consignee_address_3', 'sb_d1.consignee_address_4', 'sb_d1.notify_code', 'sb_d1.notify_name', 'sb_d1.notify_address_1', 'sb_d1.notify_address_2', 'sb_d1.notify_address_3', 'sb_d1.notify_address_4', 'sb_d2.eta_sub', 'sb_d2.etd_date', 'sb_d2.first_via_ata', 'sb_d2.first_via_eta', 'sb_d2.first_via_etd', 'sb.etd', 'sb_d2.eta', 'sb_d2.dest_eta_date', 'sb_d2.close_date_time', 'sb_d2.place_of_receipt', 'sb_d2.port_loading_code', 'sb_d2.port_loading_name', 'sb_d2.port_discharge_code', 'sb_d2.port_discharge_name', 'sb_d2.via_port_code', 'sb_d2.via_port_name', 'sb_d2.terminal', 'sb_d2.place_of_delivery', 'sb_d2.vessel_code', 'sb_d2.vessel_name', 'sb_d2.voyage_no', 'sb_d2.mother_vessel_name', 'sb_d2.mother_voyage', 'sb_d2.shippline_code', 'sb_d2.shippline_name', 'sb_d2.shippline_ref_no', 'sb_d2.shipmode', 'sb_d2.coloader_code', 'sb_d2.coloader_name', 'sb_d2.coloader_ref_no', 'sb_d3.principle_agent_code', 'sb_d3.shippagent_code', 'sb_d3.stuff_agent_code', 'sb_d3.stuff_agent_name', 'sb_d3.stuff_agent_address_1', 'sb_d3.stuff_agent_address_2', 'sb_d3.stuff_agent_address_3', 'sb_d3.stuff_agent_address_4', 'sb_d3.stuff_agent_contact_name', 'sb_d3.stuff', 'sb_d3.yard_code', 'sb_d3.yard_name', 'sb_d3.yard_address_1', 'sb_d3.yard_address_2', 'sb_d3.yard_address_3', 'sb_d3.yard_address_4', 'sb_d3.depot_code', 'sb_d3.depot_name', 'sb_d3.depot_address_1', 'sb_d3.depot_address_2', 'sb_d3.depot_address_3', 'sb_d3.depot_address_4'])
+                ->where('bp.code', $code);
+            // ->where('sb.code', $booking_no)
+
+            $end_query = $query->first();
+        }
+        return response()->json($end_query);
+    }
+
+    public function ajax_table_booking_ex_job(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $search = str_replace("'", "", strtoupper($_POST['search']['value']));
+            $searchTerms = explode(" ",  $search);
+
+            $array = [];
+            if ($searchTerms) {
+                foreach ($searchTerms as $searchTerm) {
+                    $array['search'] = $searchTerm;
+                }
+            }
+
+            $query = DB::table('sea_bookings as sb')
+                ->select('sb.id', 'sb.code as booking_no', 'sb.code_customer', 'sb.customer', 'sb.booking_date', 'sb.salesman_code', 'sb.salesman', 'sb.etd', 'sb.origin_code', 'sb.origin_name', 'sb.dest_code', 'sb.dest_name', 'sb_d1.shipper_code', 'sb_d1.shipper_name', 'sb_d1.consignee_code', 'sb_d1.consignee_name', 'sb_d1.notify_code', 'sb_d1.notify_name', 'sb_d2.port_loading_code', 'sb_d2.port_loading_name', 'sb_d2.port_discharge_code', 'sb_d2.port_discharge_name', 'sb_d3.stuff_agent_name', 'sb_d3.yard_code', 'sb_d3.yard_name')
+                ->leftJoin('sea_booking_d1 as sb_d1', 'sb_d1.sea_booking_id', '=', 'sb.id')
+                ->leftJoin('sea_booking_d2 as sb_d2', 'sb_d2.sea_booking_id', '=', 'sb.id')
+                ->leftJoin('sea_booking_d3 as sb_d3', 'sb_d3.sea_booking_id', '=', 'sb.id')
+                ->groupBy(['sb.id', 'sb.code', 'sb.code_customer', 'sb.customer', 'sb.booking_date', 'sb.salesman_code', 'sb.salesman', 'sb.etd', 'sb.origin_code', 'sb.origin_name', 'sb.dest_code', 'sb.dest_name', 'sb_d1.shipper_code', 'sb_d1.shipper_name', 'sb_d1.consignee_code', 'sb_d1.consignee_name', 'sb_d1.notify_code', 'sb_d1.notify_name', 'sb_d2.port_loading_code', 'sb_d2.port_loading_name', 'sb_d2.port_discharge_code', 'sb_d2.port_discharge_name', 'sb_d3.stuff_agent_name', 'sb_d3.yard_code', 'sb_d3.yard_name']);
+
+            if ($array['search'] != '') {
+                $query->where('sb.code', 'like', "%" . $array['search'] . "%");
+
+                $query->orWhere('sb.customer', 'like', "%" . $array['search'] . "%");
+
+                $query->orWhere('sb_d2.port_loading_name', 'like', "%" . $array['search'] . "%");
+
+                $query->orWhere('sb_d2.port_discharge_name', 'like', "%" . $array['search'] . "%");
+
+                $query->orWhere('sb.origin_name', 'like', "%" . $array['search'] . "%");
+
+                $query->orWhere('sb.dest_name', 'like', "%" . $array['search'] . "%");
+            }
+
+            return DataTables::of($query)
+                ->addColumn('action', function ($query) {
+                    $cus_code = !empty($query->code_customer) ? $query->code_customer : "";
+                    $booking_no = !empty($query->booking_no) ? $query->booking_no : 0;
+                    $id = !empty($query->id) ? $query->id : 0;
+                    return "<input type='radio' class='input_check' name='input_check' value='{$booking_no}' data-id='{$id}' data-cus_code='{$cus_code}'/>";
+                })
+                ->filter(
+                    function ($query) {
+                        if (request()->has('customer')) {
+                            $query->where('sb.customer', 'like', "%" . request('customer') . "%");
+                        }
+
+                        if (request()->has('code')) {
+                            $query->where('sb.code', 'like', "%" . request('code') . "%");
+                        }
+
+                        if (request()->has('port_loading_name')) {
+                            $query->where('sb_d2.port_loading_name', 'like', "%" . request('port_loading_name') . "%");
+                        }
+
+                        if (request()->has('port_discharge_name')) {
+                            $query->where('sb_d2.port_discharge_name', 'like', "%" . request('port_discharge_name') . "%");
+                        }
+
+                        if (request()->has('origin_name')) {
+                            $query->where('sb.origin_name', 'like', "%" . request('origin_name') . "%");
+                        }
+
+                        if (request()->has('dest_name')) {
+                            $query->where('sb.dest_name', 'like', "%" . request('dest_name') . "%");
+                        }
+                    }
+                )
+                ->smart(false)
+                ->rawColumns(['action'])
+                ->addIndexColumn()
+                ->toJson();
+        }
+    }
+
+    public function ajax_search_booking_ex_job(Request $request)
+    {
+        $code = $request->code;
+        $booking_no = $request->booking_no;
+
+        if ($request->ajax()) {
+            $query = DB::table('sea_bookings as sb')
+                ->select('sb.id', 'sb.code as booking_no', 'sb.code_customer', 'sb.customer', 'sb.booking_date', 'sb.salesman_code', 'sb.salesman', 'sb.etd', 'sb.delivery_type_code', 'sb.delivery_type', 'sb.commodity_code', 'sb.commodity', 'sb.origin_code', 'sb.origin_name', 'sb.dest_code', 'sb.dest_name', 'sb_d1.shipper_code', 'sb_d1.shipper_name', 'sb_d1.shipper_address_1', 'sb_d1.shipper_address_2', 'sb_d1.shipper_address_3', 'sb_d1.shipper_address_4', 'sb_d1.consignee_code', 'sb_d1.consignee_name', 'sb_d1.consignee_address_1', 'sb_d1.consignee_address_2', 'sb_d1.consignee_address_3', 'sb_d1.consignee_address_4', 'sb_d1.notify_code', 'sb_d1.notify_name', 'sb_d1.notify_address_1', 'sb_d1.notify_address_2', 'sb_d1.notify_address_3', 'sb_d1.notify_address_4', 'sb_d2.eta_sub', 'sb_d2.etd_date', 'sb_d2.first_via_ata', 'sb_d2.first_via_eta', 'sb_d2.first_via_etd', 'sb_d2.eta', 'sb_d2.dest_eta_date', 'sb_d2.close_date_time', 'sb_d2.place_of_receipt', 'sb_d2.port_loading_code', 'sb_d2.port_loading_name', 'sb_d2.port_discharge_code', 'sb_d2.port_discharge_name', 'sb_d2.via_port_code', 'sb_d2.via_port_name', 'sb_d2.terminal', 'sb_d2.place_of_delivery', 'sb_d2.vessel_code', 'sb_d2.vessel_name', 'sb_d2.voyage_no', 'sb_d2.mother_vessel_name', 'sb_d2.mother_voyage', 'sb_d2.shippline_code', 'sb_d2.shippline_name', 'sb_d2.shippline_ref_no', 'sb_d2.shipmode', 'sb_d2.coloader_code', 'sb_d2.coloader_name', 'sb_d2.coloader_ref_no', 'sb_d3.principle_agent_code', 'sb_d3.shippagent_code', 'sb_d3.stuff_agent_code', 'sb_d3.stuff_agent_name', 'sb_d3.stuff_agent_address_1', 'sb_d3.stuff_agent_address_2', 'sb_d3.stuff_agent_address_3', 'sb_d3.stuff_agent_address_4', 'sb_d3.stuff_agent_contact_name', 'sb_d3.stuff as stuff_date', 'sb_d3.yard_code', 'sb_d3.yard_name', 'sb_d3.yard_address_1', 'sb_d3.yard_address_2', 'sb_d3.yard_address_3', 'sb_d3.yard_address_4', 'sb_d3.depot_code', 'sb_d3.depot_name', 'sb_d3.depot_address_1', 'sb_d3.depot_address_2', 'sb_d3.depot_address_3', 'sb_d3.depot_address_4')
+                ->leftJoin('sea_booking_d1 as sb_d1', 'sb_d1.sea_booking_id', '=', 'sb.id')
+                ->leftJoin('sea_booking_d2 as sb_d2', 'sb_d2.sea_booking_id', '=', 'sb.id')
+                ->leftJoin('sea_booking_d3 as sb_d3', 'sb_d3.sea_booking_id', '=', 'sb.id')
+                ->groupBy(['sb.id', 'sb.code', 'sb.code_customer', 'sb.customer', 'sb.booking_date', 'sb.salesman_code', 'sb.salesman', 'sb.etd', 'sb.delivery_type_code', 'sb.delivery_type', 'sb.commodity_code', 'sb.commodity', 'sb.origin_code', 'sb.origin_name', 'sb.dest_code', 'sb.dest_name', 'sb_d1.shipper_code', 'sb_d1.shipper_name', 'sb_d1.shipper_address_1', 'sb_d1.shipper_address_2', 'sb_d1.shipper_address_3', 'sb_d1.shipper_address_4', 'sb_d1.consignee_code', 'sb_d1.consignee_name', 'sb_d1.consignee_address_1', 'sb_d1.consignee_address_2', 'sb_d1.consignee_address_3', 'sb_d1.consignee_address_4', 'sb_d1.notify_code', 'sb_d1.notify_name', 'sb_d1.notify_address_1', 'sb_d1.notify_address_2', 'sb_d1.notify_address_3', 'sb_d1.notify_address_4', 'sb_d2.eta_sub', 'sb_d2.etd_date', 'sb_d2.first_via_ata', 'sb_d2.first_via_eta', 'sb_d2.first_via_etd', 'sb_d2.eta', 'sb_d2.dest_eta_date', 'sb_d2.close_date_time', 'sb_d2.place_of_receipt', 'sb_d2.port_loading_code', 'sb_d2.port_loading_name', 'sb_d2.port_discharge_code', 'sb_d2.port_discharge_name', 'sb_d2.via_port_code', 'sb_d2.via_port_name', 'sb_d2.terminal', 'sb_d2.place_of_delivery', 'sb_d2.vessel_code', 'sb_d2.vessel_name', 'sb_d2.voyage_no', 'sb_d2.mother_vessel_name', 'sb_d2.mother_voyage', 'sb_d2.shippline_code', 'sb_d2.shippline_name', 'sb_d2.shippline_ref_no', 'sb_d2.shipmode', 'sb_d2.coloader_code', 'sb_d2.coloader_name', 'sb_d2.coloader_ref_no', 'sb_d3.principle_agent_code', 'sb_d3.shippagent_code', 'sb_d3.stuff_agent_code', 'sb_d3.stuff_agent_name', 'sb_d3.stuff_agent_address_1', 'sb_d3.stuff_agent_address_2', 'sb_d3.stuff_agent_address_3', 'sb_d3.stuff_agent_address_4', 'sb_d3.stuff_agent_contact_name', 'sb_d3.stuff', 'sb_d3.yard_code', 'sb_d3.yard_name', 'sb_d3.yard_address_1', 'sb_d3.yard_address_2', 'sb_d3.yard_address_3', 'sb_d3.yard_address_4', 'sb_d3.depot_code', 'sb_d3.depot_name', 'sb_d3.depot_address_1', 'sb_d3.depot_address_2', 'sb_d3.depot_address_3', 'sb_d3.depot_address_4'])
+
+                ->where('sb.code', $booking_no);
+
+            $end_query = $query->first();
+        }
+        return response()->json($end_query);
+    }
+
+    public function ajax_get_cargo_info(Request $request)
+    {
+        $id = $request->id;
+        if ($request->ajax()) {
+            $query = SeaBookingD6::where('sea_booking_id', $id)->get();
+        }
+        return response()->json($query);
     }
 
     public function ajax_store_short(Request $request)

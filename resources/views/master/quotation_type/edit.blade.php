@@ -46,7 +46,7 @@
 
                             </div>
 
-                            <div class="col-md-12">
+                            <div class="col-md-12 mt-2">
                                 <a href="{{ route('quotation_type.index') }}" class="btn btn-danger btn-back">Back</a>
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </div>

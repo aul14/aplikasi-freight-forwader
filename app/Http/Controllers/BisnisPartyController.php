@@ -23,7 +23,7 @@ class BisnisPartyController extends Controller
     {
         if (Auth::user()->hasPermission('manage-bisnis_party')) {
             if ($request->ajax()) {
-                if (auth()->user()->is_mng_sales == true || auth()->user()->is_sales == true) {
+                if (!empty(auth()->user()->salesman_code)) {
                     $bisnis_party = BisnisParty::select('*')->whereIn('salesman_code', explode(",", auth()->user()->salesman_code));
                 } else {
                     $bisnis_party = BisnisParty::select('*');

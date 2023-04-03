@@ -26,7 +26,7 @@ class AirExportBookingController extends Controller
     {
         if (Auth::user()->hasPermission('manage-air_book')) {
             if ($request->ajax()) {
-                // if (auth()->user()->is_mng_sales == true || auth()->user()->is_sales == true) {
+                // if (!empty(auth()->user()->salesman_code)) {
                 //     $air_book = AirBooking::with(['air_book_d1', 'air_book_d2'])->where('salesman_code', explode(",", auth()->user()->salesman_code))->orderBy('id', 'DESC')->select('*');
                 // } else {
                 $air_book = AirBooking::with('air_book_d1')->orderBy('id', 'DESC')->select('*');
@@ -222,6 +222,7 @@ class AirExportBookingController extends Controller
                 $air_book->total_pcs = !empty($request->total_pcs) ? str_replace(",", "", $request->total_pcs) : null;
                 $air_book->total_dimension = !empty($request->total_dimension) ? str_replace(",", "", $request->total_dimension) : null;
                 $air_book->total_vol_wt = !empty($request->total_vol_wt) ? str_replace(",", "", $request->total_vol_wt) : null;
+                $air_book->create_by = auth()->user()->firstname . " " . auth()->user()->lastname;
                 $air_book->save();
 
                 $result_d1 = [];
@@ -450,6 +451,7 @@ class AirExportBookingController extends Controller
                 $air_book->total_pcs = !empty($request->total_pcs) ? str_replace(",", "", $request->total_pcs) : null;
                 $air_book->total_dimension = !empty($request->total_dimension) ? str_replace(",", "", $request->total_dimension) : null;
                 $air_book->total_vol_wt = !empty($request->total_vol_wt) ? str_replace(",", "", $request->total_vol_wt) : null;
+                $air_book->update_by = auth()->user()->firstname . " " . auth()->user()->lastname;
                 $air_book->update();
 
                 $result_d1 = [];

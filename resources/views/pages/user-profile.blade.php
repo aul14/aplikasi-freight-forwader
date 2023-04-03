@@ -68,14 +68,14 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="example-text-input" class="form-control-label">Username</label>
-                                        <input class="form-control" type="text" name="username"
+                                        <input class="form-control" type="text" name="username" readonly
                                             value="{{ old('username', auth()->user()->username) }}">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="example-text-input" class="form-control-label">Email address</label>
-                                        <input class="form-control" type="email" name="email"
+                                        <input class="form-control" type="email" name="email" readonly
                                             value="{{ old('email', auth()->user()->email) }}">
                                     </div>
                                 </div>
@@ -162,7 +162,8 @@
                                 <div class="form-group">
                                     <label for="example-text-input" class="form-control-label">Email</label>
                                     <input type="email" name="email" class="form-control form-control-lg"
-                                        placeholder="Email" value="{{ old('email') }}" aria-label="Email">
+                                        placeholder="Email" value="{{ old('email', auth()->user()->email) }}"
+                                        aria-label="Email">
                                     @error('email')
                                         <p class="text-danger text-xs pt-1"> {{ $message }} </p>
                                     @enderror

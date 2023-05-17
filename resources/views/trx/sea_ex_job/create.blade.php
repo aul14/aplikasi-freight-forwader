@@ -382,5 +382,24 @@
             caret_pos = updated_len - original_len + caret_pos;
             input[0].setSelectionRange(caret_pos, caret_pos);
         }
+
+        function numberFormatter4(num) {
+            if (!isNaN(num)) {
+                var wholeAndDecimal = String(num.toFixed(4)).split(".");
+                var reversedWholeNumber = Array.from(wholeAndDecimal[0]).reverse();
+                var formattedOutput = [];
+
+                reversedWholeNumber.forEach((digit, index) => {
+                    formattedOutput.push(digit);
+                    if ((index + 1) % 3 === 0 && index < reversedWholeNumber.length - 1) {
+                        formattedOutput.push(",");
+                    }
+                })
+
+                formattedOutput = formattedOutput.reverse().join('') + "." + wholeAndDecimal[1];
+                return formattedOutput;
+            }
+
+        }
     </script>
 @endsection

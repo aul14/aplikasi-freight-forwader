@@ -16,7 +16,7 @@
             <li class="nav-item ">
                 <a href="{{ route('home') }}"
                     class="sidebar-menu-item nav-link {{ Route::currentRouteName() == 'home' ? 'active' : '' }}">
-                    <i class="fa fa-d text-primary text-sm opacity-10"></i>
+                    <i class="fa fa-d text-dark text-sm opacity-10"></i>
                     <div>
                         <span class="nav-link-text"> Dashboard
                             <b class="caret"></b></span>
@@ -33,7 +33,7 @@
                 @foreach (App\Models\History::where('user_id', auth()->user()->id)->get()->unique('menu')->sortByDesc('id') as $item)
                     <a href="{{ $item->url_menu }}" class="sidebar-menu-item nav-link">
                         <div>
-                            <i class="fa fa-{{ Str::lower(Str::substr($item->menu, 0, 1)) }} text-primary text-sm opacity-10"
+                            <i class="fa fa-{{ Str::lower(Str::substr($item->menu, 0, 1)) }} text-dark text-sm opacity-10"
                                 style="margin-right: 10px;"></i>
                             <span class="nav-link-text"> {{ $item->menu }}
                                 <b class="caret"></b></span>
@@ -59,7 +59,7 @@
                             </div>
                             <a href="{{ route('page', ['page' => 'tables']) }}"
                                 class="sidebar-menu-item nav-link {{ str_contains(request()->url(), 'tables') == true ? 'active' : '' }}">
-                                <i class="fa fa-t text-primary text-sm opacity-10"></i>
+                                <i class="fa fa-t text-dark text-sm opacity-10"></i>
                                 <div>
                                     <span class="nav-link-text">Tables</span>
                                 </div>
@@ -70,7 +70,7 @@
                         <li class="nav-item ">
                             <a aria-expanded="" data-toggle="collapse" data-target="#collapseShowSubmenu"
                                 class="sidebar-menu-item nav-link ">
-                                <i class="fa fa-s text-primary text-sm opacity-10"></i>
+                                <i class="fa fa-s text-dark text-sm opacity-10"></i>
                                 <div>
                                     <span class="nav-link-text">Submenu
                                         <b class="caret"></b>
@@ -85,7 +85,7 @@
                                         <div class="collapse ">
                                             <ul class="nav nav-sm flex-column"></ul>
                                         </div> <a href="javascipt:;" class="nav-link ">
-                                            <i class="fa fa-t text-primary text-sm opacity-10"></i>
+                                            <i class="fa fa-t text-dark text-sm opacity-10"></i>
                                             <div>
                                                 <span class="nav-link-text">Testing
                                                 </span>
@@ -120,7 +120,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('airline.index') }}"
                                     class="nav-link {{ Request::is('airline*') ? 'active' : '' }}">
-                                    <i class="fa fa-a text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-a text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Airline</span>
                                     </div>
@@ -135,7 +135,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('airport.index') }}"
                                     class="nav-link {{ Request::is('airport*') ? 'active' : '' }}">
-                                    <i class="fa fa-a text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-a text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Airport</span>
                                     </div>
@@ -150,7 +150,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('bisnis_party.index') }}"
                                     class="nav-link {{ Request::is('bisnis_party*') ? 'active' : '' }}">
-                                    <i class="fa fa-b text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-b text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Business Party</span>
                                     </div>
@@ -166,7 +166,7 @@
                                 </div>
                                 <a href="{{ route('country.index') }}"
                                     class="nav-link {{ Request::is('country*') ? 'active' : '' }}">
-                                    <i class="fa fa-c text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-c text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Country</span>
                                     </div>
@@ -181,7 +181,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('city.index') }}"
                                     class="nav-link {{ Request::is('city*') ? 'active' : '' }}">
-                                    <i class="fa fa-c text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-c text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">City</span>
                                     </div>
@@ -196,7 +196,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('commodity.index') }}"
                                     class="nav-link {{ Request::is('commodity*') ? 'active' : '' }}">
-                                    <i class="fa fa-c text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-c text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Commodity</span>
                                     </div>
@@ -211,7 +211,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('container.index') }}"
                                     class="nav-link {{ Request::is('container*') ? 'active' : '' }}">
-                                    <i class="fa fa-c text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-c text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Container</span>
                                     </div>
@@ -226,7 +226,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('currency.index') }}"
                                     class="nav-link {{ Request::is('currency*') ? 'active' : '' }}">
-                                    <i class="fa fa-c text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-c text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Currency Code</span>
                                     </div>
@@ -241,7 +241,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('charge_code.index') }}"
                                     class="nav-link {{ Request::is('charge_code*') ? 'active' : '' }}">
-                                    <i class="fa fa-c text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-c text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Charge Code</span>
                                     </div>
@@ -256,7 +256,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('charge_table.index') }}"
                                     class="nav-link {{ Request::is('charge_table*') ? 'active' : '' }}">
-                                    <i class="fa fa-c text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-c text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Charge Table</span>
                                     </div>
@@ -271,7 +271,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('cost_table.index') }}"
                                     class="nav-link {{ Request::is('cost_table*') ? 'active' : '' }}">
-                                    <i class="fa fa-c text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-c text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Cost Table</span>
                                     </div>
@@ -286,7 +286,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('del_type.index') }}"
                                     class="nav-link {{ Request::is('del_type*') ? 'active' : '' }}">
-                                    <i class="fa fa-d text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-d text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Delivery Type</span>
                                     </div>
@@ -301,7 +301,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('incoterms.index') }}"
                                     class="nav-link {{ Request::is('incoterms*') ? 'active' : '' }}">
-                                    <i class="fa fa-i text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-i text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Incoterms</span>
                                     </div>
@@ -316,7 +316,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('job_type.index') }}"
                                     class="nav-link {{ Request::is('job_type*') ? 'active' : '' }}">
-                                    <i class="fa fa-j text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-j text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Job Type</span>
                                     </div>
@@ -331,7 +331,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('party_type.index') }}"
                                     class="nav-link {{ Request::is('party_type*') ? 'active' : '' }}">
-                                    <i class="fa fa-p text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-p text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Party Type</span>
                                     </div>
@@ -346,7 +346,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('pay_term.index') }}"
                                     class="nav-link {{ Request::is('pay_term*') ? 'active' : '' }}">
-                                    <i class="fa fa-p text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-p text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Payment Term</span>
                                     </div>
@@ -361,7 +361,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('quotation_type.index') }}"
                                     class="nav-link {{ Request::is('quotation_type*') ? 'active' : '' }}">
-                                    <i class="fa fa-q text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-q text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Quotation Type</span>
                                     </div>
@@ -376,7 +376,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('salesman.index') }}"
                                     class="nav-link {{ Request::is('salesman*') ? 'active' : '' }}">
-                                    <i class="fa fa-s text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-s text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Salesman</span>
                                     </div>
@@ -391,7 +391,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('port.index') }}"
                                     class="nav-link {{ Request::is('port*') ? 'active' : '' }}">
-                                    <i class="fa fa-s text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-s text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Sea Port</span>
                                     </div>
@@ -406,7 +406,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('shipline.index') }}"
                                     class="nav-link {{ Request::is('shipline*') ? 'active' : '' }}">
-                                    <i class="fa fa-s text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-s text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Shipping Line</span>
                                     </div>
@@ -421,7 +421,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('uom.index') }}"
                                     class="nav-link {{ Request::is('uom*') ? 'active' : '' }}">
-                                    <i class="fa fa-u text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-u text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Unit Of Measurement</span>
                                     </div>
@@ -436,7 +436,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('vat_code.index') }}"
                                     class="nav-link {{ Request::is('vat_code*') ? 'active' : '' }}">
-                                    <i class="fa fa-v text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-v text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">VAT Code</span>
                                     </div>
@@ -451,7 +451,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('vessel.index') }}"
                                     class="nav-link {{ Request::is('vessel*') ? 'active' : '' }}">
-                                    <i class="fa fa-v text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-v text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Vessel</span>
                                     </div>
@@ -466,7 +466,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('wt_code.index') }}"
                                     class="nav-link {{ Request::is('wt_code*') ? 'active' : '' }}">
-                                    <i class="fa fa-w text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-w text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Withholding Tax</span>
                                     </div>
@@ -481,12 +481,12 @@
 
             {{-- MENU TRANSACTION --}}
             <li class="nav-item ">
-                <a aria-expanded="{{ Request::is('sea_quot*') || Request::is('air_quot*') || Request::is('sea_book*') || Request::is('air_book*') || Request::is('sea_ex_job*') ? 'true' : 'false' }}"
+                <a aria-expanded="{{ Request::is('sea_quot*') || Request::is('air_quot*') || Request::is('sea_book*') || Request::is('air_book*') || Request::is('sea_ex_job*') || Request::is('sea_im_job*') || Request::is('air_ex_job*') ? 'true' : 'false' }}"
                     data-toggle="collapse" data-target="#collapseShow4" class="sidebar-menu-item nav-link ">
                     <div><span class="nav-link-text text-uppercase text-xs font-weight-bolder">TRANSACTION <b
                                 class="caret"></b></span></div>
                 </a>
-                <div class="collapse {{ Request::is('sea_quot*') || Request::is('air_quot*') || Request::is('sea_book*') || Request::is('air_book*') || Request::is('sea_ex_job*') ? 'show' : '' }}"
+                <div class="collapse {{ Request::is('sea_quot*') || Request::is('air_quot*') || Request::is('sea_book*') || Request::is('air_book*') || Request::is('sea_ex_job*') || Request::is('sea_im_job*') || Request::is('air_ex_job*') ? 'show' : '' }}"
                     id="collapseShow4">
                     <ul class="nav nav-sm flex-column">
                         @permission('manage-air_book')
@@ -496,9 +496,24 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('air_book.index') }}"
                                     class="nav-link {{ Request::is('air_book*') ? 'active' : '' }}">
-                                    <i class="fa fa-a text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-a text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Air Export Booking</span>
+                                    </div>
+                                </a>
+                                <ul class="navbar-nav"></ul>
+                            </li>
+                        @endpermission
+                        @permission('manage-air_ex_job')
+                            <li class="nav-item">
+                                <!---->
+                                <div class="collapse ">
+                                    <ul class="nav nav-sm flex-column"></ul>
+                                </div> <a href="{{ route('air_ex_job.index') }}"
+                                    class="nav-link {{ Request::is('air_ex_job*') ? 'active' : '' }}">
+                                    <i class="fa fa-a text-dark text-sm opacity-10"></i>
+                                    <div>
+                                        <span class="nav-link-text">Air Export Job</span>
                                     </div>
                                 </a>
                                 <ul class="navbar-nav"></ul>
@@ -511,7 +526,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('air_quot.index') }}"
                                     class="nav-link {{ Request::is('air_quot*') ? 'active' : '' }}">
-                                    <i class="fa fa-a text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-a text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Air Freight Quotation</span>
                                     </div>
@@ -526,7 +541,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('sea_book.index') }}"
                                     class="nav-link {{ Request::is('sea_book*') ? 'active' : '' }}">
-                                    <i class="fa fa-s text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-s text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Sea Export Booking</span>
                                     </div>
@@ -541,9 +556,24 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('sea_ex_job.index') }}"
                                     class="nav-link {{ Request::is('sea_ex_job*') ? 'active' : '' }}">
-                                    <i class="fa fa-s text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-s text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Sea Export Job</span>
+                                    </div>
+                                </a>
+                                <ul class="navbar-nav"></ul>
+                            </li>
+                        @endpermission
+                        @permission('manage-sea_im_job')
+                            <li class="nav-item">
+                                <!---->
+                                <div class="collapse ">
+                                    <ul class="nav nav-sm flex-column"></ul>
+                                </div> <a href="{{ route('sea_im_job.index') }}"
+                                    class="nav-link {{ Request::is('sea_im_job*') ? 'active' : '' }}">
+                                    <i class="fa fa-s text-dark text-sm opacity-10"></i>
+                                    <div>
+                                        <span class="nav-link-text">Sea Import Job</span>
                                     </div>
                                 </a>
                                 <ul class="navbar-nav"></ul>
@@ -556,7 +586,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('sea_quot.index') }}"
                                     class="nav-link {{ Request::is('sea_quot*') ? 'active' : '' }}">
-                                    <i class="fa fa-s text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-s text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Sea Freight Quotation</span>
                                     </div>
@@ -586,7 +616,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('company') }}"
                                     class="nav-link {{ Request::is('company*') ? 'active' : '' }}">
-                                    <i class="fa fa-c text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-c text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Company Profile</span>
                                     </div>
@@ -601,7 +631,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('modules.index') }}"
                                     class="nav-link {{ Request::is('modules*') ? 'active' : '' }}">
-                                    <i class="fa fa-m text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-m text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Module</span>
                                     </div>
@@ -616,7 +646,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('profile') }}"
                                     class="nav-link {{ Request::is('profile*') ? 'active' : '' }}">
-                                    <i class="fa fa-p text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-p text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Profile</span>
                                     </div>
@@ -631,7 +661,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('permissions.index') }}"
                                     class="nav-link {{ Request::is('permissions*') ? 'active' : '' }}">
-                                    <i class="fa fa-p text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-p text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Permissions</span>
                                     </div>
@@ -646,7 +676,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('roles.index') }}"
                                     class="nav-link {{ Request::is('roles*') ? 'active' : '' }}">
-                                    <i class="fa fa-r text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-r text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">Roles</span>
                                     </div>
@@ -661,7 +691,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('sys_numbering.index') }}"
                                     class="nav-link {{ Request::is('sys_numbering*') ? 'active' : '' }}">
-                                    <i class="fa fa-s text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-s text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">System Numbering</span>
                                     </div>
@@ -676,7 +706,7 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('users.index') }}"
                                     class="nav-link {{ Request::is('users*') ? 'active' : '' }}">
-                                    <i class="fa fa-u text-primary text-sm opacity-10"></i>
+                                    <i class="fa fa-u text-dark text-sm opacity-10"></i>
                                     <div>
                                         <span class="nav-link-text">User Management</span>
                                     </div>

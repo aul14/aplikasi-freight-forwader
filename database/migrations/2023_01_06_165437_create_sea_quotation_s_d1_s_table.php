@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('uom', 50)->nullable();
             $table->boolean('chg')->nullable();
             $table->string('vat_code', 50)->nullable();
-            $table->string('p_c', 5)->nullable();
+            $table->string('p_c', 15)->nullable();
             $table->string('chg_unit', 100)->nullable();
             $table->string('container', 50)->nullable();
             $table->string('rate', 50)->nullable();

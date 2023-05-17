@@ -17,6 +17,11 @@ class AirBooking extends Model
      */
     protected $dates = ['deleted_at'];
 
+    public function quot()
+    {
+        return $this->hasOne(Quotation::class, 'air_quot_no', 'quotation_no');
+    }
+
     public function air_book_d1()
     {
         return $this->hasMany(AirBookingD1::class)->withTrashed();

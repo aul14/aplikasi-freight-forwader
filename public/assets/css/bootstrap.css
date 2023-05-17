@@ -286,6 +286,7 @@ input[type="radio"],
 input[type="checkbox"] {
   box-sizing: border-box;
   padding: 0;
+  transform: scale(2.0);
 }
 
 input[type="date"],
@@ -2025,7 +2026,7 @@ textarea.form-control {
 }
 
 .form-check-input {
-  position: absolute;
+  position: relative;
   margin-top: 0.3rem;
   margin-left: -1.25rem;
 }

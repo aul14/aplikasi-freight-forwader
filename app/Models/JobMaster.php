@@ -21,4 +21,14 @@ class JobMaster extends Model
     {
         return $this->hasOne(SeaExJob::class);
     }
+
+    public function sea_im_job()
+    {
+        return $this->hasOne(SeaImJob::class);
+    }
+
+    public function bisnis_party()
+    {
+        return $this->belongsTo(BisnisParty::class, 'customer_code', 'code');
+    }
 }

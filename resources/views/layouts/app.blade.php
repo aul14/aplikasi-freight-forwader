@@ -11,7 +11,7 @@
     <title>
         WFreight
     </title>
-    <!--     Fonts and icons     -->
+    <!-- Fonts and icons -->
     <link rel="stylesheet" href="{{ asset('assets/css/font-google.css?v=1.0.0') }}">
     <!-- Nucleo Icons -->
     <link rel="stylesheet" href="{{ asset('assets/css/nucleo-icons.css?v=1.0.0') }}" />
@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/fontawesome.min.css?v=1.0.0') }}">
     <link href="{{ asset('assets/css/nucleo-svg.css?v=1.0.0') }}" rel="stylesheet" />
     <!-- CSS Files -->
-    <link id="pagestyle" rel="stylesheet" href="{{ asset('assets/css/argon-dashboard.css?v=1.1.4') }}" />
+    <link id="pagestyle" rel="stylesheet" href="{{ asset('assets/css/argon-dashboard.css?v=1.1.6') }}" />
     <link rel="stylesheet" href="{{ asset('assets/css/styles.css?v=1.2.6') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css?v=1.0.0') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/jquery.toast.min.css?v=1.0.0') }}">
@@ -139,6 +139,14 @@
             }).on('change', function(e) {
                 $(this).datetimepicker('hide');
             });
+
+            $('.time-picker').datetimepicker({
+                datepicker: false,
+                format: 'H:i',
+                autoclose: true
+            }).on('change', function(e) {
+                $(this).datetimepicker('hide');
+            });
             // setting dropdown di table responsive
             // hold onto the drop down menu                                             
             var dropdownMenu;
@@ -187,7 +195,7 @@
             if (date[0] !== null && date[1] !== null) {
                 text += ' ~ ';
             } else if (date[0] === null && date[1] == null) {
-                text += 'tidak ada';
+                text += 'Nothing';
             }
 
             if (date[1] !== null) {

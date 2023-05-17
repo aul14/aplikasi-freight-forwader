@@ -262,7 +262,7 @@
                                             <select class="airdept-select @error('air_dept_code') is-invalid @enderror"
                                                 id="airdept-select-1" name="air_dept_code" required>
                                                 <option value="{{ old('air_dept_code', $ab->air_dept_code) }}">
-                                                    {{ old('air_dept_code', 'JAKARTA SOEKARNO HATTA') }}
+                                                    {{ old('air_dept_code', $ab->air_dept_code) }}
                                                 </option>
                                             </select>
                                             @error('air_dept_code')
@@ -1331,7 +1331,7 @@
                                                     <div class="col-md-7 mt-2">
                                                         <div class="form-group">
                                                             <input type="text"
-                                                                value="{{ old(str_replace('k', 'v', $key), !empty($add_info_d1) ? date('d/m/Y', strtotime($add_info_d1->$replace)) : null) }}"
+                                                                value="{{ old(str_replace('k', 'v', $key), !empty($add_info_d1->$replace) ? date('d/m/Y', strtotime($add_info_d1->$replace)) : null) }}"
                                                                 class="form-control @error(str_replace('k', 'v', $key)) is-invalid @enderror date-picker"
                                                                 autocomplete="off"
                                                                 name="{{ str_replace('k', 'v', $key) }}">
@@ -1346,7 +1346,7 @@
                                                     <div class="col-md-7 mt-2">
                                                         <div class="form-group">
                                                             <input type="text"
-                                                                value="{{ old(str_replace('k', 'v', $key), !empty($add_info_d1) ? date('Y/m/d H:i', strtotime($add_info_d1->$replace)) : null) }}"
+                                                                value="{{ old(str_replace('k', 'v', $key), !empty($add_info_d1->$replace) ? date('Y/m/d H:i', strtotime($add_info_d1->$replace)) : null) }}"
                                                                 class="form-control @error(str_replace('k', 'v', $key)) is-invalid @enderror date-time-picker"
                                                                 autocomplete="off"
                                                                 name="{{ str_replace('k', 'v', $key) }}">

@@ -509,9 +509,9 @@
                                                             <select name="p_c[]" id="pc-select-{{ $key + 1 }}"
                                                                 class="pc-select">
                                                                 <option value="">Search</option>
-                                                                <option value="P" @selected($item->p_c == 'P')>P
+                                                                <option value="P" @selected($item->p_c == 'Prepaid')>P
                                                                 </option>
-                                                                <option value="C" @selected($item->p_c == 'C')>C
+                                                                <option value="C" @selected($item->p_c == 'Collect')>C
                                                                 </option>
                                                             </select>
                                                         </div>

@@ -26,6 +26,6 @@ class AirQuotationD2 extends Model
 
     public function vat()
     {
-        return $this->belongsTo(VatCode::class, 'vat_code_d2', 'code')->withTrashed();
+        return $this->belongsTo(VatCode::class, 'vat_code', 'code')->withTrashed();
     }
 }

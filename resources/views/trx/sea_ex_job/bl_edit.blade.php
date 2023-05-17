@@ -13,7 +13,7 @@
         <div class="form-group">
             <label for="bl_no">BL No <span style="color: red;">*</span></label>
             <input type="text" class="form-control @error('bl_no') is-invalid @enderror"
-                value="{{ old('bl_no', $jm->bl_no) }}" required name="bl_no" readonly id="bl_no">
+                value="{{ old('bl_no', $jm->bl_no) }}" required name="bl_no" id="bl_no">
             @error('bl_no')
                 <div class="invalid-feedback">
                     {{ $message }}
@@ -21,7 +21,7 @@
             @enderror
         </div>
         <div class="row">
-            <div class="col-md-9">
+            <div class="col-md-8">
                 <div class="form-group">
                     <label for="booking_no">Booking No</label>
                     <input type="text" class="form-control @error('booking_no') is-invalid @enderror"
@@ -33,10 +33,20 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <div class="form-group">
                     <label for="booking_no">&nbsp;</label>
-                    <a href="javascript:void(0)" class="btn btn-primary form-control btn-book">Search</a>
+                    <a href="javascript:void(0)" class="btn btn-primary form-control btn-book">
+                        <i class="fa fa-search"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="booking_no">&nbsp;</label>
+                    <a href="javascript:void(0)" class="btn btn-danger form-control btn-delete-book">
+                        <i class="fa fa-close"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -76,7 +86,7 @@
             @enderror
         </div>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="form-group">
                     <label for="customer_code">Customer Code <span style="color: red;">*</span></label>
                     <input type="text" class="form-control @error('customer_code') is-invalid @enderror"
@@ -101,17 +111,27 @@
                     @enderror
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <div class="form-group">
                     <label for="customer_code">&nbsp;</label>
-                    <a href="javascript:void(0)" class="btn btn-primary form-control btn-cus">Search</a>
+                    <a href="javascript:void(0)" class="btn btn-primary form-control btn-cus">
+                        <i class="fa fa-search"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label for="customer_code">&nbsp;</label>
+                    <a href="javascript:void(0)" class="btn btn-danger form-control btn-deleted-cus">
+                        <i class="fa fa-close"></i>
+                    </a>
                 </div>
             </div>
         </div>
         <div class="form-group">
             <label for="reference_no">Customer Reference No.</label>
-            <input type="text" class="form-control @error('reference_no') is-invalid @enderror" name="reference_no"
-                value="{{ old('reference_no', $jm->reference_no) }}" id="reference_no">
+            <input type="text" class="form-control @error('reference_no') is-invalid @enderror"
+                name="reference_no" value="{{ old('reference_no', $jm->reference_no) }}" id="reference_no">
             @error('reference_no')
                 <div class="invalid-feedback">
                     {{ $message }}
@@ -779,6 +799,27 @@
             dataTableCustomer('#tableCus');
             dataTableBooking('#tableBook');
 
+            clickRemoveValBook(`.btn-delete-book, .btn-delete-cus`);
+
+            evtBisnisParty('.shipper-select', 'Search shipper', 'input[name=shipper_name]',
+                'input[name=shipper_address_1]', 'input[name=shipper_address_2]',
+                'input[name=shipper_address_3]',
+                'input[name=shipper_address_4]');
+
+            evtBisnisParty('.consignee-select', 'Search consignee', 'input[name=consignee_name]',
+                'input[name=consignee_address_1]', 'input[name=consignee_address_2]',
+                'input[name=consignee_address_3]',
+                'input[name=consignee_address_4]');
+
+            evtBisnisParty('.notify-select', 'Search notify', 'input[name=notify_name]',
+                'input[name=notify_address_1]', 'input[name=notify_address_2]', 'input[name=notify_address_3]',
+                'input[name=notify_address_4]');
+
+            evtBisnisParty('.delivery_agent-select', 'Search delivery agent', 'input[name=delivery_agent_name]',
+                'input[name=delivery_agent_address_1]', 'input[name=delivery_agent_address_2]',
+                'input[name=delivery_agent_address_3]',
+                'input[name=delivery_agent_address_4]');
+
             $(`.btn-cus`).click(function(e) {
                 e.preventDefault();
                 $(`#modal-cus`).modal({
@@ -808,26 +849,522 @@
                 }
             });
 
-            evtBisnisParty('.shipper-select', 'Search shipper', 'input[name=shipper_name]',
-                'input[name=shipper_address_1]', 'input[name=shipper_address_2]',
-                'input[name=shipper_address_3]',
-                'input[name=shipper_address_4]');
-
-            evtBisnisParty('.consignee-select', 'Search consignee', 'input[name=consignee_name]',
-                'input[name=consignee_address_1]', 'input[name=consignee_address_2]',
-                'input[name=consignee_address_3]',
-                'input[name=consignee_address_4]');
-
-            evtBisnisParty('.notify-select', 'Search notify', 'input[name=notify_name]',
-                'input[name=notify_address_1]', 'input[name=notify_address_2]', 'input[name=notify_address_3]',
-                'input[name=notify_address_4]');
-
-            evtBisnisParty('.delivery_agent-select', 'Search delivery agent', 'input[name=delivery_agent_name]',
-                'input[name=delivery_agent_address_1]', 'input[name=delivery_agent_address_2]',
-                'input[name=delivery_agent_address_3]',
-                'input[name=delivery_agent_address_4]');
-
         });
+
+        function clickRemoveValBook(classBtn) {
+            $(classBtn).click(function(e) {
+                e.preventDefault();
+                $("input[name=customer_code]").val('');
+                $("input[name=customer]").val('');
+                $("input[name=etd]").val('');
+                $("input[name=eta_sub]").val('');
+                $("input[name=close_date_time]").val('');
+                $("input[name=first_via_ata]").val('');
+                $("input[name=first_via_eta]").val('');
+                $("input[name=first_via_etd]").val('');
+                $("input[name=total_sales]").val('');
+                $("input[name=eta]").val('');
+                $("input[name=dest_eta_date]").val('');
+                $("input[name=booking_no]").val('');
+                $("input[name=place_of_receipt]").val('');
+                $("input[name=place_of_delivery]").val('');
+                $("input[name=voyage_no]").val('');
+                $("input[name=mother_voyage]").val('');
+                $("input[name=mother_vessel_name]").val('');
+                $("select[name=salesman_code]").empty();
+                $("input[name=salesman]").val("");
+                $("select[name=delivery_type_code]").empty();
+                $("input[name=delivery_type]").val("");
+                $("select[name=vessel_code]").empty();
+                $("input[name=vessel_name]").val("");
+                $("select[name=commodity_code], #cargo-select-1").empty();
+                $("input[name=commodity], #cargo-commodity-1").val("");
+                var lastFrom = new Option('JKT', 'JKT', true, true);
+                $("select[name=origin_code]").append(lastFrom).trigger('change');
+                $("input[name=origin_name]").val("JAKARTA");
+                $("select[name=dest_code]").empty();
+                $("input[name=dest_name]").val("");
+                var lastLoadingCode = new Option('IDJKT', 'IDJKT', true, true);
+                $("select[name=port_loading_code]").append(lastLoadingCode).trigger('change');
+                $("input[name=port_loading_name]").val("JAKARTA, INDONESIA");
+                $("select[name=via_port_code]").empty();
+                $("input[name=via_port_name]").val("");
+                $("select[name=port_discharge_code]").empty();
+                $("input[name=port_discharge_name]").val("");
+                $("select[name=shippline_code]").empty();
+                $("input[name=shippline_name]").val("");
+                $("select[name=principle_agent_code]").empty();
+                $("select[name=shippagent_code]").empty();
+                $("select[name=consignee_code]").empty();
+                $("input[name=consignee_name]").val("");
+                $("input[name=consignee_address_1]").val("");
+                $("input[name=consignee_address_2]").val("");
+                $("input[name=consignee_address_3]").val("");
+                $("input[name=consignee_address_4]").val("");
+                $("select[name=shipper_code]").empty();
+                $("input[name=shipper_name]").val("");
+                $("input[name=shipper_address_1]").val("");
+                $("input[name=shipper_address_2]").val("");
+                $("input[name=shipper_address_3]").val("");
+                $("input[name=shipper_address_4]").val("");
+                $("select[name=notify_code]").empty();
+                $("input[name=notify_name]").val("");
+                $("input[name=notify_address_1]").val("");
+                $("input[name=notify_address_2]").val("");
+                $("input[name=notify_address_3]").val("");
+                $("input[name=notify_address_4]").val("");
+                $("select[name=yard_code]").empty();
+                $("input[name=yard_name]").val("");
+                $("input[name=yard_address_1]").val("");
+                $("input[name=yard_address_2]").val("");
+                $("input[name=yard_address_3]").val("");
+                $("input[name=yard_address_4]").val("");
+                $("select[name=depot_code]").empty();
+                $("input[name=depot_name]").val("");
+                $("input[name=depot_address_1]").val("");
+                $("input[name=depot_address_2]").val("");
+                $("input[name=depot_address_3]").val("");
+                $("input[name=depot_address_4]").val("");
+                $("select[name=stuff_agent_code]").empty();
+                $("input[name=stuff_agent_name]").val("");
+                $("input[name=stuff_agent_address_1]").val("");
+                $("input[name=stuff_agent_address_2]").val("");
+                $("input[name=stuff_agent_address_3]").val("");
+                $("input[name=stuff_agent_address_4]").val("");
+                $(`.tbody-condition`).html("");
+                cloneJc = `<tr class="dynamic-field" id="dynamic-field-1" onclick="click_tr(1)">
+                                        <td class="text-center">
+                                            <button type="button" onclick="addNewField(this.id)" id="add-button-1"
+                                                class="btn btn-xs btn-primary float-left text-uppercase shadow-sm add-button"><i
+                                                    class="fa fa-plus fa-fw"></i>
+                                            </button>
+                                            <button type="button" onclick="removeLastField(this)" id="remove-button-1"
+                                                class="btn btn-xs btn-danger float-left text-uppercase ml-1 remove-button"><i
+                                                    class="fa fa-minus fa-fw"></i>
+                                            </button>
+                                        </td>
+
+                                        <td>
+                                            <div class="form-group">
+                                                <select name="code[]" id="code-select-1" class="code-select">
+                                                    <option value="">Search</option>
+
+                                                </select>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control desc" name="description[]" id="desc-1">
+                                            </div>
+                                        </td>
+
+                                        <td style="background-color: darksalmon;">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control qty-sales" name="qty_sales[]" id="qty-sales-1"
+                                                    data-type='currency4' autocomplete="off" onkeyup="sum_idr_sales(1, 1)">
+                                            </div>
+                                        </td>
+
+                                        <td style="background-color: darksalmon;">
+                                            <div class="form-group">
+                                                <select name="uom_sales[]" id="uom-sales-1" class="uom-sales">
+                                                     <option value="">Search</option>
+                                                </select>
+                                            </div>
+                                        </td>
+
+                                        <td style="background-color: darksalmon;">
+                                            <div class="form-group">
+                                                <select name="pc_sales[]" id="pc-sales-1" class="pc-sales">
+                                                    <option value="">Search</option>
+                                                    <option value="Prepaid">Prepaid</option>
+                                                    <option value="Collect">Collect</option>
+                                                </select>
+                                            </div>
+                                        </td>
+
+                                        <td style="background-color: darksalmon;">
+                                            <div class="form-group">
+                                                <select name="cust_code_sales[]" id="cust-code-sales-1" class="cust-code-sales">
+                                                    <option value="">Search</option>
+                                                </select>
+                                            </div>
+                                        </td>
+
+                                        <td style="background-color: darksalmon;">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control cust-name-sales" name="cust_name_sales[]"
+                                                    id="cust-name-sales-1">
+                                            </div>
+                                        </td>
+
+                                        <td style="background-color: darksalmon;">
+                                            <div class="form-group">
+                                                <select name="vat_sales[]" id="vat-sales-1" class="vat-sales">
+                                                    <option value="">Search</option>
+                                                </select>
+                                            </div>
+                                        </td>
+
+                                        <td style="background-color: darksalmon;">
+                                            <div class="form-group">
+                                                <select name="curr_sales[]" id="curr-sales-1" class="curr-sales">
+                                                    <option value="">Search</option>
+                                                </select>
+                                            </div>
+                                        </td>
+
+                                        <td style="background-color: darksalmon;">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control rate-sales" id="rate-sales-1"
+                                                    autocomplete="off" data-type='currency' name="rate_sales[]" 
+                                                    onkeyup="sum_idr_sales(1, 1)">
+                                            </div>
+                                        </td>
+
+                                        <td style="background-color: darksalmon;">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control unit-rate-sales" id="unit-rate-sales-1"
+                                                    autocomplete="off" data-type='currency' name="unit_rate_sales[]"
+                                                    onkeyup="sum_idr_sales(1, 1)">
+                                            </div>
+                                        </td>
+
+                                        <td style="background-color: darksalmon;">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control amt-sales" readonly id="amt-sales-1"
+                                                    autocomplete="off" data-type='currency' name="amt_sales[]">
+                                            </div>
+                                        </td>
+
+                                        <td style="background-color: darksalmon;">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control sales" readonly id="sales-1"
+                                                    autocomplete="off" data-type='currency' name="sales[]" data-total_sales="1">
+                                            </div>
+                                        </td>
+
+                                        <td style="background-color: cadetblue;">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control qty-vendor" name="qty_vendor[]"
+                                                    id="qty-vendor-1" data-type='currency4' autocomplete="off"
+                                                    onkeyup="sum_idr_vendor(1, 1)">
+                                            </div>
+                                        </td>
+
+                                        <td style="background-color: cadetblue;">
+                                            <div class="form-group">
+                                                <select name="pc_vendor[]" id="pc-vendor-1" class="pc-vendor">
+                                                    <option value="">Search</option>
+                                                    <option value="Prepaid">Prepaid</option>
+                                                    <option value="Collect">Collect</option>
+                                                </select>
+                                            </div>
+                                        </td>
+
+                                        <td style="background-color: cadetblue;">
+                                            <div class="form-group">
+                                                <select name="code_vendor[]" id="code-vendor-1" class="code-vendor">
+                                                    <option value="">Search</option>
+                                                </select>
+                                            </div>
+                                        </td>
+
+                                        <td style="background-color: cadetblue;">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control name-vendor" name="name_vendor[]"
+                                                    id="name-vendor-1">
+                                            </div>
+                                        </td>
+
+                                        <td style="background-color: cadetblue;">
+                                            <div class="form-group">
+                                                <select name="vat_vendor[]" id="vat-vendor-1" class="vat-vendor">
+                                                    <option value="">Search</option>
+                                                </select>
+                                            </div>
+                                        </td>
+
+                                        <td style="background-color: cadetblue;">
+                                            <div class="form-group">
+                                                <select name="curr_vendor[]" id="curr-vendor-1" class="curr-vendor">
+                                                    <option value="">Search</option>
+                                                </select>
+                                            </div>
+                                        </td>
+
+                                        <td style="background-color: cadetblue;">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control rate-vendor" id="rate-vendor-1"
+                                                    autocomplete="off" data-type='currency' name="rate_vendor[]"
+                                                    onkeyup="sum_idr_vendor(1, 1)">
+                                            </div>
+                                        </td>
+
+                                        <td style="background-color: cadetblue;">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control unit-rate-vendor" id="unit-rate-vendor-1"
+                                                    autocomplete="off" data-type='currency' name="unit_rate_vendor[]"
+                                                    onkeyup="sum_idr_vendor(1, 1)">
+                                            </div>
+                                        </td>
+
+                                        <td style="background-color: cadetblue;">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control amt-vendor" readonly id="amt-vendor-1"
+                                                    autocomplete="off" data-type='currency' name="amt_vendor[]">
+                                            </div>
+                                        </td>
+
+                                        <td style="background-color: cadetblue;">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control cost" readonly id="cost-1"
+                                                    autocomplete="off" data-type='currency' name="cost[]" data-total_vendor="1">
+                                            </div>
+                                        </td>
+
+                                        </tr>`;
+                $(`.tbody-condition`).append(
+                    cloneJc);
+                evtNoData(
+                    `#pc-sales-1, #pc-vendor-1`
+                );
+                evtItemCode(`#code-select-1`,
+                    `#desc-1`);
+                evtUomCode(`#uom-sales-1`);
+
+                evtBisnisPartyNotComplete(
+                    `#cust-code-sales-1`,
+                    `#cust-name-sales-1`);
+                evtBisnisPartyNotComplete(
+                    `#code-vendor-1`,
+                    `#name-vendor-1`);
+                evtVatCode(
+                    `#vat-sales-1, #vat-vendor-1`
+                );
+                evtCurrencyCode(`#curr-sales-1`,
+                    null, true,
+                    `#rate-sales-1`);
+                evtCurrencyCode(`#curr-vendor-1`,
+                    null, true,
+                    `#rate-vendor-1`);
+
+                $("input[data-type='currency']").on({
+                    keyup: function() {
+                        formatCurrency($(this));
+                    },
+                    blur: function() {
+                        formatCurrency($(this),
+                            "blur");
+                    }
+                });
+
+                $("input[data-type='currency4']").on({
+                    keyup: function() {
+                        formatCurrency4($(
+                            this));
+                    },
+                    blur: function() {
+                        formatCurrency4($(this),
+                            "blur");
+                    }
+                });
+                $(`.wrapper-row-list-fch`).html("");
+                cloneCi = `<div class="row row-list-fch">
+                                        <div class="col-md-2">
+                                            <div class="row-number">
+                                                <div>
+                                                    <small>
+                                                        Cargo Item No.
+                                                    </small>
+                                                </div>
+
+                                                <span class='num'> 1 </span>
+                                            </div>
+                                            <div class="row my-3">
+                                                <div class="col-md-6">
+                                                    <a href="javascript:void(0)" class="btn btn-primary add-btn-fch" id="add-btn-fch-1" title="Add row"
+                                                        onclick="add_row_ci(this.id)">
+                                                        <i class="fa fa-plus"></i>
+                                                    </a>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <a href="javascript:void(0)" class="btn btn-danger" title="Delete row"
+                                                        onclick="delete_row_ci(this)">
+                                                        <i class="fa fa-minus"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label for="container_no">Container No.</label>
+                                                <input type="text" class="form-control" name="container_no[]" id="container_no">
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="pcs">Pcs</label>
+                                                <input type="text" class="form-control " name="pcs[]" id="pcs-1">
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="gross_weight">Gross Weight</label>
+                                                <input type="text" data-type='currency4' autocomplete="off" title="Gross Weight"
+                                                    placeholder="Gross Weight" class="form-control " name="gross_weight[]" id="gross-weight-1">
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="cargo_commodity_code">Commodity </label>
+                                                        <select class="cargo-select" name="cargo_commodity_code[]" id="cargo-select-1">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <div class="form-group">
+                                                        <label for="cargo_commodity"> </label>
+                                                        <input type="text" readonly class="form-control cargo-commodity" name="cargo_commodity[]"
+                                                            id="cargo-commodity-1">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label for="seal_no">Seal No.</label>
+                                                <input type="text" class="form-control " name="seal_no[]" id="seal_no">
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="cargo_container_code">Container Type </label>
+                                                        <select class="cont-type-select " name="cargo_container_code[]" id="cont-type-select-1">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <div class="form-group">
+                                                        <label for="cargo_container"> </label>
+                                                        <input type="text" readonly class="form-control cargo-container" name="cargo_container[]" 
+                                                            id="cargo-container-1">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="cargo_volume">Volume</label>
+                                                <input type="text" data-type='currency4' autocomplete="off" title="Volume" placeholder="Volume"
+                                                    class="form-control " name="cargo_volume[]" id="cargo-volume-1">
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="cargo_uom_code">Uom </label>
+                                                        <select class="cargo-uom-select" name="cargo_uom_code[]" id="cargo-uom-select-1">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <div class="form-group">
+                                                        <label for="cargo_uom"> </label>
+                                                        <input type="text" readonly class="form-control cargo-uom" name="cargo_uom[]"
+                                                            id="cargo-uom-1">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr class="my-2">
+                                        <div class="col-md-2"></div>
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label for="marks_1">Marks</label>
+                                                <input type="text" class="form-control " placeholder="Marks No 01"  name="marks_1[]"
+                                                    id="marks_1">
+
+                                                <input type="text" class="form-control  my-2" placeholder="Marks No 02" name="marks_2[]"
+                                                    id="marks_2">
+
+                                                <input type="text" class="form-control my-2" placeholder="Marks No 03" name="marks_3[]"
+                                                    id="marks_3">
+
+                                                <input type="text" class="form-control  my-2" placeholder="Marks No 04" name="marks_4[]"
+                                                    id="marks_4">
+
+                                                <input type="text" class="form-control  my-2" placeholder="Marks No 05" name="marks_5[]"
+                                                    id="marks_5">
+
+                                                <input type="text" class="form-control  my-2" placeholder="Marks No 06" name="marks_6[]"
+                                                    id="marks_6">
+
+                                                <input type="text" class="form-control  my-2" placeholder="Marks No 07" name="marks_7[]"
+                                                    id="marks_7">
+
+                                                <input type="text" class="form-control my-2" placeholder="Marks No 08" name="marks_8[]"
+                                                    id="marks_8">
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label for="good_desc_1">Descriptions</label>
+                                                <input type="text" placeholder="Description 01" class="form-control " name="good_desc_1[]"
+                                                    id="good_desc_1">
+
+                                                <input type="text" placeholder="Description 02" class="form-control  my-2" name="good_desc_2[]"
+                                                    id="good_desc_2">
+
+                                                <input type="text" placeholder="Description 03" class="form-control  my-2" name="good_desc_3[]"
+                                                    id="good_desc_3">
+
+                                                <input type="text" placeholder="Description 04" class="form-control  my-2" name="good_desc_4[]"
+                                                    id="good_desc_4">
+
+                                                <input type="text" placeholder="Description 05" class="form-control  my-2" name="good_desc_5[]"
+                                                    id="good_desc_5">
+
+                                                <input type="text" placeholder="Description 06" class="form-control  my-2" name="good_desc_6[]"
+                                                    id="good_desc_6">
+
+                                                <input type="text" placeholder="Description 07" class="form-control  my-2" name="good_desc_7[]"
+                                                    id="good_desc_7">
+
+                                                <input type="text" placeholder="Description 08" class="form-control  my-2" name="good_desc_8[]"
+                                                    id="good_desc_8">
+                                            </div>
+
+
+                                        </div>
+                                        </div>`;
+
+                $(`.wrapper-row-list-fch`).append(
+                    cloneCi);
+                evtCommodity(`#cargo-select-1`,
+                    `#cargo-commodity-1`);
+                evtContainerType(`#cont-type-select-1`,
+                    `#cargo-container-1`);
+                evtUom(`#cargo-uom-select-1`,
+                    `#cargo-uom-1`);
+                $("input[data-type='currency4']").on({
+                    keyup: function() {
+                        formatCurrency4($(
+                            this));
+                    },
+                    blur: function() {
+                        formatCurrency4($(this),
+                            "blur");
+                    }
+                });
+            });
+        }
+
 
         function dataTableBooking(idTable) {
             var table = $(idTable).DataTable({
@@ -835,7 +1372,7 @@
                 serverSide: true,
                 pagingType: 'full_numbers',
                 ajax: {
-                    url: '{{ route('get.table.book_ex_job') }}',
+                    url: '{{ route('get.table.book_ex_job_sea') }}',
                     dataType: "json",
                     type: "POST",
                 },
@@ -910,10 +1447,12 @@
                         .val();
                     let id = table.rows(colIdx).nodes().to$().find('td:first-child .input_check:checked').data(
                         'id');
+                    let quotation_no = table.rows(colIdx).nodes().to$().find('td:first-child .input_check:checked')
+                        .data('quotation_no');
 
                     $.ajax({
                         type: "POST",
-                        url: '{{ route('search.book_ex_job') }}',
+                        url: '{{ route('search.book_ex_job_sea') }}',
                         data: {
                             booking_no: booking_no,
                         },
@@ -1205,20 +1744,776 @@
                                 $("input[name=stuff_agent_address_4]").val("");
                             }
 
-                            $.ajax({
-                                type: "post",
-                                url: '{{ route('get.ci') }}',
-                                data: {
-                                    id: id
-                                },
-                                dataType: "json",
-                                success: function(response) {
-                                    // console.log(response.length);
-                                    let cloneCi;
-                                    if (response.length > 0) {
-                                        $(`.wrapper-row-list-fch`).html("");
-                                        for (let i = 0; i < response.length; i++) {
-                                            cloneCi = `<div class="row row-list-fch">
+                            let cloneJc;
+                            if (quotation_no != 0) {
+                                $.ajax({
+                                    type: "post",
+                                    url: '{{ route('get.jc.from.quot_sea') }}',
+                                    data: {
+                                        quotation_no: quotation_no
+                                    },
+                                    dataType: "json",
+                                    success: function(data) {
+
+                                        let totalSales = 0;
+                                        if (data.length > 0) {
+                                            $(`.tbody-condition`).html("");
+                                            for (let i = 0; i < data.length; i++) {
+                                                totalSales += parseFloat(data[i].idr_amt);
+                                                cloneJc = `<tr class="dynamic-field" id="dynamic-field-${i+1}" onclick="click_tr(${i+1})">
+                                                            <td class="text-center">
+                                                                <button type="button" onclick="addNewField(this.id)" id="add-button-${i+1}"
+                                                                    class="btn btn-xs btn-primary float-left text-uppercase shadow-sm add-button"><i
+                                                                        class="fa fa-plus fa-fw"></i>
+                                                                </button>
+                                                                <button type="button" onclick="removeLastField(this)" id="remove-button-${i+1}"
+                                                                    class="btn btn-xs btn-danger float-left text-uppercase ml-1 remove-button"><i
+                                                                        class="fa fa-minus fa-fw"></i>
+                                                                </button>
+                                                            </td>
+
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <select name="code[]" id="code-select-${i+1}" class="code-select">
+                                                                        <option value="${data[i].item_code != null ? data[i].item_code : ''}">${data[i].item_code != null ? data[i].item_code + " - " + data[i].item_desc : ''}</option>
+
+                                                                    </select>
+                                                                </div>
+                                                            </td>
+
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control desc" name="description[]" id="desc-${i+1}" value="${data[i].item_desc != null ? data[i].item_desc : ''}">
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: darksalmon;">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control qty-sales" name="qty_sales[]" id="qty-sales-${i+1}"
+                                                                        data-type='currency4' value="${data[i].qty != null ? numberFormatter4(parseFloat(data[i].qty))  : ''}" autocomplete="off" onkeyup="sum_idr_sales(${i+1}, 1)">
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: darksalmon;">
+                                                                <div class="form-group">
+                                                                    <select name="uom_sales[]" id="uom-sales-${i+1}" class="uom-sales">
+                                                                        <option value="${data[i].uom != null ? data[i].uom : ''}">${data[i].uom != null ? data[i].uom : ''}</option>
+                                                                    </select>
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: darksalmon;">
+                                                                <div class="form-group">
+                                                                    <select name="pc_sales[]" id="pc-sales-${i+1}" class="pc-sales">
+                                                                        <option value="">Search</option>
+                                                                        <option value="Prepaid" ${data[i].p_c == 'Prepaid' ? 'selected' : ''} >Prepaid</option>
+                                                                        <option value="Collect" ${data[i].p_c == 'Collect' ? 'selected' : ''} >Collect</option>
+                                                                    </select>
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: darksalmon;">
+                                                                <div class="form-group">
+                                                                    <select name="cust_code_sales[]" id="cust-code-sales-${i+1}" class="cust-code-sales">
+                                                                        <option value="${res.code_customer}">${res.code_customer}</option>
+                                                                    </select>
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: darksalmon;">
+                                                                <div class="form-group">
+                                                                    <input type="text" value='${res.customer}' class="form-control cust-name-sales" name="cust_name_sales[]"
+                                                                        id="cust-name-sales-${i+1}">
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: darksalmon;">
+                                                                <div class="form-group">
+                                                                    <select name="vat_sales[]" id="vat-sales-${i+1}" class="vat-sales">
+                                                                        <option value="${data[i].vat_code != null ? data[i].vat_code : ''}">${data[i].vat_code != null ? data[i].vat_code : ''}</option>
+                                                                    </select>
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: darksalmon;">
+                                                                <div class="form-group">
+                                                                    <select name="curr_sales[]" id="curr-sales-${i+1}" class="curr-sales">
+                                                                        <option value="${data[i].currency != null ? data[i].currency : ''}">${data[i].currency != null ? data[i].currency : ''}</option>
+                                                                    </select>
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: darksalmon;">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control rate-sales" id="rate-sales-${i+1}"
+                                                                        autocomplete="off" data-type='currency' name="rate_sales[]" 
+                                                                        value='${data[i].curr_rate != null ? numberFormatter(parseFloat(data[i].curr_rate)) : ''}'
+                                                                        onkeyup="sum_idr_sales(${i+1}, 1)">
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: darksalmon;">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control unit-rate-sales" id="unit-rate-sales-${i+1}"
+                                                                        autocomplete="off" data-type='currency' name="unit_rate_sales[]"
+                                                                        value='${data[i].unit_rate != null ? numberFormatter(parseFloat(data[i].unit_rate)) : ''}'
+                                                                        onkeyup="sum_idr_sales(${i+1}, 1)">
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: darksalmon;">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control amt-sales" readonly id="amt-sales-${i+1}"
+                                                                    value='${data[i].amt != null ? numberFormatter(parseFloat(data[i].amt)) : ''}'
+                                                                        autocomplete="off" data-type='currency' name="amt_sales[]">
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: darksalmon;">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control sales" readonly id="sales-${i+1}"
+                                                                    value='${data[i].idr_amt != null ? numberFormatter(parseFloat(data[i].idr_amt)) : ''}'
+                                                                        autocomplete="off" data-type='currency' name="sales[]" data-total_sales="1">
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: cadetblue;">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control qty-vendor" name="qty_vendor[]"
+                                                                        id="qty-vendor-${i+1}" data-type='currency4' autocomplete="off"
+                                                                        onkeyup="sum_idr_vendor(${i+1}, 1)">
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: cadetblue;">
+                                                                <div class="form-group">
+                                                                    <select name="pc_vendor[]" id="pc-vendor-${i+1}" class="pc-vendor">
+                                                                        <option value="">Search</option>
+                                                                        <option value="Prepaid">Prepaid</option>
+                                                                        <option value="Collect">Collect</option>
+                                                                    </select>
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: cadetblue;">
+                                                                <div class="form-group">
+                                                                    <select name="code_vendor[]" id="code-vendor-${i+1}" class="code-vendor">
+                                                                        <option value="">Search</option>
+                                                                    </select>
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: cadetblue;">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control name-vendor" name="name_vendor[]"
+                                                                        id="name-vendor-${i+1}">
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: cadetblue;">
+                                                                <div class="form-group">
+                                                                    <select name="vat_vendor[]" id="vat-vendor-${i+1}" class="vat-vendor">
+                                                                        <option value="">Search</option>
+                                                                    </select>
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: cadetblue;">
+                                                                <div class="form-group">
+                                                                    <select name="curr_vendor[]" id="curr-vendor-${i+1}" class="curr-vendor">
+                                                                        <option value="">Search</option>
+                                                                    </select>
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: cadetblue;">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control rate-vendor" id="rate-vendor-${i+1}"
+                                                                        autocomplete="off" data-type='currency' name="rate_vendor[]"
+                                                                        onkeyup="sum_idr_vendor(${i+1}, 1)">
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: cadetblue;">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control unit-rate-vendor" id="unit-rate-vendor-${i+1}"
+                                                                        autocomplete="off" data-type='currency' name="unit_rate_vendor[]"
+                                                                        onkeyup="sum_idr_vendor(${i+1}, 1)">
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: cadetblue;">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control amt-vendor" readonly id="amt-vendor-${i+1}"
+                                                                        autocomplete="off" data-type='currency' name="amt_vendor[]">
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: cadetblue;">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control cost" readonly id="cost-${i+1}"
+                                                                        autocomplete="off" data-type='currency' name="cost[]" data-total_vendor="1">
+                                                                </div>
+                                                            </td>
+
+                                                            </tr>`;
+                                                $(`.tbody-condition`).append(
+                                                    cloneJc);
+                                                evtNoData(
+                                                    `#pc-sales-${i+1}, #pc-vendor-${i+1}`
+                                                );
+                                                evtItemCode(`#code-select-${i+1}`,
+                                                    `#desc-${i+1}`);
+                                                evtUomCode(`#uom-sales-${i+1}`);
+
+                                                evtBisnisPartyNotComplete(
+                                                    `#cust-code-sales-${i+1}`,
+                                                    `#cust-name-sales-${i+1}`);
+                                                evtBisnisPartyNotComplete(
+                                                    `#code-vendor-${i+1}`,
+                                                    `#name-vendor-${i+1}`);
+                                                evtVatCode(
+                                                    `#vat-sales-${i+1}, #vat-vendor-${i+1}`
+                                                );
+                                                evtCurrencyCode(`#curr-sales-${i+1}`,
+                                                    null, true,
+                                                    `#rate-sales-${i+1}`);
+                                                evtCurrencyCode(`#curr-vendor-${i+1}`,
+                                                    null, true,
+                                                    `#rate-vendor-${i+1}`);
+
+                                                $("input[data-type='currency']").on({
+                                                    keyup: function() {
+                                                        formatCurrency($(this));
+                                                    },
+                                                    blur: function() {
+                                                        formatCurrency($(this),
+                                                            "blur");
+                                                    }
+                                                });
+
+                                                $("input[data-type='currency4']").on({
+                                                    keyup: function() {
+                                                        formatCurrency4($(
+                                                            this));
+                                                    },
+                                                    blur: function() {
+                                                        formatCurrency4($(this),
+                                                            "blur");
+                                                    }
+                                                });
+
+                                            }
+                                            $(`#total-sales-1`).val(numberFormatter(
+                                                parseFloat(totalSales)));
+                                            // UPDATE TOTAL ALL SALES
+                                            total_all_sales = totalSales;
+                                        } else {
+                                            $(`.tbody-condition`).html("");
+                                            cloneJc = `<tr class="dynamic-field" id="dynamic-field-1" onclick="click_tr(1)">
+                                                <td class="text-center">
+                                                    <button type="button" onclick="addNewField(this.id)" id="add-button-1"
+                                                        class="btn btn-xs btn-primary float-left text-uppercase shadow-sm add-button"><i
+                                                            class="fa fa-plus fa-fw"></i>
+                                                    </button>
+                                                    <button type="button" onclick="removeLastField(this)" id="remove-button-1"
+                                                        class="btn btn-xs btn-danger float-left text-uppercase ml-1 remove-button"><i
+                                                            class="fa fa-minus fa-fw"></i>
+                                                    </button>
+                                                </td>
+
+                                                <td>
+                                                    <div class="form-group">
+                                                        <select name="code[]" id="code-select-1" class="code-select">
+                                                            <option value="">Search</option>
+
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control desc" name="description[]" id="desc-1">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control qty-sales" name="qty_sales[]" id="qty-sales-1"
+                                                            data-type='currency4' autocomplete="off" onkeyup="sum_idr_sales(1, 1)">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <select name="uom_sales[]" id="uom-sales-1" class="uom-sales">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <select name="pc_sales[]" id="pc-sales-1" class="pc-sales">
+                                                            <option value="">Search</option>
+                                                            <option value="Prepaid">Prepaid</option>
+                                                            <option value="Collect">Collect</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <select name="cust_code_sales[]" id="cust-code-sales-1" class="cust-code-sales">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control cust-name-sales" name="cust_name_sales[]"
+                                                            id="cust-name-sales-1">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <select name="vat_sales[]" id="vat-sales-1" class="vat-sales">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <select name="curr_sales[]" id="curr-sales-1" class="curr-sales">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control rate-sales" id="rate-sales-1"
+                                                            autocomplete="off" data-type='currency' name="rate_sales[]" 
+                                                            onkeyup="sum_idr_sales(1, 1)">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control unit-rate-sales" id="unit-rate-sales-1"
+                                                            autocomplete="off" data-type='currency' name="unit_rate_sales[]"
+                                                            onkeyup="sum_idr_sales(1, 1)">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control amt-sales" readonly id="amt-sales-1"
+                                                            autocomplete="off" data-type='currency' name="amt_sales[]">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control sales" readonly id="sales-1"
+                                                            autocomplete="off" data-type='currency' name="sales[]" data-total_sales="1">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control qty-vendor" name="qty_vendor[]"
+                                                            id="qty-vendor-1" data-type='currency4' autocomplete="off"
+                                                            onkeyup="sum_idr_vendor(1, 1)">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <select name="pc_vendor[]" id="pc-vendor-1" class="pc-vendor">
+                                                            <option value="">Search</option>
+                                                            <option value="Prepaid">Prepaid</option>
+                                                            <option value="Collect">Collect</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <select name="code_vendor[]" id="code-vendor-1" class="code-vendor">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control name-vendor" name="name_vendor[]"
+                                                            id="name-vendor-1">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <select name="vat_vendor[]" id="vat-vendor-1" class="vat-vendor">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <select name="curr_vendor[]" id="curr-vendor-1" class="curr-vendor">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control rate-vendor" id="rate-vendor-1"
+                                                            autocomplete="off" data-type='currency' name="rate_vendor[]"
+                                                            onkeyup="sum_idr_vendor(1, 1)">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control unit-rate-vendor" id="unit-rate-vendor-1"
+                                                            autocomplete="off" data-type='currency' name="unit_rate_vendor[]"
+                                                            onkeyup="sum_idr_vendor(1, 1)">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control amt-vendor" readonly id="amt-vendor-1"
+                                                            autocomplete="off" data-type='currency' name="amt_vendor[]">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control cost" readonly id="cost-1"
+                                                            autocomplete="off" data-type='currency' name="cost[]" data-total_vendor="1">
+                                                    </div>
+                                                </td>
+
+                                                </tr>`;
+                                            $(`.tbody-condition`).append(
+                                                cloneJc);
+                                            evtNoData(
+                                                `#pc-sales-1, #pc-vendor-1`
+                                            );
+                                            evtItemCode(`#code-select-1`,
+                                                `#desc-1`);
+                                            evtUomCode(`#uom-sales-1`);
+
+                                            evtBisnisPartyNotComplete(
+                                                `#cust-code-sales-1`,
+                                                `#cust-name-sales-1`);
+                                            evtBisnisPartyNotComplete(
+                                                `#code-vendor-1`,
+                                                `#name-vendor-1`);
+                                            evtVatCode(
+                                                `#vat-sales-1, #vat-vendor-1`
+                                            );
+                                            evtCurrencyCode(`#curr-sales-1`,
+                                                null, true,
+                                                `#rate-sales-1`);
+                                            evtCurrencyCode(`#curr-vendor-1`,
+                                                null, true,
+                                                `#rate-vendor-1`);
+
+                                            $("input[data-type='currency']").on({
+                                                keyup: function() {
+                                                    formatCurrency($(this));
+                                                },
+                                                blur: function() {
+                                                    formatCurrency($(this),
+                                                        "blur");
+                                                }
+                                            });
+
+                                            $("input[data-type='currency4']").on({
+                                                keyup: function() {
+                                                    formatCurrency4($(
+                                                        this));
+                                                },
+                                                blur: function() {
+                                                    formatCurrency4($(this),
+                                                        "blur");
+                                                }
+                                            });
+                                            $(`#total-sales-1`).val("");
+                                            // UPDATE TOTAL ALL SALES
+                                            total_all_sales = 0;
+                                        }
+                                    }
+                                });
+                            } else {
+                                $(`.tbody-condition`).html("");
+                                cloneJc = `<tr class="dynamic-field" id="dynamic-field-1" onclick="click_tr(1)">
+                                                <td class="text-center">
+                                                    <button type="button" onclick="addNewField(this.id)" id="add-button-1"
+                                                        class="btn btn-xs btn-primary float-left text-uppercase shadow-sm add-button"><i
+                                                            class="fa fa-plus fa-fw"></i>
+                                                    </button>
+                                                    <button type="button" onclick="removeLastField(this)" id="remove-button-1"
+                                                        class="btn btn-xs btn-danger float-left text-uppercase ml-1 remove-button"><i
+                                                            class="fa fa-minus fa-fw"></i>
+                                                    </button>
+                                                </td>
+
+                                                <td>
+                                                    <div class="form-group">
+                                                        <select name="code[]" id="code-select-1" class="code-select">
+                                                            <option value="">Search</option>
+
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control desc" name="description[]" id="desc-1">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control qty-sales" name="qty_sales[]" id="qty-sales-1"
+                                                            data-type='currency4' autocomplete="off" onkeyup="sum_idr_sales(1, 1)">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <select name="uom_sales[]" id="uom-sales-1" class="uom-sales">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <select name="pc_sales[]" id="pc-sales-1" class="pc-sales">
+                                                            <option value="">Search</option>
+                                                            <option value="Prepaid">Prepaid</option>
+                                                            <option value="Collect">Collect</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <select name="cust_code_sales[]" id="cust-code-sales-1" class="cust-code-sales">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control cust-name-sales" name="cust_name_sales[]"
+                                                            id="cust-name-sales-1">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <select name="vat_sales[]" id="vat-sales-1" class="vat-sales">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <select name="curr_sales[]" id="curr-sales-1" class="curr-sales">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control rate-sales" id="rate-sales-1"
+                                                            autocomplete="off" data-type='currency' name="rate_sales[]" 
+                                                            onkeyup="sum_idr_sales(1, 1)">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control unit-rate-sales" id="unit-rate-sales-1"
+                                                            autocomplete="off" data-type='currency' name="unit_rate_sales[]"
+                                                            onkeyup="sum_idr_sales(1, 1)">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control amt-sales" readonly id="amt-sales-1"
+                                                            autocomplete="off" data-type='currency' name="amt_sales[]">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control sales" readonly id="sales-1"
+                                                            autocomplete="off" data-type='currency' name="sales[]" data-total_sales="1">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control qty-vendor" name="qty_vendor[]"
+                                                            id="qty-vendor-1" data-type='currency4' autocomplete="off"
+                                                            onkeyup="sum_idr_vendor(1, 1)">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <select name="pc_vendor[]" id="pc-vendor-1" class="pc-vendor">
+                                                            <option value="">Search</option>
+                                                            <option value="Prepaid">Prepaid</option>
+                                                            <option value="Collect">Collect</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <select name="code_vendor[]" id="code-vendor-1" class="code-vendor">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control name-vendor" name="name_vendor[]"
+                                                            id="name-vendor-1">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <select name="vat_vendor[]" id="vat-vendor-1" class="vat-vendor">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <select name="curr_vendor[]" id="curr-vendor-1" class="curr-vendor">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control rate-vendor" id="rate-vendor-1"
+                                                            autocomplete="off" data-type='currency' name="rate_vendor[]"
+                                                            onkeyup="sum_idr_vendor(1, 1)">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control unit-rate-vendor" id="unit-rate-vendor-1"
+                                                            autocomplete="off" data-type='currency' name="unit_rate_vendor[]"
+                                                            onkeyup="sum_idr_vendor(1, 1)">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control amt-vendor" readonly id="amt-vendor-1"
+                                                            autocomplete="off" data-type='currency' name="amt_vendor[]">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control cost" readonly id="cost-1"
+                                                            autocomplete="off" data-type='currency' name="cost[]" data-total_vendor="1">
+                                                    </div>
+                                                </td>
+
+                                                </tr>`;
+                                $(`.tbody-condition`).append(
+                                    cloneJc);
+                                evtNoData(
+                                    `#pc-sales-1, #pc-vendor-1`
+                                );
+                                evtItemCode(`#code-select-1`,
+                                    `#desc-1`);
+                                evtUomCode(`#uom-sales-1`);
+
+                                evtBisnisPartyNotComplete(
+                                    `#cust-code-sales-1`,
+                                    `#cust-name-sales-1`);
+                                evtBisnisPartyNotComplete(
+                                    `#code-vendor-1`,
+                                    `#name-vendor-1`);
+                                evtVatCode(
+                                    `#vat-sales-1, #vat-vendor-1`
+                                );
+                                evtCurrencyCode(`#curr-sales-1`,
+                                    null, true,
+                                    `#rate-sales-1`);
+                                evtCurrencyCode(`#curr-vendor-1`,
+                                    null, true,
+                                    `#rate-vendor-1`);
+
+                                $("input[data-type='currency']").on({
+                                    keyup: function() {
+                                        formatCurrency($(this));
+                                    },
+                                    blur: function() {
+                                        formatCurrency($(this),
+                                            "blur");
+                                    }
+                                });
+
+                                $("input[data-type='currency4']").on({
+                                    keyup: function() {
+                                        formatCurrency4($(
+                                            this));
+                                    },
+                                    blur: function() {
+                                        formatCurrency4($(this),
+                                            "blur");
+                                    }
+                                });
+                                $(`#total-sales-1`).val("");
+                                // UPDATE TOTAL ALL SALES
+                                total_all_sales = 0;
+                            }
+
+                            let cloneCi;
+                            if (id != 0) {
+                                $.ajax({
+                                    type: "post",
+                                    url: '{{ route('get.ci') }}',
+                                    data: {
+                                        id: id
+                                    },
+                                    dataType: "json",
+                                    success: function(response) {
+
+                                        if (response.length > 0) {
+                                            $(`.wrapper-row-list-fch`).html("");
+                                            for (let i = 0; i < response.length; i++) {
+                                                cloneCi = `<div class="row row-list-fch">
                                                             <div class="col-md-2">
                                                                 <div class="row-number">
                                                                     <div>
@@ -1259,7 +2554,7 @@
                                                                 <div class="form-group">
                                                                     <label for="gross_weight">Gross Weight</label>
                                                                     <input type="text" data-type='currency4' autocomplete="off" title="Gross Weight"
-                                                                        placeholder="Gross Weight" class="form-control " name="gross_weight[]" value="${response[i].gross_weight != null ? numberFormatte4(parseFloat(response[i].gross_weight)) : ''}" id="gross-weight-${i+1}">
+                                                                        placeholder="Gross Weight" class="form-control " name="gross_weight[]" value="${response[i].gross_weight != null ? numberFormatter4(parseFloat(response[i].gross_weight)) : ''}" id="gross-weight-${i+1}">
                                                                 </div>
                                                                 <div class="row">
                                                                     <div class="col-md-4">
@@ -1308,7 +2603,7 @@
                                                                 <div class="form-group">
                                                                     <label for="cargo_volume">Volume</label>
                                                                     <input type="text" data-type='currency4' autocomplete="off" title="Volume" placeholder="Volume"
-                                                                        class="form-control " name="cargo_volume[]" id="cargo-volume-${i+1}" value="${response[i].cargo_volume != null ? numberFormatte4(parseFloat(response[i].cargo_volume)) : ''}">
+                                                                        class="form-control " name="cargo_volume[]" id="cargo-volume-${i+1}" value="${response[i].cargo_volume != null ? numberFormatter4(parseFloat(response[i].cargo_volume)) : ''}">
 
                                                                 </div>
                                                                 <div class="row">
@@ -1393,17 +2688,212 @@
                                                             </div>
                                                             </div>`;
 
+                                                $(`.wrapper-row-list-fch`).append(
+                                                    cloneCi);
+                                                evtCommodity(`#cargo-select-${i+1}`,
+                                                    `#cargo-commodity-${i+1}`);
+                                                evtContainerType(`#cont-type-select-${i+1}`,
+                                                    `#cargo-container-${i+1}`);
+                                                evtUom(`#cargo-uom-select-${i+1}`,
+                                                    `#cargo-uom-${i+1}`);
+                                                $("input[data-type='currency4']").on({
+                                                    keyup: function() {
+                                                        formatCurrency4($(
+                                                            this));
+                                                    },
+                                                    blur: function() {
+                                                        formatCurrency4($(this),
+                                                            "blur");
+                                                    }
+                                                });
+                                            }
+                                        } else {
+                                            $(`.wrapper-row-list-fch`).html("");
+                                            cloneCi = `<div class="row row-list-fch">
+                                                                    <div class="col-md-2">
+                                                                        <div class="row-number">
+                                                                            <div>
+                                                                                <small>
+                                                                                    Cargo Item No.
+                                                                                </small>
+                                                                            </div>
+
+                                                                            <span class='num'> 1 </span>
+                                                                        </div>
+                                                                        <div class="row my-3">
+                                                                            <div class="col-md-6">
+                                                                                <a href="javascript:void(0)" class="btn btn-primary add-btn-fch" id="add-btn-fch-1" title="Add row"
+                                                                                    onclick="add_row_ci(this.id)">
+                                                                                    <i class="fa fa-plus"></i>
+                                                                                </a>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <a href="javascript:void(0)" class="btn btn-danger" title="Delete row"
+                                                                                    onclick="delete_row_ci(this)">
+                                                                                    <i class="fa fa-minus"></i>
+                                                                                </a>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="col-md-5">
+                                                                        <div class="form-group">
+                                                                            <label for="container_no">Container No.</label>
+                                                                            <input type="text" class="form-control" name="container_no[]" id="container_no">
+
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="pcs">Pcs</label>
+                                                                            <input type="text" class="form-control " name="pcs[]" id="pcs-1">
+
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="gross_weight">Gross Weight</label>
+                                                                            <input type="text" data-type='currency4' autocomplete="off" title="Gross Weight"
+                                                                                placeholder="Gross Weight" class="form-control " name="gross_weight[]" id="gross-weight-1">
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-md-4">
+                                                                                <div class="form-group">
+                                                                                    <label for="cargo_commodity_code">Commodity </label>
+                                                                                    <select class="cargo-select" name="cargo_commodity_code[]" id="cargo-select-1">
+                                                                                        <option value="">Search</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-8">
+                                                                                <div class="form-group">
+                                                                                    <label for="cargo_commodity"> </label>
+                                                                                    <input type="text" readonly class="form-control cargo-commodity" name="cargo_commodity[]"
+                                                                                        id="cargo-commodity-1">
+
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="col-md-5">
+                                                                        <div class="form-group">
+                                                                            <label for="seal_no">Seal No.</label>
+                                                                            <input type="text" class="form-control " name="seal_no[]" id="seal_no">
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-md-4">
+                                                                                <div class="form-group">
+                                                                                    <label for="cargo_container_code">Container Type </label>
+                                                                                    <select class="cont-type-select " name="cargo_container_code[]" id="cont-type-select-1">
+                                                                                        <option value="">Search</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-8">
+                                                                                <div class="form-group">
+                                                                                    <label for="cargo_container"> </label>
+                                                                                    <input type="text" readonly class="form-control cargo-container" name="cargo_container[]" 
+                                                                                        id="cargo-container-1">
+
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="cargo_volume">Volume</label>
+                                                                            <input type="text" data-type='currency4' autocomplete="off" title="Volume" placeholder="Volume"
+                                                                                class="form-control " name="cargo_volume[]" id="cargo-volume-1">
+
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-md-4">
+                                                                                <div class="form-group">
+                                                                                    <label for="cargo_uom_code">Uom </label>
+                                                                                    <select class="cargo-uom-select" name="cargo_uom_code[]" id="cargo-uom-select-1">
+                                                                                        <option value="">Search</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-8">
+                                                                                <div class="form-group">
+                                                                                    <label for="cargo_uom"> </label>
+                                                                                    <input type="text" readonly class="form-control cargo-uom" name="cargo_uom[]"
+                                                                                        id="cargo-uom-1">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <hr class="my-2">
+                                                                    <div class="col-md-2"></div>
+                                                                    <div class="col-md-5">
+                                                                        <div class="form-group">
+                                                                            <label for="marks_1">Marks</label>
+                                                                            <input type="text" class="form-control " placeholder="Marks No 01"  name="marks_1[]"
+                                                                                id="marks_1">
+
+                                                                            <input type="text" class="form-control  my-2" placeholder="Marks No 02" name="marks_2[]"
+                                                                                id="marks_2">
+
+                                                                            <input type="text" class="form-control my-2" placeholder="Marks No 03" name="marks_3[]"
+                                                                                id="marks_3">
+
+                                                                            <input type="text" class="form-control  my-2" placeholder="Marks No 04" name="marks_4[]"
+                                                                                id="marks_4">
+
+                                                                            <input type="text" class="form-control  my-2" placeholder="Marks No 05" name="marks_5[]"
+                                                                                id="marks_5">
+
+                                                                            <input type="text" class="form-control  my-2" placeholder="Marks No 06" name="marks_6[]"
+                                                                                id="marks_6">
+
+                                                                            <input type="text" class="form-control  my-2" placeholder="Marks No 07" name="marks_7[]"
+                                                                                id="marks_7">
+
+                                                                            <input type="text" class="form-control my-2" placeholder="Marks No 08" name="marks_8[]"
+                                                                                id="marks_8">
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="col-md-5">
+                                                                        <div class="form-group">
+                                                                            <label for="good_desc_1">Descriptions</label>
+                                                                            <input type="text" placeholder="Description 01" class="form-control " name="good_desc_1[]"
+                                                                                id="good_desc_1">
+
+                                                                            <input type="text" placeholder="Description 02" class="form-control  my-2" name="good_desc_2[]"
+                                                                                id="good_desc_2">
+
+                                                                            <input type="text" placeholder="Description 03" class="form-control  my-2" name="good_desc_3[]"
+                                                                                id="good_desc_3">
+
+                                                                            <input type="text" placeholder="Description 04" class="form-control  my-2" name="good_desc_4[]"
+                                                                                id="good_desc_4">
+
+                                                                            <input type="text" placeholder="Description 05" class="form-control  my-2" name="good_desc_5[]"
+                                                                                id="good_desc_5">
+
+                                                                            <input type="text" placeholder="Description 06" class="form-control  my-2" name="good_desc_6[]"
+                                                                                id="good_desc_6">
+
+                                                                            <input type="text" placeholder="Description 07" class="form-control  my-2" name="good_desc_7[]"
+                                                                                id="good_desc_7">
+
+                                                                            <input type="text" placeholder="Description 08" class="form-control  my-2" name="good_desc_8[]"
+                                                                                id="good_desc_8">
+                                                                        </div>
+
+
+                                                                    </div>
+                                                                    </div>`;
+
                                             $(`.wrapper-row-list-fch`).append(
                                                 cloneCi);
-                                            evtCommodity(`#cargo-select-${i+1}`,
-                                                `#cargo-commodity-${i+1}`);
-                                            evtContainerType(`#cont-type-select-${i+1}`,
-                                                `#cargo-container-${i+1}`);
-                                            evtUom(`#cargo-uom-select-${i+1}`,
-                                                `#cargo-uom-${i+1}`);
+                                            evtCommodity(`#cargo-select-1`,
+                                                `#cargo-commodity-1`);
+                                            evtContainerType(`#cont-type-select-1`,
+                                                `#cargo-container-1`);
+                                            evtUom(`#cargo-uom-select-1`,
+                                                `#cargo-uom-1`);
                                             $("input[data-type='currency4']").on({
                                                 keyup: function() {
-                                                    formatCurrency4($(this));
+                                                    formatCurrency4($(
+                                                        this));
                                                 },
                                                 blur: function() {
                                                     formatCurrency4($(this),
@@ -1412,9 +2902,201 @@
                                             });
                                         }
                                     }
-                                }
-                            });
+                                });
+                            } else {
+                                $(`.wrapper-row-list-fch`).html("");
+                                cloneCi = `<div class="row row-list-fch">
+                                                                    <div class="col-md-2">
+                                                                        <div class="row-number">
+                                                                            <div>
+                                                                                <small>
+                                                                                    Cargo Item No.
+                                                                                </small>
+                                                                            </div>
 
+                                                                            <span class='num'> 1 </span>
+                                                                        </div>
+                                                                        <div class="row my-3">
+                                                                            <div class="col-md-6">
+                                                                                <a href="javascript:void(0)" class="btn btn-primary add-btn-fch" id="add-btn-fch-1" title="Add row"
+                                                                                    onclick="add_row_ci(this.id)">
+                                                                                    <i class="fa fa-plus"></i>
+                                                                                </a>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <a href="javascript:void(0)" class="btn btn-danger" title="Delete row"
+                                                                                    onclick="delete_row_ci(this)">
+                                                                                    <i class="fa fa-minus"></i>
+                                                                                </a>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="col-md-5">
+                                                                        <div class="form-group">
+                                                                            <label for="container_no">Container No.</label>
+                                                                            <input type="text" class="form-control" name="container_no[]" id="container_no">
+
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="pcs">Pcs</label>
+                                                                            <input type="text" class="form-control " name="pcs[]" id="pcs-1">
+
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="gross_weight">Gross Weight</label>
+                                                                            <input type="text" data-type='currency4' autocomplete="off" title="Gross Weight"
+                                                                                placeholder="Gross Weight" class="form-control " name="gross_weight[]" id="gross-weight-1">
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-md-4">
+                                                                                <div class="form-group">
+                                                                                    <label for="cargo_commodity_code">Commodity </label>
+                                                                                    <select class="cargo-select" name="cargo_commodity_code[]" id="cargo-select-1">
+                                                                                        <option value="">Search</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-8">
+                                                                                <div class="form-group">
+                                                                                    <label for="cargo_commodity"> </label>
+                                                                                    <input type="text" readonly class="form-control cargo-commodity" name="cargo_commodity[]"
+                                                                                        id="cargo-commodity-1">
+
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="col-md-5">
+                                                                        <div class="form-group">
+                                                                            <label for="seal_no">Seal No.</label>
+                                                                            <input type="text" class="form-control " name="seal_no[]" id="seal_no">
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-md-4">
+                                                                                <div class="form-group">
+                                                                                    <label for="cargo_container_code">Container Type </label>
+                                                                                    <select class="cont-type-select " name="cargo_container_code[]" id="cont-type-select-1">
+                                                                                        <option value="">Search</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-8">
+                                                                                <div class="form-group">
+                                                                                    <label for="cargo_container"> </label>
+                                                                                    <input type="text" readonly class="form-control cargo-container" name="cargo_container[]" 
+                                                                                        id="cargo-container-1">
+
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="cargo_volume">Volume</label>
+                                                                            <input type="text" data-type='currency4' autocomplete="off" title="Volume" placeholder="Volume"
+                                                                                class="form-control " name="cargo_volume[]" id="cargo-volume-1">
+
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-md-4">
+                                                                                <div class="form-group">
+                                                                                    <label for="cargo_uom_code">Uom </label>
+                                                                                    <select class="cargo-uom-select" name="cargo_uom_code[]" id="cargo-uom-select-1">
+                                                                                        <option value="">Search</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-8">
+                                                                                <div class="form-group">
+                                                                                    <label for="cargo_uom"> </label>
+                                                                                    <input type="text" readonly class="form-control cargo-uom" name="cargo_uom[]"
+                                                                                        id="cargo-uom-1">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <hr class="my-2">
+                                                                    <div class="col-md-2"></div>
+                                                                    <div class="col-md-5">
+                                                                        <div class="form-group">
+                                                                            <label for="marks_1">Marks</label>
+                                                                            <input type="text" class="form-control " placeholder="Marks No 01"  name="marks_1[]"
+                                                                                id="marks_1">
+
+                                                                            <input type="text" class="form-control  my-2" placeholder="Marks No 02" name="marks_2[]"
+                                                                                id="marks_2">
+
+                                                                            <input type="text" class="form-control my-2" placeholder="Marks No 03" name="marks_3[]"
+                                                                                id="marks_3">
+
+                                                                            <input type="text" class="form-control  my-2" placeholder="Marks No 04" name="marks_4[]"
+                                                                                id="marks_4">
+
+                                                                            <input type="text" class="form-control  my-2" placeholder="Marks No 05" name="marks_5[]"
+                                                                                id="marks_5">
+
+                                                                            <input type="text" class="form-control  my-2" placeholder="Marks No 06" name="marks_6[]"
+                                                                                id="marks_6">
+
+                                                                            <input type="text" class="form-control  my-2" placeholder="Marks No 07" name="marks_7[]"
+                                                                                id="marks_7">
+
+                                                                            <input type="text" class="form-control my-2" placeholder="Marks No 08" name="marks_8[]"
+                                                                                id="marks_8">
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="col-md-5">
+                                                                        <div class="form-group">
+                                                                            <label for="good_desc_1">Descriptions</label>
+                                                                            <input type="text" placeholder="Description 01" class="form-control " name="good_desc_1[]"
+                                                                                id="good_desc_1">
+
+                                                                            <input type="text" placeholder="Description 02" class="form-control  my-2" name="good_desc_2[]"
+                                                                                id="good_desc_2">
+
+                                                                            <input type="text" placeholder="Description 03" class="form-control  my-2" name="good_desc_3[]"
+                                                                                id="good_desc_3">
+
+                                                                            <input type="text" placeholder="Description 04" class="form-control  my-2" name="good_desc_4[]"
+                                                                                id="good_desc_4">
+
+                                                                            <input type="text" placeholder="Description 05" class="form-control  my-2" name="good_desc_5[]"
+                                                                                id="good_desc_5">
+
+                                                                            <input type="text" placeholder="Description 06" class="form-control  my-2" name="good_desc_6[]"
+                                                                                id="good_desc_6">
+
+                                                                            <input type="text" placeholder="Description 07" class="form-control  my-2" name="good_desc_7[]"
+                                                                                id="good_desc_7">
+
+                                                                            <input type="text" placeholder="Description 08" class="form-control  my-2" name="good_desc_8[]"
+                                                                                id="good_desc_8">
+                                                                        </div>
+
+
+                                                                    </div>
+                                                                    </div>`;
+
+                                $(`.wrapper-row-list-fch`).append(
+                                    cloneCi);
+                                evtCommodity(`#cargo-select-1`,
+                                    `#cargo-commodity-1`);
+                                evtContainerType(`#cont-type-select-1`,
+                                    `#cargo-container-1`);
+                                evtUom(`#cargo-uom-select-1`,
+                                    `#cargo-uom-1`);
+                                $("input[data-type='currency4']").on({
+                                    keyup: function() {
+                                        formatCurrency4($(
+                                            this));
+                                    },
+                                    blur: function() {
+                                        formatCurrency4($(this),
+                                            "blur");
+                                    }
+                                });
+                            }
                         }
                     });
 
@@ -1500,6 +3182,9 @@
 
                     let id = table.rows(colIdx).nodes().to$().find('td:first-child .input_check:checked').data(
                         'id');
+
+                    let quotation_no = table.rows(colIdx).nodes().to$().find('td:first-child .input_check:checked')
+                        .data('quotation_no');
 
                     $.ajax({
                         type: "POST",
@@ -1808,20 +3493,777 @@
                                 $("input[name=stuff_agent_address_4]").val("");
                             }
 
-                            $.ajax({
-                                type: "post",
-                                url: '{{ route('get.ci') }}',
-                                data: {
-                                    id: id
-                                },
-                                dataType: "json",
-                                success: function(response) {
-                                    // console.log(response.length);
-                                    let cloneCi;
-                                    if (response.length > 0) {
-                                        $(`.wrapper-row-list-fch`).html("");
-                                        for (let i = 0; i < response.length; i++) {
-                                            cloneCi = `<div class="row row-list-fch">
+                            let cloneJc;
+                            if (quotation_no != 0) {
+                                $.ajax({
+                                    type: "post",
+                                    url: '{{ route('get.jc.from.quot_sea') }}',
+                                    data: {
+                                        quotation_no: quotation_no
+                                    },
+                                    dataType: "json",
+                                    success: function(data) {
+
+                                        let totalSales = 0;
+                                        if (data.length > 0) {
+                                            $(`.tbody-condition`).html("");
+                                            for (let i = 0; i < data.length; i++) {
+                                                totalSales += parseFloat(data[i].idr_amt);
+                                                cloneJc = `<tr class="dynamic-field" id="dynamic-field-${i+1}" onclick="click_tr(${i+1})">
+                                                            <td class="text-center">
+                                                                <button type="button" onclick="addNewField(this.id)" id="add-button-${i+1}"
+                                                                    class="btn btn-xs btn-primary float-left text-uppercase shadow-sm add-button"><i
+                                                                        class="fa fa-plus fa-fw"></i>
+                                                                </button>
+                                                                <button type="button" onclick="removeLastField(this)" id="remove-button-${i+1}"
+                                                                    class="btn btn-xs btn-danger float-left text-uppercase ml-1 remove-button"><i
+                                                                        class="fa fa-minus fa-fw"></i>
+                                                                </button>
+                                                            </td>
+
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <select name="code[]" id="code-select-${i+1}" class="code-select">
+                                                                        <option value="${data[i].item_code != null ? data[i].item_code : ''}">${data[i].item_code != null ? data[i].item_code + " - " + data[i].item_desc : ''}</option>
+
+                                                                    </select>
+                                                                </div>
+                                                            </td>
+
+                                                            <td>
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control desc" name="description[]" id="desc-${i+1}" value="${data[i].item_desc != null ? data[i].item_desc : ''}">
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: darksalmon;">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control qty-sales" name="qty_sales[]" id="qty-sales-${i+1}"
+                                                                        data-type='currency4' value="${data[i].qty != null ? numberFormatter4(parseFloat(data[i].qty))  : ''}" autocomplete="off" onkeyup="sum_idr_sales(${i+1}, 1)">
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: darksalmon;">
+                                                                <div class="form-group">
+                                                                    <select name="uom_sales[]" id="uom-sales-${i+1}" class="uom-sales">
+                                                                        <option value="${data[i].uom != null ? data[i].uom : ''}">${data[i].uom != null ? data[i].uom : ''}</option>
+                                                                    </select>
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: darksalmon;">
+                                                                <div class="form-group">
+                                                                    <select name="pc_sales[]" id="pc-sales-${i+1}" class="pc-sales">
+                                                                        <option value="">Search</option>
+                                                                        <option value="Prepaid" ${data[i].p_c == 'Prepaid' ? 'selected' : ''} >Prepaid</option>
+                                                                        <option value="Collect" ${data[i].p_c == 'Collect' ? 'selected' : ''} >Collect</option>
+                                                                    </select>
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: darksalmon;">
+                                                                <div class="form-group">
+                                                                    <select name="cust_code_sales[]" id="cust-code-sales-${i+1}" class="cust-code-sales">
+                                                                        <option value="${res.code_customer}">${res.code_customer}</option>
+                                                                    </select>
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: darksalmon;">
+                                                                <div class="form-group">
+                                                                    <input type="text" value='${res.customer}' class="form-control cust-name-sales" name="cust_name_sales[]"
+                                                                        id="cust-name-sales-${i+1}">
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: darksalmon;">
+                                                                <div class="form-group">
+                                                                    <select name="vat_sales[]" id="vat-sales-${i+1}" class="vat-sales">
+                                                                        <option value="${data[i].vat_code != null ? data[i].vat_code : ''}">${data[i].vat_code != null ? data[i].vat_code : ''}</option>
+                                                                    </select>
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: darksalmon;">
+                                                                <div class="form-group">
+                                                                    <select name="curr_sales[]" id="curr-sales-${i+1}" class="curr-sales">
+                                                                        <option value="${data[i].currency != null ? data[i].currency : ''}">${data[i].currency != null ? data[i].currency : ''}</option>
+                                                                    </select>
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: darksalmon;">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control rate-sales" id="rate-sales-${i+1}"
+                                                                        autocomplete="off" data-type='currency' name="rate_sales[]" 
+                                                                        value='${data[i].curr_rate != null ? numberFormatter(parseFloat(data[i].curr_rate)) : ''}'
+                                                                        onkeyup="sum_idr_sales(${i+1}, 1)">
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: darksalmon;">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control unit-rate-sales" id="unit-rate-sales-${i+1}"
+                                                                        autocomplete="off" data-type='currency' name="unit_rate_sales[]"
+                                                                        value='${data[i].unit_rate != null ? numberFormatter(parseFloat(data[i].unit_rate)) : ''}'
+                                                                        onkeyup="sum_idr_sales(${i+1}, 1)">
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: darksalmon;">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control amt-sales" readonly id="amt-sales-${i+1}"
+                                                                    value='${data[i].amt != null ? numberFormatter(parseFloat(data[i].amt)) : ''}'
+                                                                        autocomplete="off" data-type='currency' name="amt_sales[]">
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: darksalmon;">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control sales" readonly id="sales-${i+1}"
+                                                                    value='${data[i].idr_amt != null ? numberFormatter(parseFloat(data[i].idr_amt)) : ''}'
+                                                                        autocomplete="off" data-type='currency' name="sales[]" data-total_sales="1">
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: cadetblue;">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control qty-vendor" name="qty_vendor[]"
+                                                                        id="qty-vendor-${i+1}" data-type='currency4' autocomplete="off"
+                                                                        onkeyup="sum_idr_vendor(${i+1}, 1)">
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: cadetblue;">
+                                                                <div class="form-group">
+                                                                    <select name="pc_vendor[]" id="pc-vendor-${i+1}" class="pc-vendor">
+                                                                        <option value="">Search</option>
+                                                                        <option value="Prepaid">Prepaid</option>
+                                                                        <option value="Collect">Collect</option>
+                                                                    </select>
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: cadetblue;">
+                                                                <div class="form-group">
+                                                                    <select name="code_vendor[]" id="code-vendor-${i+1}" class="code-vendor">
+                                                                        <option value="">Search</option>
+                                                                    </select>
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: cadetblue;">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control name-vendor" name="name_vendor[]"
+                                                                        id="name-vendor-${i+1}">
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: cadetblue;">
+                                                                <div class="form-group">
+                                                                    <select name="vat_vendor[]" id="vat-vendor-${i+1}" class="vat-vendor">
+                                                                        <option value="">Search</option>
+                                                                    </select>
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: cadetblue;">
+                                                                <div class="form-group">
+                                                                    <select name="curr_vendor[]" id="curr-vendor-${i+1}" class="curr-vendor">
+                                                                        <option value="">Search</option>
+                                                                    </select>
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: cadetblue;">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control rate-vendor" id="rate-vendor-${i+1}"
+                                                                        autocomplete="off" data-type='currency' name="rate_vendor[]"
+                                                                        onkeyup="sum_idr_vendor(${i+1}, 1)">
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: cadetblue;">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control unit-rate-vendor" id="unit-rate-vendor-${i+1}"
+                                                                        autocomplete="off" data-type='currency' name="unit_rate_vendor[]"
+                                                                        onkeyup="sum_idr_vendor(${i+1}, 1)">
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: cadetblue;">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control amt-vendor" readonly id="amt-vendor-${i+1}"
+                                                                        autocomplete="off" data-type='currency' name="amt_vendor[]">
+                                                                </div>
+                                                            </td>
+
+                                                            <td style="background-color: cadetblue;">
+                                                                <div class="form-group">
+                                                                    <input type="text" class="form-control cost" readonly id="cost-${i+1}"
+                                                                        autocomplete="off" data-type='currency' name="cost[]" data-total_vendor="1">
+                                                                </div>
+                                                            </td>
+
+                                                            </tr>`;
+                                                $(`.tbody-condition`).append(
+                                                    cloneJc);
+                                                evtNoData(
+                                                    `#pc-sales-${i+1}, #pc-vendor-${i+1}`
+                                                );
+                                                evtItemCode(`#code-select-${i+1}`,
+                                                    `#desc-${i+1}`);
+                                                evtUomCode(`#uom-sales-${i+1}`);
+
+                                                evtBisnisPartyNotComplete(
+                                                    `#cust-code-sales-${i+1}`,
+                                                    `#cust-name-sales-${i+1}`);
+                                                evtBisnisPartyNotComplete(
+                                                    `#code-vendor-${i+1}`,
+                                                    `#name-vendor-${i+1}`);
+                                                evtVatCode(
+                                                    `#vat-sales-${i+1}, #vat-vendor-${i+1}`
+                                                );
+                                                evtCurrencyCode(`#curr-sales-${i+1}`,
+                                                    null, true,
+                                                    `#rate-sales-${i+1}`);
+                                                evtCurrencyCode(`#curr-vendor-${i+1}`,
+                                                    null, true,
+                                                    `#rate-vendor-${i+1}`);
+
+                                                $("input[data-type='currency']").on({
+                                                    keyup: function() {
+                                                        formatCurrency($(this));
+                                                    },
+                                                    blur: function() {
+                                                        formatCurrency($(this),
+                                                            "blur");
+                                                    }
+                                                });
+
+                                                $("input[data-type='currency4']").on({
+                                                    keyup: function() {
+                                                        formatCurrency4($(
+                                                            this));
+                                                    },
+                                                    blur: function() {
+                                                        formatCurrency4($(this),
+                                                            "blur");
+                                                    }
+                                                });
+
+                                            }
+                                            $(`#total-sales-1`).val(numberFormatter(
+                                                parseFloat(totalSales)));
+                                            // UPDATE TOTAL ALL SALES
+                                            total_all_sales = totalSales;
+                                        } else {
+                                            $(`.tbody-condition`).html("");
+                                            cloneJc = `<tr class="dynamic-field" id="dynamic-field-1" onclick="click_tr(1)">
+                                                <td class="text-center">
+                                                    <button type="button" onclick="addNewField(this.id)" id="add-button-1"
+                                                        class="btn btn-xs btn-primary float-left text-uppercase shadow-sm add-button"><i
+                                                            class="fa fa-plus fa-fw"></i>
+                                                    </button>
+                                                    <button type="button" onclick="removeLastField(this)" id="remove-button-1"
+                                                        class="btn btn-xs btn-danger float-left text-uppercase ml-1 remove-button"><i
+                                                            class="fa fa-minus fa-fw"></i>
+                                                    </button>
+                                                </td>
+
+                                                <td>
+                                                    <div class="form-group">
+                                                        <select name="code[]" id="code-select-1" class="code-select">
+                                                            <option value="">Search</option>
+
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control desc" name="description[]" id="desc-1">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control qty-sales" name="qty_sales[]" id="qty-sales-1"
+                                                            data-type='currency4' autocomplete="off" onkeyup="sum_idr_sales(1, 1)">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <select name="uom_sales[]" id="uom-sales-1" class="uom-sales">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <select name="pc_sales[]" id="pc-sales-1" class="pc-sales">
+                                                            <option value="">Search</option>
+                                                            <option value="Prepaid">Prepaid</option>
+                                                            <option value="Collect">Collect</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <select name="cust_code_sales[]" id="cust-code-sales-1" class="cust-code-sales">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control cust-name-sales" name="cust_name_sales[]"
+                                                            id="cust-name-sales-1">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <select name="vat_sales[]" id="vat-sales-1" class="vat-sales">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <select name="curr_sales[]" id="curr-sales-1" class="curr-sales">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control rate-sales" id="rate-sales-1"
+                                                            autocomplete="off" data-type='currency' name="rate_sales[]" 
+                                                            onkeyup="sum_idr_sales(1, 1)">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control unit-rate-sales" id="unit-rate-sales-1"
+                                                            autocomplete="off" data-type='currency' name="unit_rate_sales[]"
+                                                            onkeyup="sum_idr_sales(1, 1)">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control amt-sales" readonly id="amt-sales-1"
+                                                            autocomplete="off" data-type='currency' name="amt_sales[]">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control sales" readonly id="sales-1"
+                                                            autocomplete="off" data-type='currency' name="sales[]" data-total_sales="1">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control qty-vendor" name="qty_vendor[]"
+                                                            id="qty-vendor-1" data-type='currency4' autocomplete="off"
+                                                            onkeyup="sum_idr_vendor(1, 1)">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <select name="pc_vendor[]" id="pc-vendor-1" class="pc-vendor">
+                                                            <option value="">Search</option>
+                                                            <option value="Prepaid">Prepaid</option>
+                                                            <option value="Collect">Collect</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <select name="code_vendor[]" id="code-vendor-1" class="code-vendor">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control name-vendor" name="name_vendor[]"
+                                                            id="name-vendor-1">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <select name="vat_vendor[]" id="vat-vendor-1" class="vat-vendor">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <select name="curr_vendor[]" id="curr-vendor-1" class="curr-vendor">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control rate-vendor" id="rate-vendor-1"
+                                                            autocomplete="off" data-type='currency' name="rate_vendor[]"
+                                                            onkeyup="sum_idr_vendor(1, 1)">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control unit-rate-vendor" id="unit-rate-vendor-1"
+                                                            autocomplete="off" data-type='currency' name="unit_rate_vendor[]"
+                                                            onkeyup="sum_idr_vendor(1, 1)">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control amt-vendor" readonly id="amt-vendor-1"
+                                                            autocomplete="off" data-type='currency' name="amt_vendor[]">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control cost" readonly id="cost-1"
+                                                            autocomplete="off" data-type='currency' name="cost[]" data-total_vendor="1">
+                                                    </div>
+                                                </td>
+
+                                                </tr>`;
+                                            $(`.tbody-condition`).append(
+                                                cloneJc);
+                                            evtNoData(
+                                                `#pc-sales-1, #pc-vendor-1`
+                                            );
+                                            evtItemCode(`#code-select-1`,
+                                                `#desc-1`);
+                                            evtUomCode(`#uom-sales-1`);
+
+                                            evtBisnisPartyNotComplete(
+                                                `#cust-code-sales-1`,
+                                                `#cust-name-sales-1`);
+                                            evtBisnisPartyNotComplete(
+                                                `#code-vendor-1`,
+                                                `#name-vendor-1`);
+                                            evtVatCode(
+                                                `#vat-sales-1, #vat-vendor-1`
+                                            );
+                                            evtCurrencyCode(`#curr-sales-1`,
+                                                null, true,
+                                                `#rate-sales-1`);
+                                            evtCurrencyCode(`#curr-vendor-1`,
+                                                null, true,
+                                                `#rate-vendor-1`);
+
+                                            $("input[data-type='currency']").on({
+                                                keyup: function() {
+                                                    formatCurrency($(this));
+                                                },
+                                                blur: function() {
+                                                    formatCurrency($(this),
+                                                        "blur");
+                                                }
+                                            });
+
+                                            $("input[data-type='currency4']").on({
+                                                keyup: function() {
+                                                    formatCurrency4($(
+                                                        this));
+                                                },
+                                                blur: function() {
+                                                    formatCurrency4($(this),
+                                                        "blur");
+                                                }
+                                            });
+                                            $(`#total-sales-1`).val("");
+                                            // UPDATE TOTAL ALL SALES
+                                            total_all_sales = 0;
+                                        }
+                                    }
+                                });
+                            } else {
+                                $(`.tbody-condition`).html("");
+                                cloneJc = `<tr class="dynamic-field" id="dynamic-field-1" onclick="click_tr(1)">
+                                                <td class="text-center">
+                                                    <button type="button" onclick="addNewField(this.id)" id="add-button-1"
+                                                        class="btn btn-xs btn-primary float-left text-uppercase shadow-sm add-button"><i
+                                                            class="fa fa-plus fa-fw"></i>
+                                                    </button>
+                                                    <button type="button" onclick="removeLastField(this)" id="remove-button-1"
+                                                        class="btn btn-xs btn-danger float-left text-uppercase ml-1 remove-button"><i
+                                                            class="fa fa-minus fa-fw"></i>
+                                                    </button>
+                                                </td>
+
+                                                <td>
+                                                    <div class="form-group">
+                                                        <select name="code[]" id="code-select-1" class="code-select">
+                                                            <option value="">Search</option>
+
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control desc" name="description[]" id="desc-1">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control qty-sales" name="qty_sales[]" id="qty-sales-1"
+                                                            data-type='currency4' autocomplete="off" onkeyup="sum_idr_sales(1, 1)">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <select name="uom_sales[]" id="uom-sales-1" class="uom-sales">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <select name="pc_sales[]" id="pc-sales-1" class="pc-sales">
+                                                            <option value="">Search</option>
+                                                            <option value="Prepaid">Prepaid</option>
+                                                            <option value="Collect">Collect</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <select name="cust_code_sales[]" id="cust-code-sales-1" class="cust-code-sales">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control cust-name-sales" name="cust_name_sales[]"
+                                                            id="cust-name-sales-1">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <select name="vat_sales[]" id="vat-sales-1" class="vat-sales">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <select name="curr_sales[]" id="curr-sales-1" class="curr-sales">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control rate-sales" id="rate-sales-1"
+                                                            autocomplete="off" data-type='currency' name="rate_sales[]" 
+                                                            onkeyup="sum_idr_sales(1, 1)">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control unit-rate-sales" id="unit-rate-sales-1"
+                                                            autocomplete="off" data-type='currency' name="unit_rate_sales[]"
+                                                            onkeyup="sum_idr_sales(1, 1)">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control amt-sales" readonly id="amt-sales-1"
+                                                            autocomplete="off" data-type='currency' name="amt_sales[]">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: darksalmon;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control sales" readonly id="sales-1"
+                                                            autocomplete="off" data-type='currency' name="sales[]" data-total_sales="1">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control qty-vendor" name="qty_vendor[]"
+                                                            id="qty-vendor-1" data-type='currency4' autocomplete="off"
+                                                            onkeyup="sum_idr_vendor(1, 1)">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <select name="pc_vendor[]" id="pc-vendor-1" class="pc-vendor">
+                                                            <option value="">Search</option>
+                                                            <option value="Prepaid">Prepaid</option>
+                                                            <option value="Collect">Collect</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <select name="code_vendor[]" id="code-vendor-1" class="code-vendor">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control name-vendor" name="name_vendor[]"
+                                                            id="name-vendor-1">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <select name="vat_vendor[]" id="vat-vendor-1" class="vat-vendor">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <select name="curr_vendor[]" id="curr-vendor-1" class="curr-vendor">
+                                                            <option value="">Search</option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control rate-vendor" id="rate-vendor-1"
+                                                            autocomplete="off" data-type='currency' name="rate_vendor[]"
+                                                            onkeyup="sum_idr_vendor(1, 1)">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control unit-rate-vendor" id="unit-rate-vendor-1"
+                                                            autocomplete="off" data-type='currency' name="unit_rate_vendor[]"
+                                                            onkeyup="sum_idr_vendor(1, 1)">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control amt-vendor" readonly id="amt-vendor-1"
+                                                            autocomplete="off" data-type='currency' name="amt_vendor[]">
+                                                    </div>
+                                                </td>
+
+                                                <td style="background-color: cadetblue;">
+                                                    <div class="form-group">
+                                                        <input type="text" class="form-control cost" readonly id="cost-1"
+                                                            autocomplete="off" data-type='currency' name="cost[]" data-total_vendor="1">
+                                                    </div>
+                                                </td>
+
+                                                </tr>`;
+                                $(`.tbody-condition`).append(
+                                    cloneJc);
+                                evtNoData(
+                                    `#pc-sales-1, #pc-vendor-1`
+                                );
+                                evtItemCode(`#code-select-1`,
+                                    `#desc-1`);
+                                evtUomCode(`#uom-sales-1`);
+
+                                evtBisnisPartyNotComplete(
+                                    `#cust-code-sales-1`,
+                                    `#cust-name-sales-1`);
+                                evtBisnisPartyNotComplete(
+                                    `#code-vendor-1`,
+                                    `#name-vendor-1`);
+                                evtVatCode(
+                                    `#vat-sales-1, #vat-vendor-1`
+                                );
+                                evtCurrencyCode(`#curr-sales-1`,
+                                    null, true,
+                                    `#rate-sales-1`);
+                                evtCurrencyCode(`#curr-vendor-1`,
+                                    null, true,
+                                    `#rate-vendor-1`);
+
+                                $("input[data-type='currency']").on({
+                                    keyup: function() {
+                                        formatCurrency($(this));
+                                    },
+                                    blur: function() {
+                                        formatCurrency($(this),
+                                            "blur");
+                                    }
+                                });
+
+                                $("input[data-type='currency4']").on({
+                                    keyup: function() {
+                                        formatCurrency4($(
+                                            this));
+                                    },
+                                    blur: function() {
+                                        formatCurrency4($(this),
+                                            "blur");
+                                    }
+                                });
+                                $(`#total-sales-1`).val("");
+                                // UPDATE TOTAL ALL SALES
+                                total_all_sales = 0;
+                            }
+
+                            let cloneCi;
+                            if (id != 0) {
+                                $.ajax({
+                                    type: "post",
+                                    url: '{{ route('get.ci') }}',
+                                    data: {
+                                        id: id
+                                    },
+                                    dataType: "json",
+                                    success: function(response) {
+                                        // console.log(response.length);
+
+                                        if (response.length > 0) {
+                                            $(`.wrapper-row-list-fch`).html("");
+                                            for (let i = 0; i < response.length; i++) {
+                                                cloneCi = `<div class="row row-list-fch">
                                                             <div class="col-md-2">
                                                                 <div class="row-number">
                                                                     <div>
@@ -1862,7 +4304,7 @@
                                                                 <div class="form-group">
                                                                     <label for="gross_weight">Gross Weight</label>
                                                                     <input type="text" data-type='currency4' autocomplete="off" title="Gross Weight"
-                                                                        placeholder="Gross Weight" class="form-control " name="gross_weight[]" value="${response[i].gross_weight != null ? numberFormatte4(parseFloat(response[i].gross_weight)) : ''}" id="gross-weight-${i+1}">
+                                                                        placeholder="Gross Weight" class="form-control " name="gross_weight[]" value="${response[i].gross_weight != null ? numberFormatter4(parseFloat(response[i].gross_weight)) : ''}" id="gross-weight-${i+1}">
                                                                 </div>
                                                                 <div class="row">
                                                                     <div class="col-md-4">
@@ -1911,7 +4353,7 @@
                                                                 <div class="form-group">
                                                                     <label for="cargo_volume">Volume</label>
                                                                     <input type="text" data-type='currency4' autocomplete="off" title="Volume" placeholder="Volume"
-                                                                        class="form-control " name="cargo_volume[]" id="cargo-volume-${i+1}" value="${response[i].cargo_volume != null ? numberFormatte4(parseFloat(response[i].cargo_volume)) : ''}">
+                                                                        class="form-control " name="cargo_volume[]" id="cargo-volume-${i+1}" value="${response[i].cargo_volume != null ? numberFormatter4(parseFloat(response[i].cargo_volume)) : ''}">
 
                                                                 </div>
                                                                 <div class="row">
@@ -1996,17 +4438,212 @@
                                                             </div>
                                                             </div>`;
 
+                                                $(`.wrapper-row-list-fch`).append(
+                                                    cloneCi);
+                                                evtCommodity(`#cargo-select-${i+1}`,
+                                                    `#cargo-commodity-${i+1}`);
+                                                evtContainerType(`#cont-type-select-${i+1}`,
+                                                    `#cargo-container-${i+1}`);
+                                                evtUom(`#cargo-uom-select-${i+1}`,
+                                                    `#cargo-uom-${i+1}`);
+                                                $("input[data-type='currency4']").on({
+                                                    keyup: function() {
+                                                        formatCurrency4($(
+                                                            this));
+                                                    },
+                                                    blur: function() {
+                                                        formatCurrency4($(this),
+                                                            "blur");
+                                                    }
+                                                });
+                                            }
+                                        } else {
+                                            $(`.wrapper-row-list-fch`).html("");
+                                            cloneCi = `<div class="row row-list-fch">
+                                                                    <div class="col-md-2">
+                                                                        <div class="row-number">
+                                                                            <div>
+                                                                                <small>
+                                                                                    Cargo Item No.
+                                                                                </small>
+                                                                            </div>
+
+                                                                            <span class='num'> 1 </span>
+                                                                        </div>
+                                                                        <div class="row my-3">
+                                                                            <div class="col-md-6">
+                                                                                <a href="javascript:void(0)" class="btn btn-primary add-btn-fch" id="add-btn-fch-1" title="Add row"
+                                                                                    onclick="add_row_ci(this.id)">
+                                                                                    <i class="fa fa-plus"></i>
+                                                                                </a>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <a href="javascript:void(0)" class="btn btn-danger" title="Delete row"
+                                                                                    onclick="delete_row_ci(this)">
+                                                                                    <i class="fa fa-minus"></i>
+                                                                                </a>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="col-md-5">
+                                                                        <div class="form-group">
+                                                                            <label for="container_no">Container No.</label>
+                                                                            <input type="text" class="form-control" name="container_no[]" id="container_no">
+
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="pcs">Pcs</label>
+                                                                            <input type="text" class="form-control " name="pcs[]" id="pcs-1">
+
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="gross_weight">Gross Weight</label>
+                                                                            <input type="text" data-type='currency4' autocomplete="off" title="Gross Weight"
+                                                                                placeholder="Gross Weight" class="form-control " name="gross_weight[]" id="gross-weight-1">
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-md-4">
+                                                                                <div class="form-group">
+                                                                                    <label for="cargo_commodity_code">Commodity </label>
+                                                                                    <select class="cargo-select" name="cargo_commodity_code[]" id="cargo-select-1">
+                                                                                        <option value="">Search</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-8">
+                                                                                <div class="form-group">
+                                                                                    <label for="cargo_commodity"> </label>
+                                                                                    <input type="text" readonly class="form-control cargo-commodity" name="cargo_commodity[]"
+                                                                                        id="cargo-commodity-1">
+
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="col-md-5">
+                                                                        <div class="form-group">
+                                                                            <label for="seal_no">Seal No.</label>
+                                                                            <input type="text" class="form-control " name="seal_no[]" id="seal_no">
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-md-4">
+                                                                                <div class="form-group">
+                                                                                    <label for="cargo_container_code">Container Type </label>
+                                                                                    <select class="cont-type-select " name="cargo_container_code[]" id="cont-type-select-1">
+                                                                                        <option value="">Search</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-8">
+                                                                                <div class="form-group">
+                                                                                    <label for="cargo_container"> </label>
+                                                                                    <input type="text" readonly class="form-control cargo-container" name="cargo_container[]" 
+                                                                                        id="cargo-container-1">
+
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="cargo_volume">Volume</label>
+                                                                            <input type="text" data-type='currency4' autocomplete="off" title="Volume" placeholder="Volume"
+                                                                                class="form-control " name="cargo_volume[]" id="cargo-volume-1">
+
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-md-4">
+                                                                                <div class="form-group">
+                                                                                    <label for="cargo_uom_code">Uom </label>
+                                                                                    <select class="cargo-uom-select" name="cargo_uom_code[]" id="cargo-uom-select-1">
+                                                                                        <option value="">Search</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-8">
+                                                                                <div class="form-group">
+                                                                                    <label for="cargo_uom"> </label>
+                                                                                    <input type="text" readonly class="form-control cargo-uom" name="cargo_uom[]"
+                                                                                        id="cargo-uom-1">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <hr class="my-2">
+                                                                    <div class="col-md-2"></div>
+                                                                    <div class="col-md-5">
+                                                                        <div class="form-group">
+                                                                            <label for="marks_1">Marks</label>
+                                                                            <input type="text" class="form-control " placeholder="Marks No 01"  name="marks_1[]"
+                                                                                id="marks_1">
+
+                                                                            <input type="text" class="form-control  my-2" placeholder="Marks No 02" name="marks_2[]"
+                                                                                id="marks_2">
+
+                                                                            <input type="text" class="form-control my-2" placeholder="Marks No 03" name="marks_3[]"
+                                                                                id="marks_3">
+
+                                                                            <input type="text" class="form-control  my-2" placeholder="Marks No 04" name="marks_4[]"
+                                                                                id="marks_4">
+
+                                                                            <input type="text" class="form-control  my-2" placeholder="Marks No 05" name="marks_5[]"
+                                                                                id="marks_5">
+
+                                                                            <input type="text" class="form-control  my-2" placeholder="Marks No 06" name="marks_6[]"
+                                                                                id="marks_6">
+
+                                                                            <input type="text" class="form-control  my-2" placeholder="Marks No 07" name="marks_7[]"
+                                                                                id="marks_7">
+
+                                                                            <input type="text" class="form-control my-2" placeholder="Marks No 08" name="marks_8[]"
+                                                                                id="marks_8">
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="col-md-5">
+                                                                        <div class="form-group">
+                                                                            <label for="good_desc_1">Descriptions</label>
+                                                                            <input type="text" placeholder="Description 01" class="form-control " name="good_desc_1[]"
+                                                                                id="good_desc_1">
+
+                                                                            <input type="text" placeholder="Description 02" class="form-control  my-2" name="good_desc_2[]"
+                                                                                id="good_desc_2">
+
+                                                                            <input type="text" placeholder="Description 03" class="form-control  my-2" name="good_desc_3[]"
+                                                                                id="good_desc_3">
+
+                                                                            <input type="text" placeholder="Description 04" class="form-control  my-2" name="good_desc_4[]"
+                                                                                id="good_desc_4">
+
+                                                                            <input type="text" placeholder="Description 05" class="form-control  my-2" name="good_desc_5[]"
+                                                                                id="good_desc_5">
+
+                                                                            <input type="text" placeholder="Description 06" class="form-control  my-2" name="good_desc_6[]"
+                                                                                id="good_desc_6">
+
+                                                                            <input type="text" placeholder="Description 07" class="form-control  my-2" name="good_desc_7[]"
+                                                                                id="good_desc_7">
+
+                                                                            <input type="text" placeholder="Description 08" class="form-control  my-2" name="good_desc_8[]"
+                                                                                id="good_desc_8">
+                                                                        </div>
+
+
+                                                                    </div>
+                                                                    </div>`;
+
                                             $(`.wrapper-row-list-fch`).append(
                                                 cloneCi);
-                                            evtCommodity(`#cargo-select-${i+1}`,
-                                                `#cargo-commodity-${i+1}`);
-                                            evtContainerType(`#cont-type-select-${i+1}`,
-                                                `#cargo-container-${i+1}`);
-                                            evtUom(`#cargo-uom-select-${i+1}`,
-                                                `#cargo-uom-${i+1}`);
+                                            evtCommodity(`#cargo-select-1`,
+                                                `#cargo-commodity-1`);
+                                            evtContainerType(`#cont-type-select-1`,
+                                                `#cargo-container-1`);
+                                            evtUom(`#cargo-uom-select-1`,
+                                                `#cargo-uom-1`);
                                             $("input[data-type='currency4']").on({
                                                 keyup: function() {
-                                                    formatCurrency4($(this));
+                                                    formatCurrency4($(
+                                                        this));
                                                 },
                                                 blur: function() {
                                                     formatCurrency4($(this),
@@ -2015,8 +4652,201 @@
                                             });
                                         }
                                     }
-                                }
-                            });
+                                });
+                            } else {
+                                $(`.wrapper-row-list-fch`).html("");
+                                cloneCi = `<div class="row row-list-fch">
+                                                                    <div class="col-md-2">
+                                                                        <div class="row-number">
+                                                                            <div>
+                                                                                <small>
+                                                                                    Cargo Item No.
+                                                                                </small>
+                                                                            </div>
+
+                                                                            <span class='num'> 1 </span>
+                                                                        </div>
+                                                                        <div class="row my-3">
+                                                                            <div class="col-md-6">
+                                                                                <a href="javascript:void(0)" class="btn btn-primary add-btn-fch" id="add-btn-fch-1" title="Add row"
+                                                                                    onclick="add_row_ci(this.id)">
+                                                                                    <i class="fa fa-plus"></i>
+                                                                                </a>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <a href="javascript:void(0)" class="btn btn-danger" title="Delete row"
+                                                                                    onclick="delete_row_ci(this)">
+                                                                                    <i class="fa fa-minus"></i>
+                                                                                </a>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="col-md-5">
+                                                                        <div class="form-group">
+                                                                            <label for="container_no">Container No.</label>
+                                                                            <input type="text" class="form-control" name="container_no[]" id="container_no">
+
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="pcs">Pcs</label>
+                                                                            <input type="text" class="form-control " name="pcs[]" id="pcs-1">
+
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="gross_weight">Gross Weight</label>
+                                                                            <input type="text" data-type='currency4' autocomplete="off" title="Gross Weight"
+                                                                                placeholder="Gross Weight" class="form-control " name="gross_weight[]" id="gross-weight-1">
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-md-4">
+                                                                                <div class="form-group">
+                                                                                    <label for="cargo_commodity_code">Commodity </label>
+                                                                                    <select class="cargo-select" name="cargo_commodity_code[]" id="cargo-select-1">
+                                                                                        <option value="">Search</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-8">
+                                                                                <div class="form-group">
+                                                                                    <label for="cargo_commodity"> </label>
+                                                                                    <input type="text" readonly class="form-control cargo-commodity" name="cargo_commodity[]"
+                                                                                        id="cargo-commodity-1">
+
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="col-md-5">
+                                                                        <div class="form-group">
+                                                                            <label for="seal_no">Seal No.</label>
+                                                                            <input type="text" class="form-control " name="seal_no[]" id="seal_no">
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-md-4">
+                                                                                <div class="form-group">
+                                                                                    <label for="cargo_container_code">Container Type </label>
+                                                                                    <select class="cont-type-select " name="cargo_container_code[]" id="cont-type-select-1">
+                                                                                        <option value="">Search</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-8">
+                                                                                <div class="form-group">
+                                                                                    <label for="cargo_container"> </label>
+                                                                                    <input type="text" readonly class="form-control cargo-container" name="cargo_container[]" 
+                                                                                        id="cargo-container-1">
+
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group">
+                                                                            <label for="cargo_volume">Volume</label>
+                                                                            <input type="text" data-type='currency4' autocomplete="off" title="Volume" placeholder="Volume"
+                                                                                class="form-control " name="cargo_volume[]" id="cargo-volume-1">
+
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-md-4">
+                                                                                <div class="form-group">
+                                                                                    <label for="cargo_uom_code">Uom </label>
+                                                                                    <select class="cargo-uom-select" name="cargo_uom_code[]" id="cargo-uom-select-1">
+                                                                                        <option value="">Search</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-8">
+                                                                                <div class="form-group">
+                                                                                    <label for="cargo_uom"> </label>
+                                                                                    <input type="text" readonly class="form-control cargo-uom" name="cargo_uom[]"
+                                                                                        id="cargo-uom-1">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <hr class="my-2">
+                                                                    <div class="col-md-2"></div>
+                                                                    <div class="col-md-5">
+                                                                        <div class="form-group">
+                                                                            <label for="marks_1">Marks</label>
+                                                                            <input type="text" class="form-control " placeholder="Marks No 01"  name="marks_1[]"
+                                                                                id="marks_1">
+
+                                                                            <input type="text" class="form-control  my-2" placeholder="Marks No 02" name="marks_2[]"
+                                                                                id="marks_2">
+
+                                                                            <input type="text" class="form-control my-2" placeholder="Marks No 03" name="marks_3[]"
+                                                                                id="marks_3">
+
+                                                                            <input type="text" class="form-control  my-2" placeholder="Marks No 04" name="marks_4[]"
+                                                                                id="marks_4">
+
+                                                                            <input type="text" class="form-control  my-2" placeholder="Marks No 05" name="marks_5[]"
+                                                                                id="marks_5">
+
+                                                                            <input type="text" class="form-control  my-2" placeholder="Marks No 06" name="marks_6[]"
+                                                                                id="marks_6">
+
+                                                                            <input type="text" class="form-control  my-2" placeholder="Marks No 07" name="marks_7[]"
+                                                                                id="marks_7">
+
+                                                                            <input type="text" class="form-control my-2" placeholder="Marks No 08" name="marks_8[]"
+                                                                                id="marks_8">
+                                                                        </div>
+
+                                                                    </div>
+                                                                    <div class="col-md-5">
+                                                                        <div class="form-group">
+                                                                            <label for="good_desc_1">Descriptions</label>
+                                                                            <input type="text" placeholder="Description 01" class="form-control " name="good_desc_1[]"
+                                                                                id="good_desc_1">
+
+                                                                            <input type="text" placeholder="Description 02" class="form-control  my-2" name="good_desc_2[]"
+                                                                                id="good_desc_2">
+
+                                                                            <input type="text" placeholder="Description 03" class="form-control  my-2" name="good_desc_3[]"
+                                                                                id="good_desc_3">
+
+                                                                            <input type="text" placeholder="Description 04" class="form-control  my-2" name="good_desc_4[]"
+                                                                                id="good_desc_4">
+
+                                                                            <input type="text" placeholder="Description 05" class="form-control  my-2" name="good_desc_5[]"
+                                                                                id="good_desc_5">
+
+                                                                            <input type="text" placeholder="Description 06" class="form-control  my-2" name="good_desc_6[]"
+                                                                                id="good_desc_6">
+
+                                                                            <input type="text" placeholder="Description 07" class="form-control  my-2" name="good_desc_7[]"
+                                                                                id="good_desc_7">
+
+                                                                            <input type="text" placeholder="Description 08" class="form-control  my-2" name="good_desc_8[]"
+                                                                                id="good_desc_8">
+                                                                        </div>
+
+
+                                                                    </div>
+                                                                    </div>`;
+
+                                $(`.wrapper-row-list-fch`).append(
+                                    cloneCi);
+                                evtCommodity(`#cargo-select-1`,
+                                    `#cargo-commodity-1`);
+                                evtContainerType(`#cont-type-select-1`,
+                                    `#cargo-container-1`);
+                                evtUom(`#cargo-uom-select-1`,
+                                    `#cargo-uom-1`);
+                                $("input[data-type='currency4']").on({
+                                    keyup: function() {
+                                        formatCurrency4($(
+                                            this));
+                                    },
+                                    blur: function() {
+                                        formatCurrency4($(this),
+                                            "blur");
+                                    }
+                                });
+                            }
 
                         }
                     });

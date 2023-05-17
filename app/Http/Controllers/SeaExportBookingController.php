@@ -373,7 +373,7 @@ class SeaExportBookingController extends Controller
                 $sea_d5->save();
 
                 $result_d6 = [];
-                if ($request->cargo_commodity_code[0] != null) {
+                if ($request->cargo_commodity_code != null) {
                     foreach ($request->cargo_commodity_code as $key => $val) {
                         $result_d6[] = [
                             'sea_booking_id'    => $sea_book->id,
@@ -714,7 +714,7 @@ class SeaExportBookingController extends Controller
 
                 $result_d6 = [];
                 $sea_book->sea_book_d6()->forceDelete();
-                if ($request->cargo_commodity_code[0] != null) {
+                if ($request->cargo_commodity_code != null) {
                     foreach ($request->cargo_commodity_code as $key => $val) {
                         $result_d6[] = [
                             'sea_booking_id'    => $sea_book->id,

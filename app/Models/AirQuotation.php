@@ -32,9 +32,19 @@ class AirQuotation extends Model
         return $this->hasMany(AirQuotationD1::class)->withTrashed();
     }
 
+    public function aqd1()
+    {
+        return $this->air_quotation_d1();
+    }
+
     public function air_quotation_d2()
     {
         return $this->hasMany(AirQuotationD2::class)->withTrashed();
+    }
+
+    public function aqd2()
+    {
+        return $this->air_quotation_d2();
     }
 
     public function air_quotation_s_d1()
@@ -42,9 +52,19 @@ class AirQuotation extends Model
         return $this->hasMany(AirQuotationSD1::class)->withTrashed();
     }
 
+    public function aqsd1()
+    {
+        return $this->air_quotation_s_d1();
+    }
+
     public function air_quotation_s_d2()
     {
         return $this->hasMany(AirQuotationSD2::class)->withTrashed();
+    }
+
+    public function aqsd2()
+    {
+        return $this->air_quotation_s_d2();
     }
 
     // this is the recommended way for declaring event handlers

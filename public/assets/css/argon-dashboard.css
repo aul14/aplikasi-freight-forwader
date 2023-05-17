@@ -21977,7 +21977,7 @@ hr.horizontal.gray-light {
   box-shadow: none;
 }
 .navbar-vertical.bg-white .navbar-nav > .nav-item .collapse .nav .nav-item .nav-link.active {
-  background-color: #11cdef;
+  background-color: #5E72E4;
   color: #fff !important;
   box-shadow: none;
 }
@@ -23135,7 +23135,7 @@ h4, .h4 {
 
 a {
   letter-spacing: -0.025rem;
-  color: #344767;
+  color: #5e72e4;
 }
 
 .text-sm {

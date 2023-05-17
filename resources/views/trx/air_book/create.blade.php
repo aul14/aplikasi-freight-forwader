@@ -250,7 +250,7 @@
                                             <select class="airdept-select @error('air_dept_code') is-invalid @enderror"
                                                 id="airdept-select-1" name="air_dept_code" required>
                                                 <option value="{{ old('air_dept_code', 'JKT') }}">
-                                                    {{ old('air_dept_code', 'JAKARTA SOEKARNO HATTA') }}
+                                                    {{ old('air_dept_code', 'JKT') }}
                                                 </option>
                                             </select>
                                             @error('air_dept_code')
@@ -265,7 +265,8 @@
                                             <label for="air_dept_name"> </label>
                                             <input type="text" readonly
                                                 class="form-control airdept-name @error('air_dept_name') is-invalid @enderror"
-                                                name="air_dept_name" value="{{ old('air_dept_name') }}"
+                                                name="air_dept_name"
+                                                value="{{ old('air_dept_name', 'JAKARTA SOEKARNO HATTA') }}"
                                                 id="airdept-name-1">
                                         </div>
                                     </div>

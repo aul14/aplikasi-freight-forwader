@@ -39,6 +39,16 @@ class BisnisParty extends Model
         return $this->hasOne(Quotation::class, 'customer_code', 'code')->withTrashed();
     }
 
+    public function air_book()
+    {
+        return $this->hasOne(AirBooking::class, 'code_customer', 'code')->withTrashed();
+    }
+
+    public function ab()
+    {
+        return $this->air_book();
+    }
+
     public function currency()
     {
         return $this->belongsTo(Currency::class)->withTrashed();

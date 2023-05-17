@@ -20,9 +20,12 @@ return new class extends Migration
             $table->string('job_type', 5)->nullable();
             $table->string('cargo_type', 10)->nullable();
             $table->string('master_job_no', 20)->unique()->nullable();
-            $table->string('bl_no', 25)->nullable();
-            $table->string('hbl_no', 25)->nullable();
-            $table->string('obl_no', 25)->nullable();
+            $table->string('bl_no', 30)->nullable();
+            $table->string('hbl_no', 30)->nullable();
+            $table->string('obl_no', 30)->nullable();
+            $table->string('awb_no', 30)->nullable();
+            $table->string('hawb_no', 30)->nullable();
+            $table->string('mawb_no', 30)->nullable();
             $table->string('shipment_type', 25)->nullable();
             $table->string('customer_code', 20)->nullable();
             $table->string('customer', 100)->nullable();

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AirExportBookingController;
+use App\Http\Controllers\AirExportJobController;
 use App\Http\Controllers\AirLineController;
 use App\Http\Controllers\AirPortController;
 use App\Http\Controllers\AirQuotationController;
@@ -37,6 +38,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SalesmanController;
 use App\Http\Controllers\SeaExportBookingController;
 use App\Http\Controllers\SeaExportJobController;
+use App\Http\Controllers\SeaImJobControlller;
 use App\Http\Controllers\SeaQuotationController;
 use App\Http\Controllers\ShippingLineController;
 use App\Http\Controllers\SystemNumberingController;
@@ -108,11 +110,18 @@ Route::group(['middleware' => ['auth', 'prevent-back-history']], function () {
 	Route::resource('/sea_book', SeaExportBookingController::class);
 	Route::resource('/air_book', AirExportBookingController::class);
 	Route::resource('/sea_ex_job', SeaExportJobController::class);
+	Route::resource('/air_ex_job', AirExportJobController::class);
+	Route::resource('/sea_im_job', SeaImJobControlller::class);
 	Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
 	Route::get('/pdf_sea_quot/{sea_quot}', [SeaQuotationController::class, 'pdf'])->name('pdf.sea');
 	Route::get('/pdf_air_quot/{air_quot}', [AirQuotationController::class, 'pdf'])->name('pdf.air');
 	Route::get('/pdf_sea_book/{sea_book}', [SeaExportBookingController::class, 'pdf'])->name('pdf.sea_book');
+	Route::get('/pdf_ex_job_air/{air_ex_job}/{parameter?}', [AirExportJobController::class, 'pdf'])->name('pdf.air_ex_job');
+	Route::get('/pdf_ex_job_sea/{sea_ex_job}/{parameter?}', [SeaExportJobController::class, 'pdf'])->name('pdf.sea_ex_job');
+	Route::get('/pdf_im_job_sea/{sea_im_job}/{parameter?}', [SeaImJobControlller::class, 'pdf'])->name('pdf.sea_im_job');
+	Route::post('/pdf_im_job_sea/{sea_im_job}/{parameter?}', [SeaImJobControlller::class, 'pdf'])->name('pdf.post.sea_im_job');
 	Route::get('/company', [CompanyController::class, 'index'])->name('company');
+	Route::get('/home', [HomeController::class, 'index']);
 	Route::get('/dashboard', [HomeController::class, 'index'])->name('home');
 	Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
 	Route::get('/profile-static', [PageController::class, 'profile'])->name('profile-static');
@@ -134,9 +143,15 @@ Route::group(['middleware' => ['auth', 'prevent-back-history']], function () {
 	Route::post('/ajax_search_air_customer', [DataAjaxController::class, 'ajax_search_air_customer'])->name('search.air_cus');
 	Route::post('/ajax_table_cus_ex_job', [DataAjaxController::class, 'ajax_table_cus_ex_job'])->name('get.table.cus_ex_job');
 	Route::post('/ajax_search_cus_ex_job', [DataAjaxController::class, 'ajax_search_cus_ex_job'])->name('search.cus_ex_job');
-	Route::post('/ajax_table_booking_ex_job', [DataAjaxController::class, 'ajax_table_booking_ex_job'])->name('get.table.book_ex_job');
-	Route::post('/ajax_search_booking_ex_job', [DataAjaxController::class, 'ajax_search_booking_ex_job'])->name('search.book_ex_job');
+	Route::post('/ajax_table_booking_ex_job_sea', [DataAjaxController::class, 'ajax_table_booking_ex_job_sea'])->name('get.table.book_ex_job_sea');
+	Route::post('/ajax_search_booking_ex_job_sea', [DataAjaxController::class, 'ajax_search_booking_ex_job_sea'])->name('search.book_ex_job_sea');
+	Route::post('/ajax_table_booking_ex_job_air', [DataAjaxController::class, 'ajax_table_booking_ex_job_air'])->name('get.table.book_ex_job_air');
+	Route::post('/ajax_search_booking_ex_job_air', [DataAjaxController::class, 'ajax_search_booking_ex_job_air'])->name('search.book_ex_job_air');
+	Route::post('/ajax_table_cus_ex_job_air', [DataAjaxController::class, 'ajax_table_cus_ex_job_air'])->name('get.table.cus_ex_job_air');
+	Route::post('/ajax_search_cus_ex_job_air', [DataAjaxController::class, 'ajax_search_cus_ex_job_air'])->name('search.cus_ex_job_air');
 	Route::post('/ajax_get_cargo_info', [DataAjaxController::class, 'ajax_get_cargo_info'])->name('get.ci');
+	Route::post('/ajax_get_jc_from_quot_sea', [DataAjaxController::class, 'ajax_get_jc_from_quot_sea'])->name('get.jc.from.quot_sea');
+	Route::post('/ajax_get_jc_from_quot_air', [DataAjaxController::class, 'ajax_get_jc_from_quot_air'])->name('get.jc.from.quot_air');
 	Route::post('/ajax_get_port', [DataAjaxController::class, 'ajax_get_port'])->name('get.port');
 	Route::post('/ajax_get_country', [DataAjaxController::class, 'ajax_get_country'])->name('get.country');
 	Route::post('/ajax_get_city', [DataAjaxController::class, 'ajax_get_city'])->name('get.city');
@@ -167,6 +182,7 @@ Route::group(['middleware' => ['auth', 'prevent-back-history']], function () {
 	Route::post('/ajax_get_charge_table', [DataAjaxController::class, 'ajax_get_charge_table'])->name('get.charge.table');
 	Route::post('/ajax_get_airport', [DataAjaxController::class, 'ajax_get_airport'])->name('get.airport');
 	Route::post('/ajax_get_airline', [DataAjaxController::class, 'ajax_get_airline'])->name('get.airline');
+	Route::post('/ajax_table_get_bisnis_party', [DataAjaxController::class, 'ajax_table_get_bisnis_party'])->name('table.bp');
 	Route::post('attach-permission/{role_id}', [PermissionController::class, 'attachPermission'])->name('permission.attach');
 	Route::post('detach-permission/{role_id}', [PermissionController::class, 'detachPermission'])->name('permission.detach');
 });

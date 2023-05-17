@@ -16,20 +16,20 @@ return new class extends Migration
         Schema::create('air_quotation_d2', function (Blueprint $table) {
             $table->id();
             $table->foreignId('air_quotation_id')->nullable();
-            $table->string('item_code_d2', 50)->nullable();
-            $table->string('item_desc_d2', 100)->nullable();
-            $table->double('qty_d2')->nullable();
-            $table->string('awb_code_d2', 50)->nullable();
-            $table->string('uom_d2', 50)->nullable();
-            $table->boolean('chg_d2')->nullable();
-            $table->string('vat_code_d2', 50)->nullable();
-            $table->string('p_c_d2', 5)->nullable();
-            $table->string('due_d2', 15)->nullable();
-            $table->string('chg_unit_d2', 100)->nullable();
-            $table->string('rate_d2', 50)->nullable();
-            $table->string('currency_d2', 50)->nullable();
-            $table->double('min_amt_d2')->nullable();
-            $table->double('amt_d2')->nullable();
+            $table->string('item_code', 50)->nullable();
+            $table->string('item_desc', 100)->nullable();
+            $table->double('qty')->nullable();
+            $table->string('awb_code', 50)->nullable();
+            $table->string('uom', 50)->nullable();
+            $table->boolean('chg')->nullable();
+            $table->string('vat_code', 50)->nullable();
+            $table->string('p_c', 15)->nullable();
+            $table->string('due', 15)->nullable();
+            $table->string('chg_unit', 100)->nullable();
+            $table->string('rate', 50)->nullable();
+            $table->string('currency', 50)->nullable();
+            $table->double('min_amt')->nullable();
+            $table->double('amt')->nullable();
             $table->timestamps();
         });
     }

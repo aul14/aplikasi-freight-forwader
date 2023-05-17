@@ -446,7 +446,7 @@
                     <label for="dest_eta">Dest ETA</label>
                     <input type="text"
                         value="{{ old('dest_eta', !empty($sd1->dest_eta) ? date('d/m/Y', strtotime($sd1->dest_eta)) : '') }}"
-                        placeholder="First Via ETD" autocomplete="off"
+                        placeholder="Dest ETA" autocomplete="off"
                         class="form-control @error('dest_eta') is-invalid @enderror date-picker" name="dest_eta"
                         id="dest_eta">
                     @error('dest_eta')

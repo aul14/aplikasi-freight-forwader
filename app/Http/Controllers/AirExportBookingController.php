@@ -240,6 +240,8 @@ class AirExportBookingController extends Controller
                             'dimension'      => !empty($request->dimension[$key]) ? str_replace(",", "", $request->dimension[$key]) : null,
                             'sum_m3'      => !empty($request->sum_m3[$key]) ? str_replace(",", "", $request->sum_m3[$key]) : null,
                             'sum_volwt'      => !empty($request->sum_volwt[$key]) ? str_replace(",", "", $request->sum_volwt[$key]) : null,
+                            'created_at' => now(),
+                            'updated_at' => now(),
                         ];
                     }
                     AirBookingD1::insert($result_d1);
@@ -470,6 +472,8 @@ class AirExportBookingController extends Controller
                             'dimension'      => !empty($request->dimension[$key]) ? str_replace(",", "", $request->dimension[$key]) : null,
                             'sum_m3'      => !empty($request->sum_m3[$key]) ? str_replace(",", "", $request->sum_m3[$key]) : null,
                             'sum_volwt'      => !empty($request->sum_volwt[$key]) ? str_replace(",", "", $request->sum_volwt[$key]) : null,
+                            'created_at' => now(),
+                            'updated_at' => now(),
                         ];
                     }
                     AirBookingD1::insert($result_d1);

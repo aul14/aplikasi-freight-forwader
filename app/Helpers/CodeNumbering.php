@@ -37,8 +37,8 @@ class CodeNumbering
         // CEK MENGGUNAKAN CYCLE Y OR M
         if ($cycle == "Y") {
             if ((in_array("[MM]", $exp_old) || in_array("[MMMM]", $exp_old))) {
-                if ($data_code->module_id == 36) {
-                    $imp_format = str_replace("F", "", $imp_format);
+                if ($data_code->module_id == 36 || $data_code->module_id == 37) {
+                    // $imp_format = str_replace("F", "", $imp_format);
                     $imp_format = substr($imp_format, 0, 10);
                 } else {
                     $imp_format = preg_replace("/[^a-zA-Z0-9]/", "", implode("", $exp));
@@ -63,11 +63,12 @@ class CodeNumbering
             }
         }
 
-        if ($data_code->module_id == 36) {
-            $imp_format = str_replace("F", "", $imp_format);
-        } else {
-            $imp_format = $imp_format;
-        }
+        // if ($data_code->module_id == 36) {
+        //     $imp_format = str_replace("F", "", $imp_format);
+        // } else {
+        //     $imp_format = $imp_format;
+        // }
+        // dd($imp_format);
 
         if ($count_charge_table == 0) {
             $data_format = 1;

@@ -39,9 +39,19 @@ class SeaQuotation extends Model
         return $this->hasMany(SeaQuotationD2::class)->withTrashed();
     }
 
+    public function sqd2()
+    {
+        return $this->sea_quotation_d2();
+    }
+
     public function sea_quotation_s_d1()
     {
         return $this->hasMany(SeaQuotationSD1::class)->withTrashed();
+    }
+
+    public function sqsd1()
+    {
+        return $this->sea_quotation_s_d1();
     }
 
     // this is the recommended way for declaring event handlers

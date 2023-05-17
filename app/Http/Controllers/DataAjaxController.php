@@ -7,10 +7,10 @@ use App\Models\City;
 use App\Models\Port;
 use App\Models\Module;
 use App\Models\Vendor;
+use App\Models\Vessel;
 use App\Models\WtCode;
 use App\Models\Airline;
 use App\Models\Airport;
-use App\Models\AirQuotationD1;
 use App\Models\Country;
 use App\Models\JobType;
 use App\Models\VatCode;
@@ -19,6 +19,8 @@ use App\Models\Customer;
 use App\Models\Salesman;
 use App\Models\Commodity;
 use App\Models\Container;
+use App\Models\AirBooking;
+use App\Models\AirQuotation;
 use App\Models\ChargeCode;
 use App\Models\VendorType;
 use App\Models\BisnisParty;
@@ -26,14 +28,15 @@ use App\Models\ChargeTable;
 use App\Models\PaymentTerm;
 use App\Models\CustomerType;
 use App\Models\DeliveryType;
+use App\Models\SeaBookingD6;
+use App\Models\SeaQuotation;
 use App\Models\ShippingLine;
 use Illuminate\Http\Request;
 use App\Models\QuotationType;
+use App\Models\AirQuotationD1;
 use App\Models\SeaQuotationD1;
 use Yajra\DataTables\DataTables;
 use App\Models\CurrencyDetailSatu;
-use App\Models\SeaBookingD6;
-use App\Models\Vessel;
 use Illuminate\Support\Facades\DB;
 
 class DataAjaxController extends Controller
@@ -515,6 +518,26 @@ class DataAjaxController extends Controller
         return response()->json($vat);
     }
 
+    public function ajax_table_get_bisnis_party(Request $request)
+    {
+        if ($request->ajax()) {
+            if (!empty(auth()->user()->salesman_code)) {
+                $query = BisnisParty::orderby('id', 'asc')->whereIn('salesman_code', explode(",", auth()->user()->salesman_code))->select('*');
+            } else {
+                $query = BisnisParty::orderby('id', 'asc')->select('*');
+            }
+
+            return DataTables::of($query)
+                ->addColumn('action', function ($query) {
+                    return "<input type='radio' class='input_check' name='input_check' value='{$query->code}' 
+                    data-customer='{$query->name}'/>";
+                })
+                ->rawColumns(['action'])
+                ->addIndexColumn()
+                ->make(true);
+        }
+    }
+
     public function ajax_get_charge_table(Request $request)
     {
         $search = strtoupper($request->q);
@@ -829,12 +852,12 @@ class DataAjaxController extends Controller
             }
 
             $query = DB::table('bisnis_party as bp')
-                ->select('sb.id', 'bp.code', 'bp.name', 'sb.code as booking_no', 'sb.origin_code', 'sb.origin_name', 'sb.dest_code', 'sb.dest_name', 'sb_d1.shipper_code', 'sb_d1.shipper_name', 'sb_d1.consignee_code', 'sb_d1.consignee_name', 'sb_d1.notify_code', 'sb_d1.notify_name', 'sb_d2.port_loading_code', 'sb_d2.port_loading_name', 'sb_d2.port_discharge_code', 'sb_d2.port_discharge_name', 'sb_d2.coloader_ref_no', 'sb_d3.principle_agent_code', 'sb_d3.shippagent_code')
+                ->select('sb.quotation_no', 'sb.id', 'bp.code', 'bp.name', 'sb.code as booking_no', 'sb.origin_code', 'sb.origin_name', 'sb.dest_code', 'sb.dest_name', 'sb_d1.shipper_code', 'sb_d1.shipper_name', 'sb_d1.consignee_code', 'sb_d1.consignee_name', 'sb_d1.notify_code', 'sb_d1.notify_name', 'sb_d2.port_loading_code', 'sb_d2.port_loading_name', 'sb_d2.port_discharge_code', 'sb_d2.port_discharge_name', 'sb_d2.coloader_ref_no', 'sb_d3.principle_agent_code', 'sb_d3.shippagent_code')
                 ->leftJoin('sea_bookings as sb', 'sb.code_customer', '=', 'bp.code')
                 ->leftJoin('sea_booking_d1 as sb_d1', 'sb_d1.sea_booking_id', '=', 'sb.id')
                 ->leftJoin('sea_booking_d2 as sb_d2', 'sb_d2.sea_booking_id', '=', 'sb.id')
                 ->leftJoin('sea_booking_d3 as sb_d3', 'sb_d3.sea_booking_id', '=', 'sb.id')
-                ->groupBy(['sb.id', 'bp.code', 'bp.name', 'sb.code', 'sb.origin_code', 'sb.origin_name', 'sb.dest_code', 'sb.dest_name', 'sb_d1.shipper_code', 'sb_d1.shipper_name', 'sb_d1.consignee_code', 'sb_d1.consignee_name', 'sb_d1.notify_code', 'sb_d1.notify_name', 'sb_d2.port_loading_code', 'sb_d2.port_loading_name', 'sb_d2.port_discharge_code', 'sb_d2.port_discharge_name', 'sb_d2.coloader_ref_no', 'sb_d3.principle_agent_code', 'sb_d3.shippagent_code']);
+                ->groupBy(['sb.quotation_no', 'sb.id', 'bp.code', 'bp.name', 'sb.code', 'sb.origin_code', 'sb.origin_name', 'sb.dest_code', 'sb.dest_name', 'sb_d1.shipper_code', 'sb_d1.shipper_name', 'sb_d1.consignee_code', 'sb_d1.consignee_name', 'sb_d1.notify_code', 'sb_d1.notify_name', 'sb_d2.port_loading_code', 'sb_d2.port_loading_name', 'sb_d2.port_discharge_code', 'sb_d2.port_discharge_name', 'sb_d2.coloader_ref_no', 'sb_d3.principle_agent_code', 'sb_d3.shippagent_code']);
 
             if ($array['search'] != '') {
                 $query->where('bp.name', 'like', "%" . $array['search'] . "%");
@@ -853,9 +876,11 @@ class DataAjaxController extends Controller
             return DataTables::of($query)
                 ->addColumn('action', function ($query) {
                     $cus_code = !empty($query->code) ? $query->code : "";
+                    $quotation_no = !empty($query->quotation_no) ? $query->quotation_no : 0;
                     $booking_no = !empty($query->booking_no) ? $query->booking_no : 0;
                     $id = !empty($query->id) ? $query->id : 0;
-                    return "<input type='radio' class='input_check' name='input_check' value='{$cus_code}' data-id='{$id}' data-booking_no='{$booking_no}'/>";
+                    return "<input type='radio' class='input_check' name='input_check' value='{$cus_code}' data-id='{$id}' 
+                    data-quotation_no='{$quotation_no}' data-booking_no='{$booking_no}'/>";
                 })
                 ->filter(
                     function ($query) {
@@ -912,7 +937,7 @@ class DataAjaxController extends Controller
         return response()->json($end_query);
     }
 
-    public function ajax_table_booking_ex_job(Request $request)
+    public function ajax_table_booking_ex_job_sea(Request $request)
     {
         if ($request->ajax()) {
 
@@ -927,11 +952,11 @@ class DataAjaxController extends Controller
             }
 
             $query = DB::table('sea_bookings as sb')
-                ->select('sb.id', 'sb.code as booking_no', 'sb.code_customer', 'sb.customer', 'sb.booking_date', 'sb.salesman_code', 'sb.salesman', 'sb.etd', 'sb.origin_code', 'sb.origin_name', 'sb.dest_code', 'sb.dest_name', 'sb_d1.shipper_code', 'sb_d1.shipper_name', 'sb_d1.consignee_code', 'sb_d1.consignee_name', 'sb_d1.notify_code', 'sb_d1.notify_name', 'sb_d2.port_loading_code', 'sb_d2.port_loading_name', 'sb_d2.port_discharge_code', 'sb_d2.port_discharge_name', 'sb_d3.stuff_agent_name', 'sb_d3.yard_code', 'sb_d3.yard_name')
+                ->select('sb.quotation_no', 'sb.id', 'sb.code as booking_no', 'sb.code_customer', 'sb.customer', 'sb.booking_date', 'sb.salesman_code', 'sb.salesman', 'sb.etd', 'sb.origin_code', 'sb.origin_name', 'sb.dest_code', 'sb.dest_name', 'sb_d1.shipper_code', 'sb_d1.shipper_name', 'sb_d1.consignee_code', 'sb_d1.consignee_name', 'sb_d1.notify_code', 'sb_d1.notify_name', 'sb_d2.port_loading_code', 'sb_d2.port_loading_name', 'sb_d2.port_discharge_code', 'sb_d2.port_discharge_name', 'sb_d3.stuff_agent_name', 'sb_d3.yard_code', 'sb_d3.yard_name')
                 ->leftJoin('sea_booking_d1 as sb_d1', 'sb_d1.sea_booking_id', '=', 'sb.id')
                 ->leftJoin('sea_booking_d2 as sb_d2', 'sb_d2.sea_booking_id', '=', 'sb.id')
                 ->leftJoin('sea_booking_d3 as sb_d3', 'sb_d3.sea_booking_id', '=', 'sb.id')
-                ->groupBy(['sb.id', 'sb.code', 'sb.code_customer', 'sb.customer', 'sb.booking_date', 'sb.salesman_code', 'sb.salesman', 'sb.etd', 'sb.origin_code', 'sb.origin_name', 'sb.dest_code', 'sb.dest_name', 'sb_d1.shipper_code', 'sb_d1.shipper_name', 'sb_d1.consignee_code', 'sb_d1.consignee_name', 'sb_d1.notify_code', 'sb_d1.notify_name', 'sb_d2.port_loading_code', 'sb_d2.port_loading_name', 'sb_d2.port_discharge_code', 'sb_d2.port_discharge_name', 'sb_d3.stuff_agent_name', 'sb_d3.yard_code', 'sb_d3.yard_name']);
+                ->groupBy(['sb.quotation_no', 'sb.id', 'sb.code', 'sb.code_customer', 'sb.customer', 'sb.booking_date', 'sb.salesman_code', 'sb.salesman', 'sb.etd', 'sb.origin_code', 'sb.origin_name', 'sb.dest_code', 'sb.dest_name', 'sb_d1.shipper_code', 'sb_d1.shipper_name', 'sb_d1.consignee_code', 'sb_d1.consignee_name', 'sb_d1.notify_code', 'sb_d1.notify_name', 'sb_d2.port_loading_code', 'sb_d2.port_loading_name', 'sb_d2.port_discharge_code', 'sb_d2.port_discharge_name', 'sb_d3.stuff_agent_name', 'sb_d3.yard_code', 'sb_d3.yard_name']);
 
             if ($array['search'] != '') {
                 $query->where('sb.code', 'like', "%" . $array['search'] . "%");
@@ -950,9 +975,10 @@ class DataAjaxController extends Controller
             return DataTables::of($query)
                 ->addColumn('action', function ($query) {
                     $cus_code = !empty($query->code_customer) ? $query->code_customer : "";
+                    $quotation_no = !empty($query->quotation_no) ? $query->quotation_no : "";
                     $booking_no = !empty($query->booking_no) ? $query->booking_no : 0;
                     $id = !empty($query->id) ? $query->id : 0;
-                    return "<input type='radio' class='input_check' name='input_check' value='{$booking_no}' data-id='{$id}' data-cus_code='{$cus_code}'/>";
+                    return "<input type='radio' class='input_check' name='input_check' value='{$booking_no}' data-quotation_no='{$quotation_no}' data-id='{$id}' data-cus_code='{$cus_code}'/>";
                 })
                 ->filter(
                     function ($query) {
@@ -988,7 +1014,7 @@ class DataAjaxController extends Controller
         }
     }
 
-    public function ajax_search_booking_ex_job(Request $request)
+    public function ajax_search_booking_ex_job_sea(Request $request)
     {
         $code = $request->code;
         $booking_no = $request->booking_no;
@@ -1008,6 +1034,69 @@ class DataAjaxController extends Controller
         return response()->json($end_query);
     }
 
+    public function ajax_table_booking_ex_job_air(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = AirBooking::with(['air_book_d1', 'quot'])->orderBy('id', 'DESC')->select('*');
+
+            return DataTables::of($query)
+                ->addColumn('action', function ($query) {
+                    $cus_code = !empty($query->quot->code_customer) ? $query->quot->code_customer : "";
+                    $quotation_no = !empty($query->quotation_no) ? $query->quotation_no : 0;
+                    $booking_no = !empty($query->code) ? $query->code : 0;
+                    $id = !empty($query->id) ? $query->id : 0;
+                    return "<input type='radio' class='input_check' name='input_check' value='{$booking_no}' data-quotation_no='{$quotation_no}' data-id='{$id}' data-cus_code='{$cus_code}'/>";
+                })
+                ->smart(false)
+                ->rawColumns(['action'])
+                ->addIndexColumn()
+                ->toJson();
+        }
+    }
+
+    public function ajax_search_booking_ex_job_air(Request $request)
+    {
+        $booking_no = $request->booking_no;
+
+        if ($request->ajax()) {
+            $query = AirBooking::with(['air_book_d1', 'quot'])->orderBy('id', 'DESC')->where('code', $booking_no);
+
+            $end_query = $query->first();
+        }
+        return response()->json($end_query);
+    }
+
+    public function ajax_table_cus_ex_job_air(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = BisnisParty::with(['ab.air_book_d1'])->orderBy('id', 'DESC')->select('*');
+
+            return DataTables::of($query)
+                ->addColumn('action', function ($query) {
+                    $cus_code = !empty($query->code) ? $query->code : "";
+                    $quotation_no = !empty($query->ab->quotation_no) ? $query->ab->quotation_no : 0;
+                    $booking_no = !empty($query->ab->code) ? $query->ab->code : 0;
+                    $id = !empty($query->id) ? $query->id : 0;
+                    return "<input type='radio' class='input_check' name='input_check' value='{$booking_no}' data-quotation_no='{$quotation_no}' data-id='{$id}' data-cus_code='{$cus_code}'/>";
+                })
+                ->smart(false)
+                ->rawColumns(['action'])
+                ->addIndexColumn()
+                ->toJson();
+        }
+    }
+
+    public function ajax_search_cus_ex_job_air(Request $request)
+    {
+        $code = $request->code;
+        if ($request->ajax()) {
+            $query = BisnisParty::with(['ab.air_book_d1'])->orderBy('id', 'DESC')->where('code', $code);
+
+            $end_query = $query->first();
+        }
+        return response()->json($end_query);
+    }
+
     public function ajax_get_cargo_info(Request $request)
     {
         $id = $request->id;
@@ -1015,6 +1104,28 @@ class DataAjaxController extends Controller
             $query = SeaBookingD6::where('sea_booking_id', $id)->get();
         }
         return response()->json($query);
+    }
+
+    public function ajax_get_jc_from_quot_sea(Request $request)
+    {
+        $quotation_no = $request->quotation_no;
+        $data = "";
+        if ($request->ajax()) {
+            $query = SeaQuotation::with(['sqd2', 'sqsd1'])->where('sea_quot_no', $quotation_no)->first()->toArray();
+            $data = array_merge_recursive($query['sqsd1'], $query['sqd2']);
+        }
+        return response()->json($data);
+    }
+
+    public function ajax_get_jc_from_quot_air(Request $request)
+    {
+        $quotation_no = $request->quotation_no;
+        $data = "";
+        if ($request->ajax()) {
+            $query = AirQuotation::with(['aqd2', 'aqsd2'])->where('air_quot_no', $quotation_no)->first()->toArray();
+            $data = array_merge_recursive($query['aqd2'], $query['aqsd2']);
+        }
+        return response()->json($data);
     }
 
     public function ajax_store_short(Request $request)

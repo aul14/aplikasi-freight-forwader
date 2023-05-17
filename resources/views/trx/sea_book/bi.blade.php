@@ -1077,8 +1077,9 @@
                                 $("select[name=origin_code]").append(newFrom).trigger('change');
                                 $("input[name=origin_name]").val(res.origin_name);
                             } else {
-                                $("select[name=origin_code]").empty();
-                                $("input[name=origin_name]").val("");
+                                $("select[name=origin_code]").append(new Option("JKT", "JKT", true,
+                                    true)).trigger('change');
+                                $("input[name=origin_name]").val("JAKARTA");
                             }
 
                             if (res.port_loading_code != null) {
@@ -1382,9 +1383,11 @@
                                 $("select[name=origin_code]").append(newFrom).trigger('change');
                                 $("input[name=origin_name]").val(res.origin_name);
                             } else {
-                                $("select[name=origin_code]").empty();
-                                $("input[name=origin_name]").val("");
+                                $("select[name=origin_code]").append(new Option("JKT", "JKT", true,
+                                    true)).trigger('change');
+                                $("input[name=origin_name]").val("JAKARTA");
                             }
+
 
                             if (res.port_loading_code != null) {
                                 var newPortLoading = new Option(res.port_loading_code, res

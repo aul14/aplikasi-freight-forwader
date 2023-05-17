@@ -204,47 +204,47 @@
                         @endphp
                         @foreach ($item['air_quotation_s_d2'] as $item_d1)
                             @php
-                                $total_vat = (int) $item_d1['amt_s_d2'] * ($item_d1['vat']['vat_code_detail_satu'][0]['vat_rate'] / 100);
-                                $total = $item_d1['amt_s_d2'] + $total_vat;
+                                $total_vat = (int) $item_d1['amt'] * ($item_d1['vat']['vat_code_detail_satu'][0]['vat_rate'] / 100);
+                                $total = $item_d1['amt'] + $total_vat;
                                 $total_all += $total;
                                 $total_all_vat += $total_vat;
                             @endphp
                             <tr>
-                                <td>{{ $item_d1['item_desc_s_d2'] }}</td>
+                                <td>{{ $item_d1['item_desc'] }}</td>
                                 <td style="text-align: center">
                                     {{ empty($item_d1['vat']['vat_code_detail_satu']) ? '' : $item_d1['vat']['vat_code_detail_satu'][0]['vat_rate'] . '%' }}
                                 </td>
                                 <td style="text-align: center">
-                                    {{ number_format($item_d1['qty_s_d2'] == 0 ? 1 : $item_d1['qty_s_d2'], 2, '.', ',') }}
+                                    {{ number_format($item_d1['qty'] == 0 ? 1 : $item_d1['qty'], 2, '.', ',') }}
                                 </td>
-                                <td style="text-align: left">{{ $item_d1['currency_s_d2'] }} <p class="float-right">
-                                        {{ number_format($item_d1['curr_rate_s_d2'], 2, '.', ',') }}</p>
+                                <td style="text-align: left">{{ $item_d1['currency'] }} <p class="float-right">
+                                        {{ number_format($item_d1['curr_rate'], 2, '.', ',') }}</p>
                                 </td>
                                 <td style="text-align: right">
-                                    {{ number_format($item_d1['amt_s_d2'], 2, '.', ',') }}
+                                    {{ number_format($item_d1['amt'], 2, '.', ',') }}
                                 </td>
                                 <td style="text-align: right">{{ number_format($total, 2, '.', ',') }}</td>
                             </tr>
                         @endforeach
                         @foreach ($aq['air_quotation_d2'] as $item_d2)
                             @php
-                                $total_vat = (int) $item_d2['amt_d2'] * ($item_d2['vat']['vat_code_detail_satu'][0]['vat_rate'] / 100);
-                                $total = $item_d2['amt_d2'] + $total_vat;
+                                $total_vat = (int) $item_d2['amt'] * ($item_d2['vat']['vat_code_detail_satu'][0]['vat_rate'] / 100);
+                                $total = $item_d2['amt'] + $total_vat;
                                 $total_all += $total;
                                 $total_all_vat += $total_vat;
                             @endphp
                             <tr>
-                                <td>{{ $item_d2['item_desc_d2'] }}</td>
+                                <td>{{ $item_d2['item_desc'] }}</td>
                                 <td style="text-align: center">
                                     {{ empty($item_d2['vat']['vat_code_detail_satu']) ? '' : $item_d2['vat']['vat_code_detail_satu'][0]['vat_rate'] . '%' }}
                                 </td>
                                 <td style="text-align: center">
-                                    {{ number_format($item_d2['qty_d2'] == 0 ? 1 : $item_d2['qty_d2'], 2, '.', ',') }}
+                                    {{ number_format($item_d2['qty'] == 0 ? 1 : $item_d2['qty'], 2, '.', ',') }}
                                 </td>
-                                <td style="text-align: left">{{ $item_d2['currency_d2'] }} <p class="float-right">
-                                        {{ number_format($item_d2['curr_rate_d2'], 2, '.', ',') }}</p>
+                                <td style="text-align: left">{{ $item_d2['currency'] }} <p class="float-right">
+                                        {{ number_format($item_d2['curr_rate'], 2, '.', ',') }}</p>
                                 </td>
-                                <td style="text-align: right">{{ number_format($item_d2['amt_d2'], 2, '.', ',') }}
+                                <td style="text-align: right">{{ number_format($item_d2['amt'], 2, '.', ',') }}
                                 </td>
                                 <td style="text-align: right">{{ number_format($total, 2, '.', ',') }}</td>
                             </tr>
@@ -254,18 +254,18 @@
                         @endphp
                         <tr>
                             <th rowspan="3" colspan="4">&nbsp;</th>
-                            <th style="text-align: left">TOTAL <p class="float-right">{{ $item_d1['currency_s_d2'] }}
+                            <th style="text-align: left">TOTAL <p class="float-right">{{ $item_d1['currency'] }}
                             </th>
                             <th style="text-align: right">{{ number_format($total_all, 2, '.', ',') }}</th>
                         </tr>
                         <tr>
-                            <th style="text-align: left">VAT <p class="float-right">{{ $item_d1['currency_s_d2'] }}
+                            <th style="text-align: left">VAT <p class="float-right">{{ $item_d1['currency'] }}
                             </th>
                             <th style="text-align: right">{{ number_format($total_all_vat, 2, '.', ',') }}</th>
                         </tr>
                         <tr>
                             <th style="text-align: left">GRAND TOTAL <p class="float-right">
-                                    {{ $item_d1['currency_s_d2'] }}
+                                    {{ $item_d1['currency'] }}
                             </th>
                             <th style="text-align: right">{{ number_format($grand_total, 2, '.', ',') }}</th>
                         </tr>

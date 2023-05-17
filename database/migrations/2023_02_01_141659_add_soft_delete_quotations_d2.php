@@ -14,14 +14,14 @@ return new class extends Migration
     public function up()
     {
         Schema::table('air_quotation_d2', function (Blueprint $table) {
-            $table->double('unit_rate_d2')->nullable();
-            $table->double('idr_amt_d2')->nullable();
-            $table->double('curr_rate_d2')->nullable();
+            $table->double('unit_rate')->nullable();
+            $table->double('idr_amt')->nullable();
+            $table->double('curr_rate')->nullable();
         });
         Schema::table('sea_quotation_d2', function (Blueprint $table) {
-            $table->double('unit_rate_d2')->nullable();
-            $table->double('idr_amt_d2')->nullable();
-            $table->double('curr_rate_d2')->nullable();
+            $table->double('unit_rate')->nullable();
+            $table->double('idr_amt')->nullable();
+            $table->double('curr_rate')->nullable();
         });
     }
 
@@ -33,14 +33,14 @@ return new class extends Migration
     public function down()
     {
         Schema::table('air_quotation_d2', function (Blueprint $table) {
-            $table->dropColumn('unit_rate_d2');
-            $table->dropColumn('idr_amt_d2');
-            $table->dropColumn('curr_rate_d2');
+            $table->dropColumn('unit_rate');
+            $table->dropColumn('idr_amt');
+            $table->dropColumn('curr_rate');
         });
         Schema::table('sea_quotation_d2', function (Blueprint $table) {
-            $table->dropColumn('unit_rate_d2');
-            $table->dropColumn('idr_amt_d2');
-            $table->dropColumn('curr_rate_d2');
+            $table->dropColumn('unit_rate');
+            $table->dropColumn('idr_amt');
+            $table->dropColumn('curr_rate');
         });
     }
 };

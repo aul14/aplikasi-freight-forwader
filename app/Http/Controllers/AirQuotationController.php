@@ -256,22 +256,22 @@ class AirQuotationController extends Controller
                                 $result_sd2[] = [
                                     'air_quotation_id'    =>   $air_quot->id,
                                     'air_quotation_d1_code' => $val2,
-                                    'item_code_s_d2'     => !empty($request->item_code_s_d2[$key2]) ? $request->item_code_s_d2[$key2] : null,
-                                    'item_desc_s_d2'     => !empty($request->item_desc_s_d2[$key2]) ? $request->item_desc_s_d2[$key2] : null,
-                                    'qty_s_d2'     => !empty($request->qty_s_d2[$key2]) ? $request->qty_s_d2[$key2] : null,
-                                    'uom_s_d2'     => !empty($request->uom_s_d2[$key2]) ? $request->uom_s_d2[$key2] : null,
-                                    'chg_s_d2'     => !empty($request->chg_s_d2[$key2]) ? $request->chg_s_d2[$key2] : null,
-                                    'vat_code_s_d2'     => !empty($request->vat_code_s_d2[$key2]) ? $request->vat_code_s_d2[$key2] : null,
-                                    'p_c_s_d2'     => !empty($request->p_c_s_d2[$key2]) ? $request->p_c_s_d2[$key2] : null,
-                                    'due_s_d2'     => !empty($request->due_s_d2[$key2]) ? $request->due_s_d2[$key2] : null,
-                                    'chg_unit_s_d2'     => !empty($request->chg_unit_s_d2[$key2]) ? $request->chg_unit_s_d2[$key2] : null,
-                                    'rate_s_d2'     => !empty($request->rate_s_d2[$key2]) ? $request->rate_s_d2[$key2] : null,
-                                    'currency_s_d2'     => !empty($request->currency_s_d2[$key2]) ? $request->currency_s_d2[$key2] : null,
-                                    'curr_rate_s_d2'     => !empty($request->curr_rate_s_d2[$key2]) ? str_replace(",", "", $request->curr_rate_s_d2[$key2])  : null,
-                                    'min_amt_s_d2'     => !empty($request->min_amt_s_d2[$key2]) ? str_replace(",", "", $request->min_amt_s_d2[$key2])  : null,
-                                    'unit_rate_s_d2'     => !empty($request->unit_rate_s_d2[$key2]) ?  str_replace(",", "", $request->unit_rate_s_d2[$key2])  : null,
-                                    'idr_amt_s_d2'     => !empty($request->idr_amt_s_d2[$key2]) ?  str_replace(",", "", $request->idr_amt_s_d2[$key2])  : null,
-                                    'amt_s_d2'     => !empty($request->amt_s_d2[$key2]) ?  str_replace(",", "", $request->amt_s_d2[$key2])  : null,
+                                    'item_code'     => !empty($request->item_code_s_d2[$key2]) ? $request->item_code_s_d2[$key2] : null,
+                                    'item_desc'     => !empty($request->item_desc_s_d2[$key2]) ? $request->item_desc_s_d2[$key2] : null,
+                                    'qty'     => !empty($request->qty_s_d2[$key2]) ? $request->qty_s_d2[$key2] : null,
+                                    'uom'     => !empty($request->uom_s_d2[$key2]) ? $request->uom_s_d2[$key2] : null,
+                                    'chg'     => !empty($request->chg_s_d2[$key2]) ? $request->chg_s_d2[$key2] : null,
+                                    'vat_code'     => !empty($request->vat_code_s_d2[$key2]) ? $request->vat_code_s_d2[$key2] : null,
+                                    'p_c'     => !empty($request->p_c_s_d2[$key2]) ? $request->p_c_s_d2[$key2] : null,
+                                    'due'     => !empty($request->due_s_d2[$key2]) ? $request->due_s_d2[$key2] : null,
+                                    'chg_unit'     => !empty($request->chg_unit_s_d2[$key2]) ? $request->chg_unit_s_d2[$key2] : null,
+                                    'rate'     => !empty($request->rate_s_d2[$key2]) ? $request->rate_s_d2[$key2] : null,
+                                    'currency'     => !empty($request->currency_s_d2[$key2]) ? $request->currency_s_d2[$key2] : null,
+                                    'curr_rate'     => !empty($request->curr_rate_s_d2[$key2]) ? str_replace(",", "", $request->curr_rate_s_d2[$key2])  : null,
+                                    'min_amt'     => !empty($request->min_amt_s_d2[$key2]) ? str_replace(",", "", $request->min_amt_s_d2[$key2])  : null,
+                                    'unit_rate'     => !empty($request->unit_rate_s_d2[$key2]) ?  str_replace(",", "", $request->unit_rate_s_d2[$key2])  : null,
+                                    'idr_amt'     => !empty($request->idr_amt_s_d2[$key2]) ?  str_replace(",", "", $request->idr_amt_s_d2[$key2])  : null,
+                                    'amt'     => !empty($request->amt_s_d2[$key2]) ?  str_replace(",", "", $request->amt_s_d2[$key2])  : null,
                                     'created_at' => now(),
                                     'updated_at' => now(),
                                 ];
@@ -289,22 +289,22 @@ class AirQuotationController extends Controller
                     foreach (array_unique($request->item_code_d2) as $key3 => $val3) {
                         $result_d2[] = [
                             'air_quotation_id'    =>   $air_quot->id,
-                            'item_code_d2'     => $val3,
-                            'item_desc_d2'     => !empty($request->item_desc_d2[$key3]) ? $request->item_desc_d2[$key3] : null,
-                            'qty_d2'     => !empty($request->qty_d2[$key3]) ? $request->qty_d2[$key3] : null,
-                            'uom_d2'     => !empty($request->uom_d2[$key3]) ? $request->uom_d2[$key3] : null,
-                            'chg_d2'     => !empty($request->chg_d2[$key3]) ? $request->chg_d2[$key3] : null,
-                            'vat_code_d2'     => !empty($request->vat_code_d2[$key3]) ? $request->vat_code_d2[$key3] : null,
-                            'p_c_d2'     => !empty($request->p_c_d2[$key3]) ? $request->p_c_d2[$key3] : null,
-                            'chg_unit_d2'     => !empty($request->chg_unit_d2[$key3]) ? $request->chg_unit_d2[$key3] : null,
-                            'due_d2'     => !empty($request->due_d2[$key3]) ? $request->due_d2[$key3] : null,
-                            'rate_d2'     => !empty($request->rate_d2[$key3]) ? $request->rate_d2[$key3] : null,
-                            'currency_d2'     => !empty($request->currency_d2[$key3]) ? $request->currency_d2[$key3] : null,
-                            'curr_rate_d2'     => !empty($request->curr_rate_d2[$key3]) ? str_replace(",", "", $request->curr_rate_d2[$key3])  : null,
-                            'unit_rate_d2'     => !empty($request->unit_rate_d2[$key3]) ? str_replace(",", "", $request->unit_rate_d2[$key3])  : null,
-                            'min_amt_d2'     => !empty($request->min_amt_d2[$key3]) ? str_replace(",", "", $request->min_amt_d2[$key3])  : null,
-                            'idr_amt_d2'     => !empty($request->idr_amt_d2[$key3]) ? str_replace(",", "", $request->idr_amt_d2[$key3])  : null,
-                            'amt_d2'     => !empty($request->amt_d2[$key3]) ? str_replace(",", "", $request->amt_d2[$key3])  : null,
+                            'item_code'     => $val3,
+                            'item_desc'     => !empty($request->item_desc_d2[$key3]) ? $request->item_desc_d2[$key3] : null,
+                            'qty'     => !empty($request->qty_d2[$key3]) ? $request->qty_d2[$key3] : null,
+                            'uom'     => !empty($request->uom_d2[$key3]) ? $request->uom_d2[$key3] : null,
+                            'chg'     => !empty($request->chg_d2[$key3]) ? $request->chg_d2[$key3] : null,
+                            'vat_code'     => !empty($request->vat_code_d2[$key3]) ? $request->vat_code_d2[$key3] : null,
+                            'p_c'     => !empty($request->p_c_d2[$key3]) ? $request->p_c_d2[$key3] : null,
+                            'chg_unit'     => !empty($request->chg_unit_d2[$key3]) ? $request->chg_unit_d2[$key3] : null,
+                            'due'     => !empty($request->due_d2[$key3]) ? $request->due_d2[$key3] : null,
+                            'rate'     => !empty($request->rate_d2[$key3]) ? $request->rate_d2[$key3] : null,
+                            'currency'     => !empty($request->currency_d2[$key3]) ? $request->currency_d2[$key3] : null,
+                            'curr_rate'     => !empty($request->curr_rate_d2[$key3]) ? str_replace(",", "", $request->curr_rate_d2[$key3])  : null,
+                            'unit_rate'     => !empty($request->unit_rate_d2[$key3]) ? str_replace(",", "", $request->unit_rate_d2[$key3])  : null,
+                            'min_amt'     => !empty($request->min_amt_d2[$key3]) ? str_replace(",", "", $request->min_amt_d2[$key3])  : null,
+                            'idr_amt'     => !empty($request->idr_amt_d2[$key3]) ? str_replace(",", "", $request->idr_amt_d2[$key3])  : null,
+                            'amt'     => !empty($request->amt_d2[$key3]) ? str_replace(",", "", $request->amt_d2[$key3])  : null,
                             'created_at' => now(),
                             'updated_at' => now(),
                         ];
@@ -313,7 +313,7 @@ class AirQuotationController extends Controller
                 }
 
                 //SAVE TO TABLE ADDITIONAL INFO OR Extra Info OR REMARK
-                $add_info = AddInfo::where('trx_type', 'SQ')->first()->makeHidden(['trx_type', 'created_at', 'updated_at'])->toarray();
+                $add_info = AddInfo::where('trx_type', 'AQ')->first()->makeHidden(['trx_type', 'created_at', 'updated_at'])->toarray();
                 $add_info =  collect($add_info)->filter(function ($value) {
                     return !is_null($value);
                 });
@@ -332,7 +332,7 @@ class AirQuotationController extends Controller
                     $add_info_d1 = AddInfoD1::where('trx_id', $air_quot->id)->first();
                 }
                 $add_info_d1->add_info_id = $add_info['id'];
-                $add_info_d1->trx_type = 'SQ';
+                $add_info_d1->trx_type = 'AQ';
                 $add_info_d1->trx_id = $air_quot->id;
                 $add_info_d1->vs1 = !empty($data_info['vs1']) ? $data_info['vs1'] : null;
                 $add_info_d1->vs2 = !empty($data_info['vs2']) ? $data_info['vs2'] : null;
@@ -417,7 +417,6 @@ class AirQuotationController extends Controller
         if (Auth::user()->hasPermission('edit-air_quot')) {
             $request->validate(
                 [
-                    'air_quot_no'    => 'required|max:15|unique:air_quotations,air_quot_no,' . $id,
                     'quotation_type_id'  => 'required',
                     'salesman_code'  => 'required',
                 ],
@@ -550,22 +549,22 @@ class AirQuotationController extends Controller
                                 $result_sd2[] = [
                                     'air_quotation_id'    =>   $air_quot->id,
                                     'air_quotation_d1_code' => $val2,
-                                    'item_code_s_d2'     => !empty($request->item_code_s_d2[$key2]) ? $request->item_code_s_d2[$key2] : null,
-                                    'item_desc_s_d2'     => !empty($request->item_desc_s_d2[$key2]) ? $request->item_desc_s_d2[$key2] : null,
-                                    'qty_s_d2'     => !empty($request->qty_s_d2[$key2]) ? $request->qty_s_d2[$key2] : null,
-                                    'uom_s_d2'     => !empty($request->uom_s_d2[$key2]) ? $request->uom_s_d2[$key2] : null,
-                                    'chg_s_d2'     => !empty($request->chg_s_d2[$key2]) ? $request->chg_s_d2[$key2] : null,
-                                    'vat_code_s_d2'     => !empty($request->vat_code_s_d2[$key2]) ? $request->vat_code_s_d2[$key2] : null,
-                                    'p_c_s_d2'     => !empty($request->p_c_s_d2[$key2]) ? $request->p_c_s_d2[$key2] : null,
-                                    'due_s_d2'     => !empty($request->due_s_d2[$key2]) ? $request->due_s_d2[$key2] : null,
-                                    'chg_unit_s_d2'     => !empty($request->chg_unit_s_d2[$key2]) ? $request->chg_unit_s_d2[$key2] : null,
-                                    'rate_s_d2'     => !empty($request->rate_s_d2[$key2]) ? $request->rate_s_d2[$key2] : null,
-                                    'currency_s_d2'     => !empty($request->currency_s_d2[$key2]) ? $request->currency_s_d2[$key2] : null,
-                                    'curr_rate_s_d2'     => !empty($request->curr_rate_s_d2[$key2]) ? str_replace(",", "", $request->curr_rate_s_d2[$key2])  : null,
-                                    'min_amt_s_d2'     => !empty($request->min_amt_s_d2[$key2]) ? str_replace(",", "", $request->min_amt_s_d2[$key2])  : null,
-                                    'unit_rate_s_d2'     => !empty($request->unit_rate_s_d2[$key2]) ?  str_replace(",", "", $request->unit_rate_s_d2[$key2])  : null,
-                                    'idr_amt_s_d2'     => !empty($request->idr_amt_s_d2[$key2]) ?  str_replace(",", "", $request->idr_amt_s_d2[$key2])  : null,
-                                    'amt_s_d2'     => !empty($request->amt_s_d2[$key2]) ?  str_replace(",", "", $request->amt_s_d2[$key2])  : null,
+                                    'item_code'     => !empty($request->item_code_s_d2[$key2]) ? $request->item_code_s_d2[$key2] : null,
+                                    'item_desc'     => !empty($request->item_desc_s_d2[$key2]) ? $request->item_desc_s_d2[$key2] : null,
+                                    'qty'     => !empty($request->qty_s_d2[$key2]) ? $request->qty_s_d2[$key2] : null,
+                                    'uom'     => !empty($request->uom_s_d2[$key2]) ? $request->uom_s_d2[$key2] : null,
+                                    'chg'     => !empty($request->chg_s_d2[$key2]) ? $request->chg_s_d2[$key2] : null,
+                                    'vat_code'     => !empty($request->vat_code_s_d2[$key2]) ? $request->vat_code_s_d2[$key2] : null,
+                                    'p_c'     => !empty($request->p_c_s_d2[$key2]) ? $request->p_c_s_d2[$key2] : null,
+                                    'due'     => !empty($request->due_s_d2[$key2]) ? $request->due_s_d2[$key2] : null,
+                                    'chg_unit'     => !empty($request->chg_unit_s_d2[$key2]) ? $request->chg_unit_s_d2[$key2] : null,
+                                    'rate'     => !empty($request->rate_s_d2[$key2]) ? $request->rate_s_d2[$key2] : null,
+                                    'currency'     => !empty($request->currency_s_d2[$key2]) ? $request->currency_s_d2[$key2] : null,
+                                    'curr_rate'     => !empty($request->curr_rate_s_d2[$key2]) ? str_replace(",", "", $request->curr_rate_s_d2[$key2])  : null,
+                                    'min_amt'     => !empty($request->min_amt_s_d2[$key2]) ? str_replace(",", "", $request->min_amt_s_d2[$key2])  : null,
+                                    'unit_rate'     => !empty($request->unit_rate_s_d2[$key2]) ?  str_replace(",", "", $request->unit_rate_s_d2[$key2])  : null,
+                                    'idr_amt'     => !empty($request->idr_amt_s_d2[$key2]) ?  str_replace(",", "", $request->idr_amt_s_d2[$key2])  : null,
+                                    'amt'     => !empty($request->amt_s_d2[$key2]) ?  str_replace(",", "", $request->amt_s_d2[$key2])  : null,
                                     'created_at' => now(),
                                     'updated_at' => now(),
                                 ];
@@ -584,22 +583,22 @@ class AirQuotationController extends Controller
                     foreach (array_unique($request->item_code_d2) as $key3 => $val3) {
                         $result_d2[] = [
                             'air_quotation_id'    =>   $air_quot->id,
-                            'item_code_d2'     => $val3,
-                            'item_desc_d2'     => !empty($request->item_desc_d2[$key3]) ? $request->item_desc_d2[$key3] : null,
-                            'qty_d2'     => !empty($request->qty_d2[$key3]) ? $request->qty_d2[$key3] : null,
-                            'uom_d2'     => !empty($request->uom_d2[$key3]) ? $request->uom_d2[$key3] : null,
-                            'chg_d2'     => !empty($request->chg_d2[$key3]) ? $request->chg_d2[$key3] : null,
-                            'vat_code_d2'     => !empty($request->vat_code_d2[$key3]) ? $request->vat_code_d2[$key3] : null,
-                            'p_c_d2'     => !empty($request->p_c_d2[$key3]) ? $request->p_c_d2[$key3] : null,
-                            'chg_unit_d2'     => !empty($request->chg_unit_d2[$key3]) ? $request->chg_unit_d2[$key3] : null,
-                            'due_d2'     => !empty($request->due_d2[$key3]) ? $request->due_d2[$key3] : null,
-                            'rate_d2'     => !empty($request->rate_d2[$key3]) ? $request->rate_d2[$key3] : null,
-                            'currency_d2'     => !empty($request->currency_d2[$key3]) ? $request->currency_d2[$key3] : null,
-                            'curr_rate_d2'     => !empty($request->curr_rate_d2[$key3]) ? str_replace(",", "", $request->curr_rate_d2[$key3])  : null,
-                            'unit_rate_d2'     => !empty($request->unit_rate_d2[$key3]) ? str_replace(",", "", $request->unit_rate_d2[$key3])  : null,
-                            'min_amt_d2'     => !empty($request->min_amt_d2[$key3]) ? str_replace(",", "", $request->min_amt_d2[$key3])  : null,
-                            'idr_amt_d2'     => !empty($request->idr_amt_d2[$key3]) ? str_replace(",", "", $request->idr_amt_d2[$key3])  : null,
-                            'amt_d2'     => !empty($request->amt_d2[$key3]) ? str_replace(",", "", $request->amt_d2[$key3])  : null,
+                            'item_code'     => $val3,
+                            'item_desc'     => !empty($request->item_desc_d2[$key3]) ? $request->item_desc_d2[$key3] : null,
+                            'qty'     => !empty($request->qty_d2[$key3]) ? $request->qty_d2[$key3] : null,
+                            'uom'     => !empty($request->uom_d2[$key3]) ? $request->uom_d2[$key3] : null,
+                            'chg'     => !empty($request->chg_d2[$key3]) ? $request->chg_d2[$key3] : null,
+                            'vat_code'     => !empty($request->vat_code_d2[$key3]) ? $request->vat_code_d2[$key3] : null,
+                            'p_c'     => !empty($request->p_c_d2[$key3]) ? $request->p_c_d2[$key3] : null,
+                            'chg_unit'     => !empty($request->chg_unit_d2[$key3]) ? $request->chg_unit_d2[$key3] : null,
+                            'due'     => !empty($request->due_d2[$key3]) ? $request->due_d2[$key3] : null,
+                            'rate'     => !empty($request->rate_d2[$key3]) ? $request->rate_d2[$key3] : null,
+                            'currency'     => !empty($request->currency_d2[$key3]) ? $request->currency_d2[$key3] : null,
+                            'curr_rate'     => !empty($request->curr_rate_d2[$key3]) ? str_replace(",", "", $request->curr_rate_d2[$key3])  : null,
+                            'unit_rate'     => !empty($request->unit_rate_d2[$key3]) ? str_replace(",", "", $request->unit_rate_d2[$key3])  : null,
+                            'min_amt'     => !empty($request->min_amt_d2[$key3]) ? str_replace(",", "", $request->min_amt_d2[$key3])  : null,
+                            'idr_amt'     => !empty($request->idr_amt_d2[$key3]) ? str_replace(",", "", $request->idr_amt_d2[$key3])  : null,
+                            'amt'     => !empty($request->amt_d2[$key3]) ? str_replace(",", "", $request->amt_d2[$key3])  : null,
                             'created_at' => now(),
                             'updated_at' => now(),
                         ];
@@ -608,7 +607,7 @@ class AirQuotationController extends Controller
                 }
 
                 //SAVE TO TABLE ADDITIONAL INFO OR Extra Info OR REMARK
-                $add_info = AddInfo::where('trx_type', 'SQ')->first()->makeHidden(['trx_type', 'created_at', 'updated_at'])->toarray();
+                $add_info = AddInfo::where('trx_type', 'AQ')->first()->makeHidden(['trx_type', 'created_at', 'updated_at'])->toarray();
                 $add_info =  collect($add_info)->filter(function ($value) {
                     return !is_null($value);
                 });
@@ -627,7 +626,7 @@ class AirQuotationController extends Controller
                     $add_info_d1 = AddInfoD1::where('trx_id', $air_quot->id)->first();
                 }
                 $add_info_d1->add_info_id = $add_info['id'];
-                $add_info_d1->trx_type = 'SQ';
+                $add_info_d1->trx_type = 'AQ';
                 $add_info_d1->trx_id = $air_quot->id;
                 $add_info_d1->vs1 = !empty($data_info['vs1']) ? $data_info['vs1'] : null;
                 $add_info_d1->vs2 = !empty($data_info['vs2']) ? $data_info['vs2'] : null;

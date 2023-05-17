@@ -15,6 +15,8 @@ use App\Models\SeaExJobD4;
 use App\Models\SeaExJobD5;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use App\Models\CompanyDetailSatu;
+use App\Models\SeaBooking;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\QueryException;
@@ -39,11 +41,11 @@ class SeaExportJobController extends Controller
                 }
                 return DataTables::of($sea_ex_job)
                     ->addColumn('action', function ($sea_ex_job) {
-                        return view('datatable-modal._action', [
+                        return view('datatable-modal._action_pdf', [
                             'row_id' => $sea_ex_job->id,
                             'edit_url' => route('sea_ex_job.edit', $sea_ex_job->id),
                             'delete_url' => route('sea_ex_job.destroy', $sea_ex_job->id),
-                            // 'pdf_url' => route('pdf.sea_ex_job', $sea_ex_job->id),
+                            'job_no'    => $sea_ex_job->job_master->job_no,
                             'can_edit' => 'edit-sea_ex_job',
                             'can_delete' => 'delete-sea_ex_job'
                         ]);
@@ -120,7 +122,7 @@ class SeaExportJobController extends Controller
             $request->validate(
                 [
                     'job_no'    => 'required|max:20|unique:job_masters,job_no',
-                    'bl_no'  => 'required',
+                    'bl_no'  => 'required|unique:job_masters,bl_no',
                     'shipment_type'  => 'required',
                     'cargo_type'  => 'required',
                     'job_type'  => 'required',
@@ -133,8 +135,8 @@ class SeaExportJobController extends Controller
             );
             DB::beginTransaction();
             try {
-                $sea_job = new SeaExJob();
-                $job_no = CodeNumbering::custom_code('36', $sea_job, 'job_no');
+                $sj = new SeaExJob();
+                $job_no = CodeNumbering::custom_code('36', $sj, 'job_no');
 
                 $jm = new JobMaster();
                 $jm->job_no = $job_no;
@@ -174,7 +176,6 @@ class SeaExportJobController extends Controller
                 $jm->create_by  = auth()->user()->firstname . " " . auth()->user()->lastname;
                 $jm->save();
 
-                $sj = new SeaExJob();
                 $sj->job_master_id = $jm->id;
                 $sj->job_no = $job_no;
                 $sj->booking_no = !empty($request->booking_no) ? $request->booking_no : null;
@@ -189,10 +190,10 @@ class SeaExportJobController extends Controller
                 $sj->notify_address_3 = !empty($request->notify_address_3) ? $request->notify_address_3 : null;
                 $sj->notify_address_4 = !empty($request->notify_address_4) ? $request->notify_address_4 : null;
                 $sj->freight = !empty($request->freight) ? $request->freight : null;
-                $sj->total_pcs = !empty($request->total_pcs) ? str_replace(",", "", $request->total_pcs) : (!empty($request->pcs[0]) ? $request->pcs[0] : null);
+                $sj->total_pcs = !empty($request->total_pcs) ? str_replace(",", "", $request->total_pcs) : (!empty($request->pcs[0]) ? array_sum($request->pcs) : null);
                 $sj->uom_code = !empty($request->uom_code) ? $request->uom_code : null;
-                $sj->total_gross = !empty($request->total_gross) ? str_replace(",", "", $request->total_gross) : (!empty($request->gross_weight[0]) ? $request->gross_weight[0] : null);
-                $sj->total_volume = !empty($request->total_volume) ? str_replace(",", "", $request->total_volume) : (!empty($request->cargo_volume[0]) ? $request->cargo_volume[0] : null);
+                $sj->total_gross = !empty($request->total_gross) ? str_replace(",", "", $request->total_gross) : (!empty($request->gross_weight[0]) ? array_sum(str_replace(",", "", $request->gross_weight)) : null);
+                $sj->total_volume = !empty($request->total_volume) ? str_replace(",", "", $request->total_volume) : (!empty($request->cargo_volume[0]) ? array_sum(str_replace(",", "", $request->cargo_volume)) : null);
                 $sj->billing_instruction = !empty($request->billing_instruction) ? $request->billing_instruction : null;
                 $sj->job_costing_remark = !empty($request->job_costing_remark) ? $request->job_costing_remark : null;
                 $sj->total_sales = !empty($request->total_sales) ? str_replace(",", "", $request->total_sales) : null;
@@ -235,7 +236,7 @@ class SeaExportJobController extends Controller
                 $sj_d1->stuff_warehouse_code = !empty($request->stuff_warehouse_code) ? $request->stuff_warehouse_code : null;
                 $sj_d1->stuff_warehouse_name = !empty($request->stuff_warehouse_name) ? $request->stuff_warehouse_name : null;
                 $sj_d1->permit_no = !empty($request->permit_no) ? $request->permit_no : null;
-                $sj_d1->eta_sub = !empty($request->eta_sub) ?  date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->eta_sub))) : null;
+                $sj_d1->eta_sub = !empty($request->eta_sub) ? date('Y-m-d H:i:s', strtotime(str_replace('/', '-', $request->eta_sub))) : null;
                 $sj_d1->etd = !empty($request->etd) ?  date('Y-m-d', strtotime(str_replace('/', '-', $request->etd))) : null;
                 $sj_d1->first_via_ata = !empty($request->first_via_ata) ?  date('Y-m-d', strtotime(str_replace('/', '-', $request->first_via_ata))) : null;
                 $sj_d1->first_via_eta = !empty($request->first_via_eta) ?  date('Y-m-d', strtotime(str_replace('/', '-', $request->first_via_eta))) : null;
@@ -382,6 +383,13 @@ class SeaExportJobController extends Controller
                     SeaExJobD5::insert($result_d5);
                 }
 
+                // UPDATE NO JOB NO. DI MENU BOOKING
+                if (!empty($request->booking_no)) {
+                    $book = SeaBooking::where('code', $request->booking_no)->first();
+                    $book->job_no = $job_no;
+                    $book->update();
+                }
+
                 DB::commit();
                 return to_route('sea_ex_job.index')->with('success', 'New Sea Export Job has been added!');
             } catch (QueryException $th) {
@@ -437,9 +445,13 @@ class SeaExportJobController extends Controller
     public function update(Request $request, $id)
     {
         if (Auth::user()->hasPermission('edit-sea_ex_job')) {
+            $sj = SeaExJob::find($id);
+
+            $jm = JobMaster::where('id', $sj->job_master_id)->first();
+
             $request->validate(
                 [
-                    'bl_no'  => 'required',
+                    'bl_no'  => 'required|unique:job_masters,bl_no,' . $jm->id,
                     'shipment_type'  => 'required',
                     'cargo_type'  => 'required',
                     'job_type'  => 'required',
@@ -452,9 +464,6 @@ class SeaExportJobController extends Controller
             );
             DB::beginTransaction();
             try {
-                $sj = SeaExJob::find($id);
-
-                $jm = JobMaster::where('id', $sj->job_master_id)->first();
 
                 $jm->job_type = !empty($request->job_type) ? $request->job_type : null;
                 $jm->cargo_type = !empty($request->cargo_type) ? $request->cargo_type : null;
@@ -490,6 +499,19 @@ class SeaExportJobController extends Controller
                 $jm->update_by  = auth()->user()->firstname . " " . auth()->user()->lastname;
                 $jm->update();
 
+                // UPDATE NO JOB NO. DI MENU BOOKING
+                if (!empty($request->booking_no)) {
+                    if ($sj->booking_no != $request->booking_no) {
+                        $book_old = SeaBooking::where('code', $sj->booking_no)->first();
+                        $book_old->update(['job_no' => null]);
+
+                        $book = SeaBooking::where('code', $request->booking_no)->first();
+                        $book->update(['job_no' => $jm->job_no]);
+                    } else {
+                        $book = SeaBooking::where('code', $sj->booking_no)->first();
+                        $book->update(['job_no' => $jm->job_no]);
+                    }
+                }
 
                 $sj->booking_no = !empty($request->booking_no) ? $request->booking_no : null;
                 $sj->quotation_no = !empty($request->quotation_no) ? $request->quotation_no : null;
@@ -503,10 +525,10 @@ class SeaExportJobController extends Controller
                 $sj->notify_address_3 = !empty($request->notify_address_3) ? $request->notify_address_3 : null;
                 $sj->notify_address_4 = !empty($request->notify_address_4) ? $request->notify_address_4 : null;
                 $sj->freight = !empty($request->freight) ? $request->freight : null;
-                $sj->total_pcs = !empty($request->total_pcs) ? str_replace(",", "", $request->total_pcs) : (!empty($request->pcs[0]) ? $request->pcs[0] : null);
+                $sj->total_pcs = !empty($request->total_pcs) ? str_replace(",", "", $request->total_pcs) : (!empty($request->pcs[0]) ? array_sum($request->pcs) : null);
                 $sj->uom_code = !empty($request->uom_code) ? $request->uom_code : null;
-                $sj->total_gross = !empty($request->total_gross) ? str_replace(",", "", $request->total_gross) : (!empty($request->gross_weight[0]) ? $request->gross_weight[0] : null);
-                $sj->total_volume = !empty($request->total_volume) ? str_replace(",", "", $request->total_volume) : (!empty($request->cargo_volume[0]) ? $request->cargo_volume[0] : null);
+                $sj->total_gross = !empty($request->total_gross) ? str_replace(",", "", $request->total_gross) : (!empty($request->gross_weight[0]) ? array_sum(str_replace(",", "", $request->gross_weight)) : null);
+                $sj->total_volume = !empty($request->total_volume) ? str_replace(",", "", $request->total_volume) : (!empty($request->cargo_volume[0]) ? array_sum(str_replace(",", "", $request->cargo_volume)) : null);
                 $sj->billing_instruction = !empty($request->billing_instruction) ? $request->billing_instruction : null;
                 $sj->job_costing_remark = !empty($request->job_costing_remark) ? $request->job_costing_remark : null;
                 $sj->total_sales = !empty($request->total_sales) ? str_replace(",", "", $request->total_sales) : null;
@@ -738,5 +760,49 @@ class SeaExportJobController extends Controller
         } else {
             abort(403);
         }
+    }
+
+
+
+    public function pdf($id, $jns_pdf = NULL)
+    {
+        $sj = SeaExJob::with(['jm.bisnis_party', 's_d1', 's_d2', 's_d3', 's_d4', 's_d5'])->where('id', $id)->orderBy('id', 'DESC')->first();
+        $sales = array_filter($sj->toArray()['s_d5'], function ($value) {
+            return ($value['cust_code_sales'] != null);
+        });
+
+        $vendor = array_filter($sj->toArray()['s_d5'], function ($value) {
+            return ($value['code_vendor'] != null);
+        });
+        $company = Company::first();
+        $company_detail = CompanyDetailSatu::where('company_id', $company->id)->where('type', 'Head Office')->first();
+        $pdf = app('dompdf.wrapper');
+
+        if ($jns_pdf == 'js') {
+            $pdf->loadView('trx.sea_ex_job.export_pdf_js', [
+                'sj'    => $sj,
+                'company'   => $company,
+                'company_detail'   => $company_detail,
+                'vendor'   => $vendor,
+                'sales'   => $sales,
+            ])->setPaper('a4', 'portrait');
+        } else if ($jns_pdf == 'jo') {
+            $pdf->loadView('trx.sea_ex_job.export_pdf_jo', [
+                'sj'    => $sj,
+                'company'   => $company,
+                'company_detail'   => $company_detail,
+                'vendor'   => $vendor,
+                'sales'   => $sales,
+            ])->setPaper('a4', 'portrait');
+        } else if ($jns_pdf == 'jc') {
+            $pdf->loadView('trx.sea_ex_job.export_pdf_jc', [
+                'sj'    => $sj,
+                'company'   => $company,
+                'company_detail'   => $company_detail,
+                'vendor'   => $vendor,
+                'sales'   => $sales,
+            ])->setPaper('a4', 'portrait');
+        }
+        return $pdf->stream('laporan.pdf');
     }
 }

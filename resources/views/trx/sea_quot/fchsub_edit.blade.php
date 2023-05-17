@@ -149,8 +149,8 @@
                                     <select name="p_c[]" id="pc-select-{{ $count_test }}"
                                         @disabled($item_s_d1->chg_unit == 'REV TON') class="pc-select">
                                         <option value="">Search</option>
-                                        <option value="P" @selected($item_s_d1->p_c == 'P')>Prepaid</option>
-                                        <option value="C" @selected($item_s_d1->p_c == 'C')>Collect</option>
+                                        <option value="P" @selected($item_s_d1->p_c == 'Prepaid')>Prepaid</option>
+                                        <option value="C" @selected($item_s_d1->p_c == 'Collect')>Collect</option>
                                     </select>
                                 </div>
                             </td>

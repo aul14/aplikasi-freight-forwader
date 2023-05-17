@@ -1356,6 +1356,80 @@ class AdminSeederTable extends Seeder
             ]);
         }
 
+        // SEA IMPORT JOB
+        $moduleSeaImJob = Module::create([
+            'name' => 'Module Sea Import Job'
+        ]);
+
+        $permissionmoduleSeaImJob = [
+            [
+                'name' => 'manage-sea_im_job',
+                'display_name' => 'Manage Sea Import Job',
+                'description' => 'Can Manage Sea Import Job'
+            ],
+            [
+                'name' => 'create-sea_im_job',
+                'display_name' => 'Create Sea Import Job',
+                'description' => 'Can Create Sea Import Job'
+            ],
+            [
+                'name' => 'edit-sea_im_job',
+                'display_name' => 'Edit Sea Import Job',
+                'description' => 'Can Edit Sea Import Job'
+            ],
+            [
+                'name' => 'delete-sea_im_job',
+                'display_name' => 'Delete Sea Import Job',
+                'description' => 'Can Delete Sea Import Job'
+            ]
+        ];
+
+        foreach ($permissionmoduleSeaImJob as $key) {
+            Permission::create([
+                'name' => $key['name'],
+                'display_name' => $key['display_name'],
+                'description' => $key['description'],
+                'module_id' => $moduleSeaImJob->id
+            ]);
+        }
+
+        // AIR EXPORT JOB
+        $moduleAirExJob = Module::create([
+            'name' => 'Module Air Export Job'
+        ]);
+
+        $permissionmoduleAirExJob = [
+            [
+                'name' => 'manage-air_ex_job',
+                'display_name' => 'Manage Air Export Job',
+                'description' => 'Can Manage Air Export Job'
+            ],
+            [
+                'name' => 'create-air_ex_job',
+                'display_name' => 'Create Air Export Job',
+                'description' => 'Can Create Air Export Job'
+            ],
+            [
+                'name' => 'edit-air_ex_job',
+                'display_name' => 'Edit Air Export Job',
+                'description' => 'Can Edit Air Export Job'
+            ],
+            [
+                'name' => 'delete-air_ex_job',
+                'display_name' => 'Delete Air Export Job',
+                'description' => 'Can Delete Air Export Job'
+            ]
+        ];
+
+        foreach ($permissionmoduleAirExJob as $key) {
+            Permission::create([
+                'name' => $key['name'],
+                'display_name' => $key['display_name'],
+                'description' => $key['description'],
+                'module_id' => $moduleAirExJob->id
+            ]);
+        }
+
         // SUPER ADMIN RULES
         Role::create([
             'name' => 'super_admin',
@@ -1509,6 +1583,14 @@ class AdminSeederTable extends Seeder
             'create-sea_ex_job',
             'edit-sea_ex_job',
             'delete-sea_ex_job',
+            'manage-sea_im_job',
+            'create-sea_im_job',
+            'edit-sea_im_job',
+            'delete-sea_im_job',
+            'manage-air_ex_job',
+            'create-air_ex_job',
+            'edit-air_ex_job',
+            'delete-air_ex_job',
         ];
 
         $userAdmin = User::create([
@@ -1680,6 +1762,14 @@ class AdminSeederTable extends Seeder
             'create-sea_ex_job',
             'edit-sea_ex_job',
             'delete-sea_ex_job',
+            'manage-sea_im_job',
+            'create-sea_im_job',
+            'edit-sea_im_job',
+            'delete-sea_im_job',
+            'manage-air_ex_job',
+            'create-air_ex_job',
+            'edit-air_ex_job',
+            'delete-air_ex_job',
         ];
 
         $userOwner = User::create([

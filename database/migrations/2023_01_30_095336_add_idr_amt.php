@@ -19,8 +19,8 @@ return new class extends Migration
         });
 
         Schema::table('air_quotation_s_d2', function (Blueprint $table) {
-            $table->double('unit_rate_s_d2')->nullable();
-            $table->double('idr_amt_s_d2')->nullable();
+            $table->double('unit_rate')->nullable();
+            $table->double('idr_amt')->nullable();
         });
     }
 
@@ -37,8 +37,8 @@ return new class extends Migration
         });
 
         Schema::table('air_quotation_s_d2', function (Blueprint $table) {
-            $table->dropColumn('unit_rate_s_d2');
-            $table->dropColumn('idr_amt_s_d2');
+            $table->dropColumn('unit_rate');
+            $table->dropColumn('idr_amt');
         });
     }
 };

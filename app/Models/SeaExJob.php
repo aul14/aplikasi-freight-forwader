@@ -2,9 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\JobMaster;
+use App\Models\SeaExJobD1;
+use App\Models\SeaExJobD2;
+use App\Models\SeaExJobD3;
+use App\Models\SeaExJobD4;
+use App\Models\SeaExJobD5;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class SeaExJob extends Model
 {

@@ -45,7 +45,7 @@
                                 <div class="form-group">
                                     <select name="item_code_d2[]" id="item-selectd2-{{ $key_d2 + 1 }}"
                                         class="item-selectd2">
-                                        <option value="{{ $item_d2->item_code_d2 }}">{{ $item_d2->item_code_d2 }}
+                                        <option value="{{ $item_d2->item_code }}">{{ $item_d2->item_code }}
                                         </option>
 
                                     </select>
@@ -55,7 +55,7 @@
                             <td>
                                 <div class="form-group">
                                     <input type="text" class="form-control item-descd2"
-                                        value="{{ $item_d2->item_desc_d2 }}" name="item_desc_d2[]"
+                                        value="{{ $item_d2->item_desc }}" name="item_desc_d2[]"
                                         id="item-descd2-{{ $key_d2 + 1 }}">
                                 </div>
                             </td>
@@ -65,13 +65,13 @@
                                     <select name="chg_unit_d2[]" id="chgunit-selectd2-{{ $key_d2 + 1 }}"
                                         class="chgunit-selectd2">
                                         <option value="">Search</option>
-                                        <option value="CONTAINER" @selected($item_d2->chg_unit_d2 == 'CONTAINER')>CONTAINER</option>
-                                        <option value="REV TON" @selected($item_d2->chg_unit_d2 == 'REV TON')>REV TON</option>
-                                        <option value="SHIPMENT" @selected($item_d2->chg_unit_d2 == 'SHIPMENT')>SHIPMENT</option>
-                                        <option value="HOUSE" @selected($item_d2->chg_unit_d2 == 'HOUSE')>HOUSE</option>
-                                        <option value="VOLUME" @selected($item_d2->chg_unit_d2 == 'VOLUME')>VOLUME</option>
-                                        <option value="WEIGHT" @selected($item_d2->chg_unit_d2 == 'WEIGHT')>WEIGHT</option>
-                                        <option value="PCS" @selected($item_d2->chg_unit_d2 == 'PCS')>PCS</option>
+                                        <option value="CONTAINER" @selected($item_d2->chg_unit == 'CONTAINER')>CONTAINER</option>
+                                        <option value="REV TON" @selected($item_d2->chg_unit == 'REV TON')>REV TON</option>
+                                        <option value="SHIPMENT" @selected($item_d2->chg_unit == 'SHIPMENT')>SHIPMENT</option>
+                                        <option value="HOUSE" @selected($item_d2->chg_unit == 'HOUSE')>HOUSE</option>
+                                        <option value="VOLUME" @selected($item_d2->chg_unit == 'VOLUME')>VOLUME</option>
+                                        <option value="WEIGHT" @selected($item_d2->chg_unit == 'WEIGHT')>WEIGHT</option>
+                                        <option value="PCS" @selected($item_d2->chg_unit == 'PCS')>PCS</option>
 
                                     </select>
                                 </div>
@@ -80,8 +80,8 @@
                             <td>
                                 <div class="form-group">
                                     <input type="text" class="form-control qty-inputd2" autocomplete="off"
-                                        @disabled($item_d2->chg_unit_d2 == 'SHIPMENT') data-type='currency4'
-                                        value="{{ number_format($item_d2->chg_unit_d2 == 'SHIPMENT' ? 1 : $item_d2->qty_d2, 4, '.', ',') }}"
+                                        @disabled($item_d2->chg_unit == 'SHIPMENT') data-type='currency4'
+                                        value="{{ number_format($item_d2->chg_unit == 'SHIPMENT' ? 1 : $item_d2->qty, 4, '.', ',') }}"
                                         name="qty_d2[]" id="qty-inputd2-{{ $key_d2 + 1 }}"
                                         onkeyup="sum_idr_d2({{ $key_d2 + 1 }}, 1)">
                                 </div>
@@ -90,22 +90,22 @@
                             <td>
                                 <div class="form-group">
                                     <select name="cargo_d2[]" id="cargo-selectd2-{{ $key_d2 + 1 }}"
-                                        class="cargo-selectd2" @disabled($item_d2->chg_unit_d2 == 'SHIPMENT')>
+                                        class="cargo-selectd2" @disabled($item_d2->chg_unit == 'SHIPMENT')>
                                         <option value="">Search</option>
-                                        <option value="FCL" @selected($item_d2->cargo_d2 == 'FCL')>FCL</option>
-                                        <option value="LCL" @selected($item_d2->cargo_d2 == 'LCL')>LCL</option>
+                                        <option value="FCL" @selected($item_d2->cargo == 'FCL')>FCL</option>
+                                        <option value="LCL" @selected($item_d2->cargo == 'LCL')>LCL</option>
                                     </select>
                                 </div>
                             </td>
 
                             <td>
                                 <div class="form-group">
-                                    <select name="dg_d2[]" @disabled($item_d2->chg_unit_d2 == 'SHIPMENT')
+                                    <select name="dg_d2[]" @disabled($item_d2->chg_unit == 'SHIPMENT')
                                         id="dg-selectd2-{{ $key_d2 + 1 }}" class="dg-selectd2">
                                         <option value="">Search</option>
-                                        <option value="1" @selected($item_d2->dg_d2 == '1')>1</option>
-                                        <option value="2" @selected($item_d2->dg_d2 == '2')>2</option>
-                                        <option value="3" @selected($item_d2->dg_d2 == '3')>3</option>
+                                        <option value="1" @selected($item_d2->dg == '1')>1</option>
+                                        <option value="2" @selected($item_d2->dg == '2')>2</option>
+                                        <option value="3" @selected($item_d2->dg == '3')>3</option>
                                     </select>
                                 </div>
                             </td>
@@ -113,7 +113,7 @@
                             <td>
                                 <div class="form-group">
                                     <select name="uom_d2[]" id="uom-subd2-{{ $key_d2 + 1 }}" class="uom-subd2">
-                                        <option value="{{ $item_d2->uom_d2 }}">{{ $item_d2->uom_d2 }}</option>
+                                        <option value="{{ $item_d2->uom }}">{{ $item_d2->uom }}</option>
                                     </select>
                                 </div>
                             </td>
@@ -123,8 +123,8 @@
                                     <select name="chg_d2[]" id="chg-selectd2-{{ $key_d2 + 1 }}"
                                         class="chg-selectd2">
                                         <option value="">Search</option>
-                                        <option value="yes" @selected($item_d2->chg_d2 == true)>Yes</option>
-                                        <option value="no" @selected($item_d2->chg_d2 != true)>No</option>
+                                        <option value="yes" @selected($item_d2->chg == true)>Yes</option>
+                                        <option value="no" @selected($item_d2->chg != true)>No</option>
                                     </select>
                                 </div>
                             </td>
@@ -133,7 +133,7 @@
                                 <div class="form-group">
                                     <select name="vat_code_d2[]" id="vat-selectd2-{{ $key_d2 + 1 }}"
                                         class="vat-selectd2">
-                                        <option value="{{ $item_d2->vat_code_d2 }}">{{ $item_d2->vat_code_d2 }}
+                                        <option value="{{ $item_d2->vat_code }}">{{ $item_d2->vat_code }}
                                         </option>
                                     </select>
                                 </div>
@@ -142,10 +142,10 @@
                             <td>
                                 <div class="form-group">
                                     <select name="p_c_d2[]" id="pc-selectd2-{{ $key_d2 + 1 }}"
-                                        @disabled($item_d2->chg_unit_d2 == 'REV TON') class="pc-selectd2">
+                                        @disabled($item_d2->chg_unit == 'REV TON') class="pc-selectd2">
                                         <option value="">Search</option>
-                                        <option value="P" @selected($item_d2->p_c_d2 == 'P')>Prepaid</option>
-                                        <option value="C" @selected($item_d2->p_c_d2 == 'C')>Collect</option>
+                                        <option value="P" @selected($item_d2->p_c == 'Prepaid')>Prepaid</option>
+                                        <option value="C" @selected($item_d2->p_c == 'Collect')>Collect</option>
                                     </select>
                                 </div>
                             </td>
@@ -153,8 +153,8 @@
                             <td>
                                 <div class="form-group">
                                     <select name="container_d2[]" id="container-selectd2-{{ $key_d2 + 1 }}"
-                                        class="container-selectd2" @disabled($item_d2->chg_unit_d2 == 'REV TON' || $item_d2->chg_unit_d2 == 'SHIPMENT')>
-                                        <option value="{{ $item_d2->container_d2 }}">{{ $item_d2->container_d2 }}
+                                        class="container-selectd2" @disabled($item_d2->chg_unit == 'REV TON' || $item_d2->chg_unit == 'SHIPMENT')>
+                                        <option value="{{ $item_d2->container }}">{{ $item_d2->container }}
                                         </option>
                                     </select>
                                 </div>
@@ -165,9 +165,9 @@
                                     <select name="rate_d2[]" id="rate-selectd2-{{ $key_d2 + 1 }}"
                                         class="rate-selectd2">
                                         <option value="">Search</option>
-                                        <option value="Break Point" @selected($item_d2->rate_d2 == 'Break Point')>Break Point</option>
-                                        <option value="Std Rate" @selected($item_d2->rate_d2 == 'Std Rate')>Std Rate</option>
-                                        <option value="Flat Amount" @selected($item_d2->rate_d2 == 'Flat Amount')>Flat Amount</option>
+                                        <option value="Break Point" @selected($item_d2->rate == 'Break Point')>Break Point</option>
+                                        <option value="Std Rate" @selected($item_d2->rate == 'Std Rate')>Std Rate</option>
+                                        <option value="Flat Amount" @selected($item_d2->rate == 'Flat Amount')>Flat Amount</option>
                                     </select>
                                 </div>
                             </td>
@@ -176,7 +176,7 @@
                                 <div class="form-group">
                                     <select name="currency_d2[]" id="currency-subd2-{{ $key_d2 + 1 }}"
                                         class="currency-subd2">
-                                        <option value="{{ $item_d2->currency_d2 }}">{{ $item_d2->currency_d2 }}
+                                        <option value="{{ $item_d2->currency }}">{{ $item_d2->currency }}
                                         </option>
                                     </select>
                                 </div>
@@ -187,7 +187,7 @@
                                     <input type="text" class="form-control curr-rated2"
                                         id="curr-rated2{{ $key_d2 + 1 }}" autocomplete="off" data-type='currency'
                                         name="curr_rate_d2[]"
-                                        value="{{ number_format($item_d2->curr_rate_d2, 2, '.', ',') }}"
+                                        value="{{ number_format($item_d2->curr_rate, 2, '.', ',') }}"
                                         onkeyup="sum_idr_d2({{ $key_d2 + 1 }}, 1)">
                                 </div>
                             </td>
@@ -197,7 +197,7 @@
                                 <div class="form-group">
                                     <input type="text" class="form-control unit-rated2"
                                         id="unit-rated2{{ $key_d2 + 1 }}" autocomplete="off" data-type='currency'
-                                        value="{{ number_format($item_d2->unit_rate_d2, 2, '.', ',') }}"
+                                        value="{{ number_format($item_d2->unit_rate, 2, '.', ',') }}"
                                         name="unit_rate_d2[]" onkeyup="sum_idr_d2({{ $key_d2 + 1 }}, 1)">
                                 </div>
                             </td>
@@ -206,7 +206,7 @@
                                 <div class="form-group">
                                     <input type="text" class="form-control min-amtd2"
                                         id="min-amtd2{{ $key_d2 + 1 }}" autocomplete="off" data-type='currency'
-                                        value="{{ number_format($item_d2->min_amt_d2, 2, '.', ',') }}"
+                                        value="{{ number_format($item_d2->min_amt, 2, '.', ',') }}"
                                         name="min_amt_d2[]" onkeyup="sum_idr_d2({{ $key_d2 + 1 }}, 1)">
                                 </div>
                             </td>
@@ -215,7 +215,7 @@
                                 <div class="form-group">
                                     <input type="text" class="form-control amtd2" id="amtd2{{ $key_d2 + 1 }}"
                                         readonly autocomplete="off"
-                                        value="{{ number_format($item_d2->amt_d2, 2, '.', ',') }}"
+                                        value="{{ number_format($item_d2->amt, 2, '.', ',') }}"
                                         data-type='currency_amt' name="amt_d2[]">
                                 </div>
                             </td>
@@ -224,7 +224,7 @@
                                 <div class="form-group">
                                     <input type="text" class="form-control idr-amtd2"
                                         id="idr-amtd2{{ $key_d2 + 1 }}" readonly data-idrd2="1" autocomplete="off"
-                                        value="{{ number_format($item_d2->idr_amt_d2, 2, '.', ',') }}"
+                                        value="{{ number_format($item_d2->idr_amt, 2, '.', ',') }}"
                                         data-type='currency_amt' name="idr_amt_d2[]">
                                 </div>
                             </td>

@@ -51,7 +51,7 @@
                                 <div class="form-group">
                                     <select name="item_code_s_d2[]" id="item-select-{{ $count_test }}"
                                         class="item-select">
-                                        <option value="{{ $val->item_code_s_d2 }}">{{ $val->item_code_s_d2 }}</option>
+                                        <option value="{{ $val->item_code }}">{{ $val->item_code }}</option>
 
                                     </select>
                                 </div>
@@ -59,9 +59,8 @@
 
                             <td>
                                 <div class="form-group">
-                                    <input type="text" class="form-control item-desc"
-                                        value="{{ $val->item_desc_s_d2 }}" name="item_desc_s_d2[]"
-                                        id="item-desc-{{ $count_test }}">
+                                    <input type="text" class="form-control item-desc" value="{{ $val->item_desc }}"
+                                        name="item_desc_s_d2[]" id="item-desc-{{ $count_test }}">
                                 </div>
                             </td>
 
@@ -70,13 +69,13 @@
                                     <select name="chg_unit_s_d2[]" id="chgunit-select-{{ $count_test }}"
                                         class="chgunit-select">
                                         <option value="">Search</option>
-                                        <option value="CHARGE WEIGHT" @selected($val->chg_unit_s_d2 == 'CHARGE WEIGHT')>CHARGE WEIGHT
+                                        <option value="CHARGE WEIGHT" @selected($val->chg_unit == 'CHARGE WEIGHT')>CHARGE WEIGHT
                                         </option>
-                                        <option value="SHIPMENT" @selected($val->chg_unit_s_d2 == 'SHIPMENT')>SHIPMENT</option>
-                                        <option value="WEIGHT" @selected($val->chg_unit_s_d2 == 'WEIGHT')>WEIGHT</option>
-                                        <option value="VOLUME" @selected($val->chg_unit_s_d2 == 'VOLUME')>VOLUME</option>
-                                        <option value="PCS" @selected($val->chg_unit_s_d2 == 'PCS')>PCS</option>
-                                        <option value="CC FEE" @selected($val->chg_unit_s_d2 == 'CC FEE')>CC FEE</option>
+                                        <option value="SHIPMENT" @selected($val->chg_unit == 'SHIPMENT')>SHIPMENT</option>
+                                        <option value="WEIGHT" @selected($val->chg_unit == 'WEIGHT')>WEIGHT</option>
+                                        <option value="VOLUME" @selected($val->chg_unit == 'VOLUME')>VOLUME</option>
+                                        <option value="PCS" @selected($val->chg_unit == 'PCS')>PCS</option>
+                                        <option value="CC FEE" @selected($val->chg_unit == 'CC FEE')>CC FEE</option>
                                     </select>
                                 </div>
                             </td>
@@ -84,8 +83,8 @@
                             <td>
                                 <div class="form-group">
                                     <input type="text" class="form-control qty-input" autocomplete="off"
-                                        @disabled($val->chg_unit_s_d2 == 'SHIPMENT') data-type='currency4'
-                                        value="{{ number_format($val->chg_unit_s_d2 == 'SHIPMENT' ? 1 : $val->qty_s_d2, 4, '.', ',') }}"
+                                        @disabled($val->chg_unit == 'SHIPMENT') data-type='currency4'
+                                        value="{{ number_format($val->chg_unit == 'SHIPMENT' ? 1 : $val->qty, 4, '.', ',') }}"
                                         name="qty_s_d2[]" id="qty-input-{{ $count_test }}"
                                         onkeyup="sum_idr({{ $count_test }}, {{ $key + 1 }})">
                                 </div>
@@ -95,7 +94,7 @@
                             <td>
                                 <div class="form-group">
                                     <select name="uom_s_d2[]" id="uom-sub-{{ $count_test }}" class="uom-sub">
-                                        <option value="{{ $val->uom_s_d2 }}">{{ $val->uom_s_d2 }}</option>
+                                        <option value="{{ $val->uom }}">{{ $val->uom }}</option>
                                     </select>
                                 </div>
                             </td>
@@ -104,8 +103,8 @@
                                 <div class="form-group">
                                     <select name="chg_s_d2[]" id="chg-select-{{ $count_test }}" class="chg-select">
                                         <option value="">Search</option>
-                                        <option value="yes" @selected($val->chg_s_d2 == true)>Yes</option>
-                                        <option value="no" @selected($val->chg_s_d2 != true)>No</option>
+                                        <option value="yes" @selected($val->chg == true)>Yes</option>
+                                        <option value="no" @selected($val->chg != true)>No</option>
                                     </select>
                                 </div>
                             </td>
@@ -114,7 +113,7 @@
                                 <div class="form-group">
                                     <select name="vat_code_s_d2[]" id="vat-select-{{ $count_test }}"
                                         class="vat-select">
-                                        <option value="{{ $val->vat_code_s_d2 }}">{{ $val->vat_code_s_d2 }}</option>
+                                        <option value="{{ $val->vat_code }}">{{ $val->vat_code }}</option>
                                     </select>
                                 </div>
                             </td>
@@ -123,8 +122,8 @@
                                 <div class="form-group">
                                     <select name="p_c_s_d2[]" id="pc-select-{{ $count_test }}" class="pc-select">
                                         <option value="">Search</option>
-                                        <option value="P" @selected($val->p_c_s_d2 == 'P')>Prepaid</option>
-                                        <option value="C" @selected($val->p_c_s_d2 == 'C')>Collect</option>
+                                        <option value="P" @selected($val->p_c == 'Prepaid')>Prepaid</option>
+                                        <option value="C" @selected($val->p_c == 'Collect')>Collect</option>
                                     </select>
                                 </div>
                             </td>
@@ -134,8 +133,8 @@
                                     <select name="due_s_d2[]" id="due-select-{{ $count_test }}"
                                         class="due-select">
                                         <option value="">Search</option>
-                                        <option value="Agent" @selected($val->due_s_d2 == 'Agent')>Agent</option>
-                                        <option value="Carrier" @selected($val->due_s_d2 == 'Carrier')>Carrier</option>
+                                        <option value="Agent" @selected($val->due == 'Agent')>Agent</option>
+                                        <option value="Carrier" @selected($val->due == 'Carrier')>Carrier</option>
                                     </select>
                                 </div>
                             </td>
@@ -145,9 +144,9 @@
                                     <select name="rate_s_d2[]" id="rate-select-{{ $count_test }}"
                                         class="rate-select">
                                         <option value="">Search</option>
-                                        <option value="Break Point" @selected($val->rate_s_d2 == 'Break Point')>Break Point</option>
-                                        <option value="Std Rate" @selected($val->rate_s_d2 == 'Std Rate')>Std Rate</option>
-                                        <option value="Flat Amount" @selected($val->rate_s_d2 == 'Flat Amount')>Flat Amount</option>
+                                        <option value="Break Point" @selected($val->rate == 'Break Point')>Break Point</option>
+                                        <option value="Std Rate" @selected($val->rate == 'Std Rate')>Std Rate</option>
+                                        <option value="Flat Amount" @selected($val->rate == 'Flat Amount')>Flat Amount</option>
                                     </select>
                                 </div>
                             </td>
@@ -156,7 +155,7 @@
                                 <div class="form-group">
                                     <select name="currency_s_d2[]" id="currency-sub-{{ $count_test }}"
                                         class="currency-sub">
-                                        <option value="{{ $val->currency_s_d2 }}">{{ $val->currency_s_d2 }}</option>
+                                        <option value="{{ $val->currency }}">{{ $val->currency }}</option>
                                     </select>
                                 </div>
                             </td>
@@ -166,7 +165,7 @@
                                     <input type="text" class="form-control curr-rate"
                                         id="curr-rate{{ $count_test }}" autocomplete="off" data-type='currency'
                                         name="curr_rate_s_d2[]"
-                                        value="{{ number_format($val->curr_rate_s_d2, 2, '.', ',') }}"
+                                        value="{{ number_format($val->curr_rate, 2, '.', ',') }}"
                                         onkeyup="sum_idr({{ $count_test }}, {{ $key + 1 }})">
                                 </div>
                             </td>
@@ -177,7 +176,7 @@
                                     <input type="text" class="form-control unit-rate"
                                         id="unit-rate{{ $count_test }}" autocomplete="off" data-type='currency'
                                         name="unit_rate_s_d2[]"
-                                        value="{{ number_format($val->unit_rate_s_d2, 2, '.', ',') }}"
+                                        value="{{ number_format($val->unit_rate, 2, '.', ',') }}"
                                         onkeyup="sum_idr({{ $count_test }}, {{ $key + 1 }})">
                                 </div>
                             </td>
@@ -186,8 +185,7 @@
                                 <div class="form-group">
                                     <input type="text" class="form-control min-amt"
                                         id="min-amt{{ $count_test }}" autocomplete="off" data-type='currency'
-                                        name="min_amt_s_d2[]"
-                                        value="{{ number_format($val->min_amt_s_d2, 2, '.', ',') }}"
+                                        name="min_amt_s_d2[]" value="{{ number_format($val->min_amt, 2, '.', ',') }}"
                                         onkeyup="sum_idr({{ $count_test }}, {{ $key + 1 }})">
                                 </div>
                             </td>
@@ -195,7 +193,7 @@
                             <td>
                                 <div class="form-group">
                                     <input type="text" class="form-control amt" id="amt{{ $count_test }}"
-                                        value="{{ number_format($val->amt_s_d2, 2, '.', ',') }}" readonly
+                                        value="{{ number_format($val->amt, 2, '.', ',') }}" readonly
                                         autocomplete="off" data-type='currency_amt' name="amt_s_d2[]">
                                 </div>
                             </td>
@@ -206,7 +204,7 @@
                                     <input type="text" class="form-control idr-amt"
                                         id="idr-amt{{ $count_test }}" readonly data-idr="{{ $key + 1 }}"
                                         autocomplete="off" data-type='currency_amt'
-                                        value="{{ number_format($val->idr_amt_s_d2, 2, '.', ',') }}"
+                                        value="{{ number_format($val->idr_amt, 2, '.', ',') }}"
                                         name="idr_amt_s_d2[]">
                                 </div>
                             </td>

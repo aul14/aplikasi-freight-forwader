@@ -489,36 +489,6 @@
                 <div class="collapse {{ Request::is('sea_quot*') || Request::is('air_quot*') || Request::is('sea_book*') || Request::is('air_book*') || Request::is('sea_ex_job*') || Request::is('sea_im_job*') || Request::is('air_ex_job*') ? 'show' : '' }}"
                     id="collapseShow4">
                     <ul class="nav nav-sm flex-column">
-                        @permission('manage-air_book')
-                            <li class="nav-item">
-                                <!---->
-                                <div class="collapse ">
-                                    <ul class="nav nav-sm flex-column"></ul>
-                                </div> <a href="{{ route('air_book.index') }}"
-                                    class="nav-link {{ Request::is('air_book*') ? 'active' : '' }}">
-                                    <i class="fa fa-a text-dark text-sm opacity-10"></i>
-                                    <div>
-                                        <span class="nav-link-text">Air Export Booking</span>
-                                    </div>
-                                </a>
-                                <ul class="navbar-nav"></ul>
-                            </li>
-                        @endpermission
-                        @permission('manage-air_ex_job')
-                            <li class="nav-item">
-                                <!---->
-                                <div class="collapse ">
-                                    <ul class="nav nav-sm flex-column"></ul>
-                                </div> <a href="{{ route('air_ex_job.index') }}"
-                                    class="nav-link {{ Request::is('air_ex_job*') ? 'active' : '' }}">
-                                    <i class="fa fa-a text-dark text-sm opacity-10"></i>
-                                    <div>
-                                        <span class="nav-link-text">Air Export Job</span>
-                                    </div>
-                                </a>
-                                <ul class="navbar-nav"></ul>
-                            </li>
-                        @endpermission
                         @permission('manage-air_quot')
                             <li class="nav-item">
                                 <!---->
@@ -526,54 +496,9 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('air_quot.index') }}"
                                     class="nav-link {{ Request::is('air_quot*') ? 'active' : '' }}">
-                                    <i class="fa fa-a text-dark text-sm opacity-10"></i>
+                                    <i class="fa fa-q text-dark text-sm opacity-10"></i>
                                     <div>
-                                        <span class="nav-link-text">Air Freight Quotation</span>
-                                    </div>
-                                </a>
-                                <ul class="navbar-nav"></ul>
-                            </li>
-                        @endpermission
-                        @permission('manage-sea_book')
-                            <li class="nav-item">
-                                <!---->
-                                <div class="collapse ">
-                                    <ul class="nav nav-sm flex-column"></ul>
-                                </div> <a href="{{ route('sea_book.index') }}"
-                                    class="nav-link {{ Request::is('sea_book*') ? 'active' : '' }}">
-                                    <i class="fa fa-s text-dark text-sm opacity-10"></i>
-                                    <div>
-                                        <span class="nav-link-text">Sea Export Booking</span>
-                                    </div>
-                                </a>
-                                <ul class="navbar-nav"></ul>
-                            </li>
-                        @endpermission
-                        @permission('manage-sea_ex_job')
-                            <li class="nav-item">
-                                <!---->
-                                <div class="collapse ">
-                                    <ul class="nav nav-sm flex-column"></ul>
-                                </div> <a href="{{ route('sea_ex_job.index') }}"
-                                    class="nav-link {{ Request::is('sea_ex_job*') ? 'active' : '' }}">
-                                    <i class="fa fa-s text-dark text-sm opacity-10"></i>
-                                    <div>
-                                        <span class="nav-link-text">Sea Export Job</span>
-                                    </div>
-                                </a>
-                                <ul class="navbar-nav"></ul>
-                            </li>
-                        @endpermission
-                        @permission('manage-sea_im_job')
-                            <li class="nav-item">
-                                <!---->
-                                <div class="collapse ">
-                                    <ul class="nav nav-sm flex-column"></ul>
-                                </div> <a href="{{ route('sea_im_job.index') }}"
-                                    class="nav-link {{ Request::is('sea_im_job*') ? 'active' : '' }}">
-                                    <i class="fa fa-s text-dark text-sm opacity-10"></i>
-                                    <div>
-                                        <span class="nav-link-text">Sea Import Job</span>
+                                        <span class="nav-link-text">Quotation - Air Freight</span>
                                     </div>
                                 </a>
                                 <ul class="navbar-nav"></ul>
@@ -586,15 +511,89 @@
                                     <ul class="nav nav-sm flex-column"></ul>
                                 </div> <a href="{{ route('sea_quot.index') }}"
                                     class="nav-link {{ Request::is('sea_quot*') ? 'active' : '' }}">
-                                    <i class="fa fa-s text-dark text-sm opacity-10"></i>
+                                    <i class="fa fa-q text-dark text-sm opacity-10"></i>
                                     <div>
-                                        <span class="nav-link-text">Sea Freight Quotation</span>
+                                        <span class="nav-link-text">Quotation - Sea Freight</span>
                                     </div>
                                 </a>
                                 <ul class="navbar-nav"></ul>
                             </li>
                         @endpermission
-
+                        @permission('manage-air_book')
+                            <li class="nav-item">
+                                <!---->
+                                <div class="collapse ">
+                                    <ul class="nav nav-sm flex-column"></ul>
+                                </div> <a href="{{ route('air_book.index') }}"
+                                    class="nav-link {{ Request::is('air_book*') ? 'active' : '' }}">
+                                    <i class="fa fa-b text-dark text-sm opacity-10"></i>
+                                    <div>
+                                        <span class="nav-link-text">Booking - Air Export</span>
+                                    </div>
+                                </a>
+                                <ul class="navbar-nav"></ul>
+                            </li>
+                        @endpermission
+                        @permission('manage-sea_book')
+                            <li class="nav-item">
+                                <!---->
+                                <div class="collapse ">
+                                    <ul class="nav nav-sm flex-column"></ul>
+                                </div> <a href="{{ route('sea_book.index') }}"
+                                    class="nav-link {{ Request::is('sea_book*') ? 'active' : '' }}">
+                                    <i class="fa fa-b text-dark text-sm opacity-10"></i>
+                                    <div>
+                                        <span class="nav-link-text">Booking - Sea Export</span>
+                                    </div>
+                                </a>
+                                <ul class="navbar-nav"></ul>
+                            </li>
+                        @endpermission
+                        @permission('manage-air_ex_job')
+                            <li class="nav-item">
+                                <!---->
+                                <div class="collapse ">
+                                    <ul class="nav nav-sm flex-column"></ul>
+                                </div> <a href="{{ route('air_ex_job.index') }}"
+                                    class="nav-link {{ Request::is('air_ex_job*') ? 'active' : '' }}">
+                                    <i class="fa fa-j text-dark text-sm opacity-10"></i>
+                                    <div>
+                                        <span class="nav-link-text">Job - Air Export</span>
+                                    </div>
+                                </a>
+                                <ul class="navbar-nav"></ul>
+                            </li>
+                        @endpermission
+                        @permission('manage-sea_ex_job')
+                            <li class="nav-item">
+                                <!---->
+                                <div class="collapse ">
+                                    <ul class="nav nav-sm flex-column"></ul>
+                                </div> <a href="{{ route('sea_ex_job.index') }}"
+                                    class="nav-link {{ Request::is('sea_ex_job*') ? 'active' : '' }}">
+                                    <i class="fa fa-j text-dark text-sm opacity-10"></i>
+                                    <div>
+                                        <span class="nav-link-text">Job - Sea Export</span>
+                                    </div>
+                                </a>
+                                <ul class="navbar-nav"></ul>
+                            </li>
+                        @endpermission
+                        @permission('manage-sea_im_job')
+                            <li class="nav-item">
+                                <!---->
+                                <div class="collapse ">
+                                    <ul class="nav nav-sm flex-column"></ul>
+                                </div> <a href="{{ route('sea_im_job.index') }}"
+                                    class="nav-link {{ Request::is('sea_im_job*') ? 'active' : '' }}">
+                                    <i class="fa fa-j text-dark text-sm opacity-10"></i>
+                                    <div>
+                                        <span class="nav-link-text">Job - Sea Import</span>
+                                    </div>
+                                </a>
+                                <ul class="navbar-nav"></ul>
+                            </li>
+                        @endpermission
                     </ul>
                 </div>
             </li>

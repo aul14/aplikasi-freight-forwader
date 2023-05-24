@@ -1100,7 +1100,6 @@
                 field.find(id_key).attr("id", `id-key-${countSub}`).val(countSub);
 
                 field.find(rate_vendor).attr("id", "rate-vendor-" + countSub);
-
                 field.find(amt_sales).attr("id", "amt-sales-" + countSub);
                 field.find(sales).attr("id", "sales-" + countSub);
                 field.find(qty_sales).attr("id", "qty-sales-" + countSub).removeAttr("onkeyup").attr("onkeyup",

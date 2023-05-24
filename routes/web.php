@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AirExportBookingController;
 use App\Http\Controllers\AirExportJobController;
+use App\Http\Controllers\AirImJobController;
 use App\Http\Controllers\AirLineController;
 use App\Http\Controllers\AirPortController;
 use App\Http\Controllers\AirQuotationController;
@@ -112,11 +113,13 @@ Route::group(['middleware' => ['auth', 'prevent-back-history']], function () {
 	Route::resource('/sea_ex_job', SeaExportJobController::class);
 	Route::resource('/air_ex_job', AirExportJobController::class);
 	Route::resource('/sea_im_job', SeaImJobControlller::class);
+	Route::resource('/air_im_job', AirImJobController::class);
 	Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
 	Route::get('/pdf_sea_quot/{sea_quot}', [SeaQuotationController::class, 'pdf'])->name('pdf.sea');
 	Route::get('/pdf_air_quot/{air_quot}', [AirQuotationController::class, 'pdf'])->name('pdf.air');
 	Route::get('/pdf_sea_book/{sea_book}', [SeaExportBookingController::class, 'pdf'])->name('pdf.sea_book');
 	Route::get('/pdf_ex_job_air/{air_ex_job}/{parameter?}', [AirExportJobController::class, 'pdf'])->name('pdf.air_ex_job');
+	Route::get('/pdf_im_job_air/{air_im_job}/{parameter?}', [AirImJobController::class, 'pdf'])->name('pdf.air_im_job');
 	Route::get('/pdf_ex_job_sea/{sea_ex_job}/{parameter?}', [SeaExportJobController::class, 'pdf'])->name('pdf.sea_ex_job');
 	Route::get('/pdf_im_job_sea/{sea_im_job}/{parameter?}', [SeaImJobControlller::class, 'pdf'])->name('pdf.sea_im_job');
 	Route::post('/pdf_im_job_sea/{sea_im_job}/{parameter?}', [SeaImJobControlller::class, 'pdf'])->name('pdf.post.sea_im_job');

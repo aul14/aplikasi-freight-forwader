@@ -122,7 +122,7 @@
 <body>
 
     <div class="page_break">
-        <h6 style="text-align: center;">{{ $company->name }} <br> OPERATIONAL ORDER SHEET <br> IMPORT / EXPORT</h6>
+        <h6 style="text-align: center;">{{ $company->name }} <br> OPERATIONAL ORDER SHEET <br> AIR EXPORT</h6>
 
         <br>
         <div class="row">
@@ -132,7 +132,7 @@
                     <td style="text-align: center;">:</td>
                     <td><strong>{{ $aj->jm->job_no }}</strong></td>
 
-                    <td>AWB#</td>
+                    <td>AWB</td>
                     <td style="text-align: center;">:</td>
                     <td>{{ $aj->jm->mawb_no }}</td>
                 </tr>

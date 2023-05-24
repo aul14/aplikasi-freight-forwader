@@ -1066,6 +1066,25 @@ class DataAjaxController extends Controller
         return response()->json($end_query);
     }
 
+    public function ajax_table_cus_im_job_air(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = BisnisParty::with(['quotation'])->orderBy('id', 'DESC')->select('*');
+
+            return DataTables::of($query)
+                ->addColumn('action', function ($query) {
+                    $cus_code = !empty($query->code) ? $query->code : "";
+                    $quotation_no = !empty($query->ab->quotation_no) ? $query->ab->quotation_no : 0;
+                    $booking_no = !empty($query->ab->code) ? $query->ab->code : 0;
+                    $id = !empty($query->id) ? $query->id : 0;
+                    return "<input type='radio' class='input_check' name='input_check' value='{$booking_no}' data-quotation_no='{$quotation_no}' data-id='{$id}' data-cus_code='{$cus_code}'/>";
+                })
+                ->smart(false)
+                ->rawColumns(['action'])
+                ->addIndexColumn()
+                ->toJson();
+        }
+    }
     public function ajax_table_cus_ex_job_air(Request $request)
     {
         if ($request->ajax()) {

@@ -388,11 +388,11 @@ class SeaImJobControlller extends Controller
                 }
 
                 $result_d5 = [];
-                if ($request->code[0] != null) {
-                    foreach ($request->code as $key6 => $val6) {
+                if ($request->code[1] != null) {
+                    foreach ($request->id_key as $key6) {
                         $result_d5[] = [
                             'sea_im_job_id'    => $sj->id,
-                            'code'  => $val6,
+                            'code'  => !empty($request->code[$key6]) ? $request->code[$key6] : null,
                             'description'      => !empty($request->description[$key6]) ? $request->description[$key6] : null,
                             'qty_sales'      => !empty($request->qty_sales[$key6]) ? str_replace(",", "", $request->qty_sales[$key6]) : null,
                             'unit_rate_sales'      => !empty($request->unit_rate_sales[$key6]) ? str_replace(",", "", $request->unit_rate_sales[$key6]) : null,
@@ -736,11 +736,11 @@ class SeaImJobControlller extends Controller
 
                 $result_d5 = [];
                 $sj->sea_im_job_d5()->forceDelete();
-                if ($request->code[0] != null) {
-                    foreach ($request->code as $key6 => $val6) {
+                if ($request->code[1] != null) {
+                    foreach ($request->id_key as $key6) {
                         $result_d5[] = [
                             'sea_im_job_id'    => $sj->id,
-                            'code'  => $val6,
+                            'code'  => !empty($request->code[$key6]) ? $request->code[$key6] : null,
                             'description'      => !empty($request->description[$key6]) ? $request->description[$key6] : null,
                             'qty_sales'      => !empty($request->qty_sales[$key6]) ? str_replace(",", "", $request->qty_sales[$key6]) : null,
                             'unit_rate_sales'      => !empty($request->unit_rate_sales[$key6]) ? str_replace(",", "", $request->unit_rate_sales[$key6]) : null,

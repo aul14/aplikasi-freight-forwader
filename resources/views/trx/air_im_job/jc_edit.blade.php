@@ -30,200 +30,441 @@
                 </tr>
             </thead>
             <tbody class="tbody-conditionjc" id="tbody-conditionjc-1">
-                <tr class="dynamic-field" id="dynamic-field-1" onclick="click_tr(1)">
-                    <input type="hidden" name="id_key[]" id="id-key-1" class="id-key" value="1">
-                    <td class="text-center">
-                        <button type="button" onclick="addNewField(this.id)" id="add-button-1"
-                            class="btn btn-xs btn-primary float-left text-uppercase shadow-sm add-button"><i
-                                class="fa fa-plus fa-fw"></i>
-                        </button>
-                        <button type="button" onclick="removeLastField(this)" id="remove-button-1"
-                            class="btn btn-xs btn-danger float-left text-uppercase ml-1 remove-button"><i
-                                class="fa fa-minus fa-fw"></i>
-                        </button>
-                    </td>
+                @if (count($ad3) > 0)
+                    @foreach ($ad3 as $key => $val)
+                        <tr class="dynamic-field" id="dynamic-field-{{ $key + 1 }}"
+                            onclick="click_tr({{ $key + 1 }})">
+                            <input type="hidden" name="id_key[]" id="id-key-{{ $key + 1 }}" class="id-key"
+                                value="{{ $key + 1 }}">
+                            <td class="text-center">
+                                <button type="button" onclick="addNewField(this.id)"
+                                    id="add-button-{{ $key + 1 }}"
+                                    class="btn btn-xs btn-primary float-left text-uppercase shadow-sm add-button"><i
+                                        class="fa fa-plus fa-fw"></i>
+                                </button>
+                                <button type="button" onclick="removeLastField(this)"
+                                    id="remove-button-{{ $key + 1 }}"
+                                    class="btn btn-xs btn-danger float-left text-uppercase ml-1 remove-button"><i
+                                        class="fa fa-minus fa-fw"></i>
+                                </button>
+                            </td>
 
-                    <td>
-                        <div class="form-group">
-                            <select name="code[1]" id="code-select-1" class="code-select">
-                                <option value="">Search</option>
+                            <td>
+                                <div class="form-group">
+                                    <select name="code[{{ $key + 1 }}]" id="code-select-{{ $key + 1 }}"
+                                        class="code-select">
+                                        <option value="{{ $val->code }}">{{ $val->code }}</option>
 
-                            </select>
-                        </div>
-                    </td>
+                                    </select>
+                                </div>
+                            </td>
 
-                    <td>
-                        <div class="form-group">
-                            <input type="text" class="form-control desc" name="description[1]" id="desc-1">
-                        </div>
-                    </td>
+                            <td>
+                                <div class="form-group">
+                                    <input type="text" class="form-control desc"
+                                        name="description[{{ $key + 1 }}]" id="desc-{{ $key + 1 }}"
+                                        value="{{ $val->description }}">
+                                </div>
+                            </td>
 
-                    <td style="background-color: darksalmon;">
-                        <div class="form-group">
-                            <input type="text" class="form-control qty-sales" name="qty_sales[1]" id="qty-sales-1"
-                                data-type='currency4' autocomplete="off" onkeyup="sum_idr_sales(1, 1)">
-                        </div>
-                    </td>
+                            <td style="background-color: darksalmon;">
+                                <div class="form-group">
+                                    <input type="text" class="form-control qty-sales"
+                                        name="qty_sales[{{ $key + 1 }}]" id="qty-sales-{{ $key + 1 }}"
+                                        data-type='currency4' value="{{ number_format($val->qty_sales, 4, '.', ',') }}"
+                                        autocomplete="off" onkeyup="sum_idr_sales({{ $key + 1 }}, 1)">
+                                </div>
+                            </td>
 
-                    <td style="background-color: darksalmon;">
-                        <div class="form-group">
-                            <select name="uom_sales[1]" id="uom-sales-1" class="uom-sales">
-                                <option value="">Search</option>
-                            </select>
-                        </div>
-                    </td>
+                            <td style="background-color: darksalmon;">
+                                <div class="form-group">
+                                    <select name="uom_sales[{{ $key + 1 }}]" id="uom-sales-{{ $key + 1 }}"
+                                        class="uom-sales">
+                                        <option value="{{ $val->uom_sales }}">{{ $val->uom_sales }}</option>
+                                    </select>
+                                </div>
+                            </td>
 
-                    <td style="background-color: darksalmon;">
-                        <div class="form-group">
-                            <select name="pc_sales[1]" id="pc-sales-1" class="pc-sales">
-                                <option value="">Search</option>
-                                <option value="Prepaid">Prepaid</option>
-                                <option value="Collect">Collect</option>
-                            </select>
-                        </div>
-                    </td>
+                            <td style="background-color: darksalmon;">
+                                <div class="form-group">
+                                    <select name="pc_sales[{{ $key + 1 }}]" id="pc-sales-{{ $key + 1 }}"
+                                        class="pc-sales">
+                                        <option value="">Search</option>
+                                        <option value="Prepaid" @selected($val->pc_sales == 'Prepaid')>Prepaid</option>
+                                        <option value="Collect" @selected($val->pc_sales == 'Collect')>Collect</option>
+                                    </select>
+                                </div>
+                            </td>
 
-                    <td style="background-color: darksalmon;">
-                        <div class="form-group">
-                            <select name="cust_code_sales[1]" id="cust-code-sales-1" class="cust-code-sales">
-                                <option value="">Search</option>
-                            </select>
-                        </div>
-                    </td>
+                            <td style="background-color: darksalmon;">
+                                <div class="form-group">
+                                    <select name="cust_code_sales[{{ $key + 1 }}]"
+                                        id="cust-code-sales-{{ $key + 1 }}" class="cust-code-sales">
+                                        <option value="{{ $val->cust_code_sales }}">{{ $val->cust_code_sales }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </td>
 
-                    <td style="background-color: darksalmon;">
-                        <div class="form-group">
-                            <input type="text" class="form-control cust-name-sales" name="cust_name_sales[1]"
-                                id="cust-name-sales-1">
-                        </div>
-                    </td>
+                            <td style="background-color: darksalmon;">
+                                <div class="form-group">
+                                    <input type="text" class="form-control cust-name-sales"
+                                        name="cust_name_sales[{{ $key + 1 }}]"
+                                        value="{{ $val->cust_name_sales }}"
+                                        id="cust-name-sales-{{ $key + 1 }}">
+                                </div>
+                            </td>
 
-                    <td style="background-color: darksalmon;">
-                        <div class="form-group">
-                            <select name="vat_sales[1]" id="vat-sales-1" class="vat-sales">
-                                <option value="">Search</option>
-                            </select>
-                        </div>
-                    </td>
+                            <td style="background-color: darksalmon;">
+                                <div class="form-group">
+                                    <select name="vat_sales[{{ $key + 1 }}]" id="vat-sales-{{ $key + 1 }}"
+                                        class="vat-sales">
+                                        <option value="{{ $val->vat_sales }}">{{ $val->vat_sales }}</option>
+                                    </select>
+                                </div>
+                            </td>
 
-                    <td style="background-color: darksalmon;">
-                        <div class="form-group">
-                            <select name="curr_sales[1]" id="curr-sales-1" class="curr-sales">
-                                <option value="">Search</option>
-                            </select>
-                        </div>
-                    </td>
+                            <td style="background-color: darksalmon;">
+                                <div class="form-group">
+                                    <select name="curr_sales[{{ $key + 1 }}]"
+                                        id="curr-sales-{{ $key + 1 }}" class="curr-sales">
+                                        <option value="{{ $val->curr_sales }}">{{ $val->curr_sales }}</option>
+                                    </select>
+                                </div>
+                            </td>
 
-                    <td style="background-color: darksalmon;">
-                        <div class="form-group">
-                            <input type="text" class="form-control rate-sales" id="rate-sales-1"
-                                autocomplete="off" data-type='currency' name="rate_sales[1]"
-                                onkeyup="sum_idr_sales(1, 1)">
-                        </div>
-                    </td>
+                            <td style="background-color: darksalmon;">
+                                <div class="form-group">
+                                    <input type="text" class="form-control rate-sales"
+                                        id="rate-sales-{{ $key + 1 }}" autocomplete="off" data-type='currency'
+                                        name="rate_sales[{{ $key + 1 }}]"
+                                        value="{{ number_format($val->rate_sales, 2, '.', ',') }}"
+                                        onkeyup="sum_idr_sales({{ $key + 1 }}, 1)">
+                                </div>
+                            </td>
 
-                    <td style="background-color: darksalmon;">
-                        <div class="form-group">
-                            <input type="text" class="form-control unit-rate-sales" id="unit-rate-sales-1"
-                                autocomplete="off" data-type='currency' name="unit_rate_sales[1]"
-                                onkeyup="sum_idr_sales(1, 1)">
-                        </div>
-                    </td>
+                            <td style="background-color: darksalmon;">
+                                <div class="form-group">
+                                    <input type="text" class="form-control unit-rate-sales"
+                                        id="unit-rate-sales-{{ $key + 1 }}" autocomplete="off"
+                                        data-type='currency' name="unit_rate_sales[{{ $key + 1 }}]"
+                                        value="{{ number_format($val->unit_rate_sales, 2, '.', ',') }}"
+                                        onkeyup="sum_idr_sales({{ $key + 1 }}, 1)">
+                                </div>
+                            </td>
 
-                    <td style="background-color: darksalmon;">
-                        <div class="form-group">
-                            <input type="text" class="form-control amt-sales" readonly id="amt-sales-1"
-                                autocomplete="off" data-type='currency' name="amt_sales[1]">
-                        </div>
-                    </td>
+                            <td style="background-color: darksalmon;">
+                                <div class="form-group">
+                                    <input type="text" class="form-control amt-sales" readonly
+                                        id="amt-sales-{{ $key + 1 }}" autocomplete="off" data-type='currency'
+                                        name="amt_sales[{{ $key + 1 }}]"
+                                        value="{{ number_format($val->amt_sales, 2, '.', ',') }}">
+                                </div>
+                            </td>
 
-                    <td style="background-color: darksalmon;">
-                        <div class="form-group">
-                            <input type="text" class="form-control sales" readonly id="sales-1"
-                                autocomplete="off" data-type='currency' name="sales[1]" data-total_sales="1">
-                        </div>
-                    </td>
+                            <td style="background-color: darksalmon;">
+                                <div class="form-group">
+                                    <input type="text" class="form-control sales" readonly
+                                        id="sales-{{ $key + 1 }}" autocomplete="off" data-type='currency'
+                                        name="sales[{{ $key + 1 }}]" data-total_sales="1"
+                                        value="{{ number_format($val->sales, 2, '.', ',') }}">
+                                </div>
+                            </td>
 
-                    <td style="background-color: cadetblue;">
-                        <div class="form-group">
-                            <input type="text" class="form-control qty-vendor" name="qty_vendor[1]"
-                                id="qty-vendor-1" data-type='currency4' autocomplete="off"
-                                onkeyup="sum_idr_vendor(1, 1)">
-                        </div>
-                    </td>
+                            <td style="background-color: cadetblue;">
+                                <div class="form-group">
+                                    <input type="text" class="form-control qty-vendor"
+                                        name="qty_vendor[{{ $key + 1 }}]" id="qty-vendor-{{ $key + 1 }}"
+                                        data-type='currency4' autocomplete="off"
+                                        value="{{ number_format($val->qty_vendor, 4, '.', ',') }}"
+                                        onkeyup="sum_idr_vendor({{ $key + 1 }}, 1)">
+                                </div>
+                            </td>
 
-                    <td style="background-color: cadetblue;">
-                        <div class="form-group">
-                            <select name="pc_vendor[1]" id="pc-vendor-1" class="pc-vendor">
-                                <option value="">Search</option>
-                                <option value="Prepaid">Prepaid</option>
-                                <option value="Collect">Collect</option>
-                            </select>
-                        </div>
-                    </td>
+                            <td style="background-color: cadetblue;">
+                                <div class="form-group">
+                                    <select name="pc_vendor[{{ $key + 1 }}]" id="pc-vendor-{{ $key + 1 }}"
+                                        class="pc-vendor">
+                                        <option value="">Search</option>
+                                        <option value="Prepaid" @selected($val->pc_vendor == 'Prepaid')>Prepaid</option>
+                                        <option value="Collect" @selected($val->pc_vendor == 'Collect')>Collect</option>
+                                    </select>
+                                </div>
+                            </td>
 
-                    <td style="background-color: cadetblue;">
-                        <div class="form-group">
-                            <select name="code_vendor[1]" id="code-vendor-1" class="code-vendor">
-                                <option value="">Search</option>
-                            </select>
-                        </div>
-                    </td>
+                            <td style="background-color: cadetblue;">
+                                <div class="form-group">
+                                    <select name="code_vendor[{{ $key + 1 }}]"
+                                        id="code-vendor-{{ $key + 1 }}" class="code-vendor">
+                                        <option value="{{ $val->code_vendor }}">{{ $val->code_vendor }}</option>
+                                    </select>
+                                </div>
+                            </td>
 
-                    <td style="background-color: cadetblue;">
-                        <div class="form-group">
-                            <input type="text" class="form-control name-vendor" name="name_vendor[1]"
-                                id="name-vendor-1">
-                        </div>
-                    </td>
+                            <td style="background-color: cadetblue;">
+                                <div class="form-group">
+                                    <input type="text" class="form-control name-vendor"
+                                        name="name_vendor[{{ $key + 1 }}]" value="{{ $val->name_vendor }}"
+                                        id="name-vendor-{{ $key + 1 }}">
+                                </div>
+                            </td>
 
-                    <td style="background-color: cadetblue;">
-                        <div class="form-group">
-                            <select name="vat_vendor[1]" id="vat-vendor-1" class="vat-vendor">
-                                <option value="">Search</option>
-                            </select>
-                        </div>
-                    </td>
+                            <td style="background-color: cadetblue;">
+                                <div class="form-group">
+                                    <select name="vat_vendor[{{ $key + 1 }}]"
+                                        id="vat-vendor-{{ $key + 1 }}" class="vat-vendor">
+                                        <option value="{{ $val->vat_vendor }}">{{ $val->vat_vendor }}</option>
+                                    </select>
+                                </div>
+                            </td>
 
-                    <td style="background-color: cadetblue;">
-                        <div class="form-group">
-                            <select name="curr_vendor[1]" id="curr-vendor-1" class="curr-vendor">
-                                <option value="">Search</option>
-                            </select>
-                        </div>
-                    </td>
+                            <td style="background-color: cadetblue;">
+                                <div class="form-group">
+                                    <select name="curr_vendor[{{ $key + 1 }}]"
+                                        id="curr-vendor-{{ $key + 1 }}" class="curr-vendor">
+                                        <option value="{{ $val->curr_vendor }}">{{ $val->curr_vendor }}</option>
+                                    </select>
+                                </div>
+                            </td>
 
-                    <td style="background-color: cadetblue;">
-                        <div class="form-group">
-                            <input type="text" class="form-control rate-vendor" id="rate-vendor-1"
-                                autocomplete="off" data-type='currency' name="rate_vendor[1]"
-                                onkeyup="sum_idr_vendor(1, 1)">
-                        </div>
-                    </td>
+                            <td style="background-color: cadetblue;">
+                                <div class="form-group">
+                                    <input type="text" class="form-control rate-vendor"
+                                        id="rate-vendor-{{ $key + 1 }}" autocomplete="off" data-type='currency'
+                                        value="{{ number_format($val->rate_vendor, 2, '.', ',') }}"
+                                        name="rate_vendor[{{ $key + 1 }}]"
+                                        onkeyup="sum_idr_vendor({{ $key + 1 }}, 1)">
+                                </div>
+                            </td>
 
-                    <td style="background-color: cadetblue;">
-                        <div class="form-group">
-                            <input type="text" class="form-control unit-rate-vendor" id="unit-rate-vendor-1"
-                                autocomplete="off" data-type='currency' name="unit_rate_vendor[1]"
-                                onkeyup="sum_idr_vendor(1, 1)">
-                        </div>
-                    </td>
+                            <td style="background-color: cadetblue;">
+                                <div class="form-group">
+                                    <input type="text" class="form-control unit-rate-vendor"
+                                        id="unit-rate-vendor-{{ $key + 1 }}" autocomplete="off"
+                                        data-type='currency' name="unit_rate_vendor[{{ $key + 1 }}]"
+                                        value="{{ number_format($val->unit_rate_vendor, 2, '.', ',') }}"
+                                        onkeyup="sum_idr_vendor({{ $key + 1 }}, 1)">
+                                </div>
+                            </td>
 
-                    <td style="background-color: cadetblue;">
-                        <div class="form-group">
-                            <input type="text" class="form-control amt-vendor" readonly id="amt-vendor-1"
-                                autocomplete="off" data-type='currency' name="amt_vendor[1]">
-                        </div>
-                    </td>
+                            <td style="background-color: cadetblue;">
+                                <div class="form-group">
+                                    <input type="text" class="form-control amt-vendor" readonly
+                                        id="amt-vendor-{{ $key + 1 }}" autocomplete="off" data-type='currency'
+                                        value="{{ number_format($val->amt_vendor, 2, '.', ',') }}"
+                                        name="amt_vendor[{{ $key + 1 }}]">
+                                </div>
+                            </td>
 
-                    <td style="background-color: cadetblue;">
-                        <div class="form-group">
-                            <input type="text" class="form-control cost" readonly id="cost-1"
-                                autocomplete="off" data-type='currency' name="cost[1]" data-total_vendor="1">
-                        </div>
-                    </td>
+                            <td style="background-color: cadetblue;">
+                                <div class="form-group">
+                                    <input type="text" class="form-control cost" readonly
+                                        id="cost-{{ $key + 1 }}" autocomplete="off" data-type='currency'
+                                        value="{{ number_format($val->cost, 2, '.', ',') }}"
+                                        name="cost[{{ $key + 1 }}]" data-total_vendor="1">
+                                </div>
+                            </td>
 
-                </tr>
+                        </tr>
+                    @endforeach
+                @else
+                    <tr class="dynamic-field" id="dynamic-field-1" onclick="click_tr(1)">
+                        <input type="hidden" name="id_key[]" id="id-key-1" class="id-key" value="1">
+                        <td class="text-center">
+                            <button type="button" onclick="addNewField(this.id)" id="add-button-1"
+                                class="btn btn-xs btn-primary float-left text-uppercase shadow-sm add-button"><i
+                                    class="fa fa-plus fa-fw"></i>
+                            </button>
+                            <button type="button" onclick="removeLastField(this)" id="remove-button-1"
+                                class="btn btn-xs btn-danger float-left text-uppercase ml-1 remove-button"><i
+                                    class="fa fa-minus fa-fw"></i>
+                            </button>
+                        </td>
+
+                        <td>
+                            <div class="form-group">
+                                <select name="code[1]" id="code-select-1" class="code-select">
+                                    <option value="">Search</option>
+
+                                </select>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="form-group">
+                                <input type="text" class="form-control desc" name="description[1]"
+                                    id="desc-1">
+                            </div>
+                        </td>
+
+                        <td style="background-color: darksalmon;">
+                            <div class="form-group">
+                                <input type="text" class="form-control qty-sales" name="qty_sales[1]"
+                                    id="qty-sales-1" data-type='currency4' autocomplete="off"
+                                    onkeyup="sum_idr_sales(1, 1)">
+                            </div>
+                        </td>
+
+                        <td style="background-color: darksalmon;">
+                            <div class="form-group">
+                                <select name="uom_sales[1]" id="uom-sales-1" class="uom-sales">
+                                    <option value="">Search</option>
+                                </select>
+                            </div>
+                        </td>
+
+                        <td style="background-color: darksalmon;">
+                            <div class="form-group">
+                                <select name="pc_sales[1]" id="pc-sales-1" class="pc-sales">
+                                    <option value="">Search</option>
+                                    <option value="Prepaid">Prepaid</option>
+                                    <option value="Collect">Collect</option>
+                                </select>
+                            </div>
+                        </td>
+
+                        <td style="background-color: darksalmon;">
+                            <div class="form-group">
+                                <select name="cust_code_sales[1]" id="cust-code-sales-1" class="cust-code-sales">
+                                    <option value="">Search</option>
+                                </select>
+                            </div>
+                        </td>
+
+                        <td style="background-color: darksalmon;">
+                            <div class="form-group">
+                                <input type="text" class="form-control cust-name-sales" name="cust_name_sales[1]"
+                                    id="cust-name-sales-1">
+                            </div>
+                        </td>
+
+                        <td style="background-color: darksalmon;">
+                            <div class="form-group">
+                                <select name="vat_sales[1]" id="vat-sales-1" class="vat-sales">
+                                    <option value="">Search</option>
+                                </select>
+                            </div>
+                        </td>
+
+                        <td style="background-color: darksalmon;">
+                            <div class="form-group">
+                                <select name="curr_sales[1]" id="curr-sales-1" class="curr-sales">
+                                    <option value="">Search</option>
+                                </select>
+                            </div>
+                        </td>
+
+                        <td style="background-color: darksalmon;">
+                            <div class="form-group">
+                                <input type="text" class="form-control rate-sales" id="rate-sales-1"
+                                    autocomplete="off" data-type='currency' name="rate_sales[1]"
+                                    onkeyup="sum_idr_sales(1, 1)">
+                            </div>
+                        </td>
+
+                        <td style="background-color: darksalmon;">
+                            <div class="form-group">
+                                <input type="text" class="form-control unit-rate-sales" id="unit-rate-sales-1"
+                                    autocomplete="off" data-type='currency' name="unit_rate_sales[1]"
+                                    onkeyup="sum_idr_sales(1, 1)">
+                            </div>
+                        </td>
+
+                        <td style="background-color: darksalmon;">
+                            <div class="form-group">
+                                <input type="text" class="form-control amt-sales" readonly id="amt-sales-1"
+                                    autocomplete="off" data-type='currency' name="amt_sales[1]">
+                            </div>
+                        </td>
+
+                        <td style="background-color: darksalmon;">
+                            <div class="form-group">
+                                <input type="text" class="form-control sales" readonly id="sales-1"
+                                    autocomplete="off" data-type='currency' name="sales[1]" data-total_sales="1">
+                            </div>
+                        </td>
+
+                        <td style="background-color: cadetblue;">
+                            <div class="form-group">
+                                <input type="text" class="form-control qty-vendor" name="qty_vendor[1]"
+                                    id="qty-vendor-1" data-type='currency4' autocomplete="off"
+                                    onkeyup="sum_idr_vendor(1, 1)">
+                            </div>
+                        </td>
+
+                        <td style="background-color: cadetblue;">
+                            <div class="form-group">
+                                <select name="pc_vendor[1]" id="pc-vendor-1" class="pc-vendor">
+                                    <option value="">Search</option>
+                                    <option value="Prepaid">Prepaid</option>
+                                    <option value="Collect">Collect</option>
+                                </select>
+                            </div>
+                        </td>
+
+                        <td style="background-color: cadetblue;">
+                            <div class="form-group">
+                                <select name="code_vendor[1]" id="code-vendor-1" class="code-vendor">
+                                    <option value="">Search</option>
+                                </select>
+                            </div>
+                        </td>
+
+                        <td style="background-color: cadetblue;">
+                            <div class="form-group">
+                                <input type="text" class="form-control name-vendor" name="name_vendor[1]"
+                                    id="name-vendor-1">
+                            </div>
+                        </td>
+
+                        <td style="background-color: cadetblue;">
+                            <div class="form-group">
+                                <select name="vat_vendor[1]" id="vat-vendor-1" class="vat-vendor">
+                                    <option value="">Search</option>
+                                </select>
+                            </div>
+                        </td>
+
+                        <td style="background-color: cadetblue;">
+                            <div class="form-group">
+                                <select name="curr_vendor[1]" id="curr-vendor-1" class="curr-vendor">
+                                    <option value="">Search</option>
+                                </select>
+                            </div>
+                        </td>
+
+                        <td style="background-color: cadetblue;">
+                            <div class="form-group">
+                                <input type="text" class="form-control rate-vendor" id="rate-vendor-1"
+                                    autocomplete="off" data-type='currency' name="rate_vendor[1]"
+                                    onkeyup="sum_idr_vendor(1, 1)">
+                            </div>
+                        </td>
+
+                        <td style="background-color: cadetblue;">
+                            <div class="form-group">
+                                <input type="text" class="form-control unit-rate-vendor" id="unit-rate-vendor-1"
+                                    autocomplete="off" data-type='currency' name="unit_rate_vendor[1]"
+                                    onkeyup="sum_idr_vendor(1, 1)">
+                            </div>
+                        </td>
+
+                        <td style="background-color: cadetblue;">
+                            <div class="form-group">
+                                <input type="text" class="form-control amt-vendor" readonly id="amt-vendor-1"
+                                    autocomplete="off" data-type='currency' name="amt_vendor[1]">
+                            </div>
+                        </td>
+
+                        <td style="background-color: cadetblue;">
+                            <div class="form-group">
+                                <input type="text" class="form-control cost" readonly id="cost-1"
+                                    autocomplete="off" data-type='currency' name="cost[1]" data-total_vendor="1">
+                            </div>
+                        </td>
+
+                    </tr>
+                @endif
             </tbody>
         </table>
     </div>
@@ -518,7 +759,7 @@
         <div class="form-group">
             <label for="billing_instruction">Billing Instruction</label>
             <textarea name="billing_instruction" id="billing_instruction" cols="30" rows="3"
-                class="form-control @error('billing_instruction') is-invalid @enderror">{{ old('billing_instruction') }}</textarea>
+                class="form-control @error('billing_instruction') is-invalid @enderror">{{ old('billing_instruction', $aj->billing_instruction) }}</textarea>
             @error('billing_instruction')
                 <div class="invalid-feedback">
                     {{ $message }}
@@ -533,7 +774,7 @@
         <div class="form-group">
             <label for="job_costing_remark">Job Costing Remark</label>
             <textarea name="job_costing_remark" id="job_costing_remark" cols="30" rows="4"
-                class="form-control @error('job_costing_remark') is-invalid @enderror">{{ old('job_costing_remark') }}</textarea>
+                class="form-control @error('job_costing_remark') is-invalid @enderror">{{ old('job_costing_remark', $aj->job_costing_remark) }}</textarea>
             @error('job_costing_remark')
                 <div class="invalid-feedback">
                     {{ $message }}
@@ -548,7 +789,8 @@
                     <label for="profit_loss">Profit/Loss</label>
                     <input type="text" data-type='currency0' readonly title="Profit/Loss"
                         class="form-control @error('profit_loss') is-invalid @enderror total-profit"
-                        name="profit_loss" id="total-profit-1" value="{{ old('profit_loss') }}">
+                        name="profit_loss" id="total-profit-1"
+                        value="{{ old('profit_loss', !empty($aj->profit_loss) ? number_format($aj->profit_loss, 2, '.', ',') : '') }}">
                     @error('profit_loss')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -561,7 +803,8 @@
                     <label for="total_sales">Total Sales</label>
                     <input type="text" data-type='currency0' readonly title="Total Sales"
                         class="form-control @error('total_sales') is-invalid @enderror total-sales" name="total_sales"
-                        id="total-sales-1" value="{{ old('total_sales') }}">
+                        id="total-sales-1"
+                        value="{{ old('total_sales', !empty($aj->total_sales) ? number_format($aj->total_sales, 2, '.', ',') : '') }}">
                     @error('total_sales')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -574,7 +817,7 @@
                     <label for="margin">Margin</label>
                     <input type="text" data-type='currency0' readonly title="Margin"
                         class="form-control @error('margin') is-invalid @enderror margin" name="margin"
-                        id="margin-1" value="{{ old('margin') }}">
+                        id="margin-1" value="{{ old('margin', $aj->margin) }}">
                     @error('margin')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -587,7 +830,8 @@
                     <label for="total_cost">Total Cost</label>
                     <input type="text" data-type='currency0' readonly title="Total Cost"
                         class="form-control @error('total_cost') is-invalid @enderror total-cost" name="total_cost"
-                        id="total-cost-1" value="{{ old('total_cost') }}">
+                        id="total-cost-1"
+                        value="{{ old('total_cost', !empty($aj->total_cost) ? number_format($aj->total_cost, 2, '.', ',') : '') }}">
                     @error('total_cost')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -637,14 +881,14 @@
         }
 
         $(function() {
-            evtItemCode(`#code-select-1`, `#desc-1`);
-            evtUomCode(`#uom-sales-1`);
-            evtNoData(`#pc-sales-1, #pc-vendor-1`);
-            evtBisnisPartyNotComplete(`#cust-code-sales-1`, `#cust-name-sales-1`);
-            evtBisnisPartyNotComplete(`#code-vendor-1`, `#name-vendor-1`);
-            evtVatCode(`#vat-sales-1, #vat-vendor-1`);
-            evtCurrencyCode(`#curr-sales-1`, null, true, `#rate-sales-1`);
-            evtCurrencyCode(`#curr-vendor-1`, null, true, `#rate-vendor-1`);
+            evtItemCode(`.code-select`, `.desc`);
+            evtUomCode(`.uom-sales`);
+            evtNoData(`.pc-sales, .pc-vendor`);
+            evtBisnisPartyNotComplete(`.cust-code-sales`, `.cust-name-sales`);
+            evtBisnisPartyNotComplete(`.code-vendor`, `.name-vendor`);
+            evtVatCode(`.vat-sales, .vat-vendor`);
+            evtCurrencyCode(`.curr-sales`, null, true, `.rate-sales`);
+            evtCurrencyCode(`.curr-vendor`, null, true, `.rate-vendor`);
 
         });
 
@@ -1100,7 +1344,6 @@
                 field.find(id_key).attr("id", `id-key-${countSub}`).val(countSub);
 
                 field.find(rate_vendor).attr("id", "rate-vendor-" + countSub);
-
                 field.find(amt_sales).attr("id", "amt-sales-" + countSub);
                 field.find(sales).attr("id", "sales-" + countSub);
                 field.find(qty_sales).attr("id", "qty-sales-" + countSub).removeAttr("onkeyup").attr("onkeyup",

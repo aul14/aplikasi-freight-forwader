@@ -1430,6 +1430,43 @@ class AdminSeederTable extends Seeder
             ]);
         }
 
+        // AIR IMPORT JOB
+        $moduleAirImJob = Module::create([
+            'name' => 'Module Air Import Job'
+        ]);
+
+        $permissionmoduleAirImJob = [
+            [
+                'name' => 'manage-air_im_job',
+                'display_name' => 'Manage Air Import Job',
+                'description' => 'Can Manage Air Import Job'
+            ],
+            [
+                'name' => 'create-air_im_job',
+                'display_name' => 'Create Air Import Job',
+                'description' => 'Can Create Air Import Job'
+            ],
+            [
+                'name' => 'edit-air_im_job',
+                'display_name' => 'Edit Air Import Job',
+                'description' => 'Can Edit Air Import Job'
+            ],
+            [
+                'name' => 'delete-air_im_job',
+                'display_name' => 'Delete Air Import Job',
+                'description' => 'Can Delete Air Import Job'
+            ]
+        ];
+
+        foreach ($permissionmoduleAirImJob as $key) {
+            Permission::create([
+                'name' => $key['name'],
+                'display_name' => $key['display_name'],
+                'description' => $key['description'],
+                'module_id' => $moduleAirImJob->id
+            ]);
+        }
+
         // SUPER ADMIN RULES
         Role::create([
             'name' => 'super_admin',
@@ -1591,6 +1628,10 @@ class AdminSeederTable extends Seeder
             'create-air_ex_job',
             'edit-air_ex_job',
             'delete-air_ex_job',
+            'manage-air_im_job',
+            'create-air_im_job',
+            'edit-air_im_job',
+            'delete-air_im_job',
         ];
 
         $userAdmin = User::create([
@@ -1770,6 +1811,10 @@ class AdminSeederTable extends Seeder
             'create-air_ex_job',
             'edit-air_ex_job',
             'delete-air_ex_job',
+            'manage-air_im_job',
+            'create-air_im_job',
+            'edit-air_im_job',
+            'delete-air_im_job',
         ];
 
         $userOwner = User::create([

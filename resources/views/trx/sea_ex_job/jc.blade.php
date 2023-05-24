@@ -31,6 +31,7 @@
             </thead>
             <tbody class="tbody-condition" id="tbody-condition-1">
                 <tr class="dynamic-field" id="dynamic-field-1" onclick="click_tr(1)">
+                    <input type="hidden" name="id_key[]" id="id-key-1" class="id-key" value="1">
                     <td class="text-center">
                         <button type="button" onclick="addNewField(this.id)" id="add-button-1"
                             class="btn btn-xs btn-primary float-left text-uppercase shadow-sm add-button"><i
@@ -44,7 +45,7 @@
 
                     <td>
                         <div class="form-group">
-                            <select name="code[]" id="code-select-1" class="code-select">
+                            <select name="code[1]" id="code-select-1" class="code-select">
                                 <option value="">Search</option>
 
                             </select>
@@ -53,20 +54,20 @@
 
                     <td>
                         <div class="form-group">
-                            <input type="text" class="form-control desc" name="description[]" id="desc-1">
+                            <input type="text" class="form-control desc" name="description[1]" id="desc-1">
                         </div>
                     </td>
 
                     <td style="background-color: darksalmon;">
                         <div class="form-group">
-                            <input type="text" class="form-control qty-sales" name="qty_sales[]" id="qty-sales-1"
+                            <input type="text" class="form-control qty-sales" name="qty_sales[1]" id="qty-sales-1"
                                 data-type='currency4' autocomplete="off" onkeyup="sum_idr_sales(1, 1)">
                         </div>
                     </td>
 
                     <td style="background-color: darksalmon;">
                         <div class="form-group">
-                            <select name="uom_sales[]" id="uom-sales-1" class="uom-sales">
+                            <select name="uom_sales[1]" id="uom-sales-1" class="uom-sales">
                                 <option value="">Search</option>
                             </select>
                         </div>
@@ -74,7 +75,7 @@
 
                     <td style="background-color: darksalmon;">
                         <div class="form-group">
-                            <select name="pc_sales[]" id="pc-sales-1" class="pc-sales">
+                            <select name="pc_sales[1]" id="pc-sales-1" class="pc-sales">
                                 <option value="">Search</option>
                                 <option value="Prepaid">Prepaid</option>
                                 <option value="Collect">Collect</option>
@@ -84,7 +85,7 @@
 
                     <td style="background-color: darksalmon;">
                         <div class="form-group">
-                            <select name="cust_code_sales[]" id="cust-code-sales-1" class="cust-code-sales">
+                            <select name="cust_code_sales[1]" id="cust-code-sales-1" class="cust-code-sales">
                                 <option value="">Search</option>
                             </select>
                         </div>
@@ -92,14 +93,14 @@
 
                     <td style="background-color: darksalmon;">
                         <div class="form-group">
-                            <input type="text" class="form-control cust-name-sales" name="cust_name_sales[]"
+                            <input type="text" class="form-control cust-name-sales" name="cust_name_sales[1]"
                                 id="cust-name-sales-1">
                         </div>
                     </td>
 
                     <td style="background-color: darksalmon;">
                         <div class="form-group">
-                            <select name="vat_sales[]" id="vat-sales-1" class="vat-sales">
+                            <select name="vat_sales[1]" id="vat-sales-1" class="vat-sales">
                                 <option value="">Search</option>
                             </select>
                         </div>
@@ -107,7 +108,7 @@
 
                     <td style="background-color: darksalmon;">
                         <div class="form-group">
-                            <select name="curr_sales[]" id="curr-sales-1" class="curr-sales">
+                            <select name="curr_sales[1]" id="curr-sales-1" class="curr-sales">
                                 <option value="">Search</option>
                             </select>
                         </div>
@@ -116,7 +117,7 @@
                     <td style="background-color: darksalmon;">
                         <div class="form-group">
                             <input type="text" class="form-control rate-sales" id="rate-sales-1"
-                                autocomplete="off" data-type='currency' name="rate_sales[]"
+                                autocomplete="off" data-type='currency' name="rate_sales[1]"
                                 onkeyup="sum_idr_sales(1, 1)">
                         </div>
                     </td>
@@ -124,7 +125,7 @@
                     <td style="background-color: darksalmon;">
                         <div class="form-group">
                             <input type="text" class="form-control unit-rate-sales" id="unit-rate-sales-1"
-                                autocomplete="off" data-type='currency' name="unit_rate_sales[]"
+                                autocomplete="off" data-type='currency' name="unit_rate_sales[1]"
                                 onkeyup="sum_idr_sales(1, 1)">
                         </div>
                     </td>
@@ -132,20 +133,20 @@
                     <td style="background-color: darksalmon;">
                         <div class="form-group">
                             <input type="text" class="form-control amt-sales" readonly id="amt-sales-1"
-                                autocomplete="off" data-type='currency' name="amt_sales[]">
+                                autocomplete="off" data-type='currency' name="amt_sales[1]">
                         </div>
                     </td>
 
                     <td style="background-color: darksalmon;">
                         <div class="form-group">
                             <input type="text" class="form-control sales" readonly id="sales-1"
-                                autocomplete="off" data-type='currency' name="sales[]" data-total_sales="1">
+                                autocomplete="off" data-type='currency' name="sales[1]" data-total_sales="1">
                         </div>
                     </td>
 
                     <td style="background-color: cadetblue;">
                         <div class="form-group">
-                            <input type="text" class="form-control qty-vendor" name="qty_vendor[]"
+                            <input type="text" class="form-control qty-vendor" name="qty_vendor[1]"
                                 id="qty-vendor-1" data-type='currency4' autocomplete="off"
                                 onkeyup="sum_idr_vendor(1, 1)">
                         </div>
@@ -153,7 +154,7 @@
 
                     <td style="background-color: cadetblue;">
                         <div class="form-group">
-                            <select name="pc_vendor[]" id="pc-vendor-1" class="pc-vendor">
+                            <select name="pc_vendor[1]" id="pc-vendor-1" class="pc-vendor">
                                 <option value="">Search</option>
                                 <option value="Prepaid">Prepaid</option>
                                 <option value="Collect">Collect</option>
@@ -163,7 +164,7 @@
 
                     <td style="background-color: cadetblue;">
                         <div class="form-group">
-                            <select name="code_vendor[]" id="code-vendor-1" class="code-vendor">
+                            <select name="code_vendor[1]" id="code-vendor-1" class="code-vendor">
                                 <option value="">Search</option>
                             </select>
                         </div>
@@ -171,14 +172,14 @@
 
                     <td style="background-color: cadetblue;">
                         <div class="form-group">
-                            <input type="text" class="form-control name-vendor" name="name_vendor[]"
+                            <input type="text" class="form-control name-vendor" name="name_vendor[1]"
                                 id="name-vendor-1">
                         </div>
                     </td>
 
                     <td style="background-color: cadetblue;">
                         <div class="form-group">
-                            <select name="vat_vendor[]" id="vat-vendor-1" class="vat-vendor">
+                            <select name="vat_vendor[1]" id="vat-vendor-1" class="vat-vendor">
                                 <option value="">Search</option>
                             </select>
                         </div>
@@ -186,7 +187,7 @@
 
                     <td style="background-color: cadetblue;">
                         <div class="form-group">
-                            <select name="curr_vendor[]" id="curr-vendor-1" class="curr-vendor">
+                            <select name="curr_vendor[1]" id="curr-vendor-1" class="curr-vendor">
                                 <option value="">Search</option>
                             </select>
                         </div>
@@ -195,7 +196,7 @@
                     <td style="background-color: cadetblue;">
                         <div class="form-group">
                             <input type="text" class="form-control rate-vendor" id="rate-vendor-1"
-                                autocomplete="off" data-type='currency' name="rate_vendor[]"
+                                autocomplete="off" data-type='currency' name="rate_vendor[1]"
                                 onkeyup="sum_idr_vendor(1, 1)">
                         </div>
                     </td>
@@ -203,7 +204,7 @@
                     <td style="background-color: cadetblue;">
                         <div class="form-group">
                             <input type="text" class="form-control unit-rate-vendor" id="unit-rate-vendor-1"
-                                autocomplete="off" data-type='currency' name="unit_rate_vendor[]"
+                                autocomplete="off" data-type='currency' name="unit_rate_vendor[1]"
                                 onkeyup="sum_idr_vendor(1, 1)">
                         </div>
                     </td>
@@ -211,14 +212,14 @@
                     <td style="background-color: cadetblue;">
                         <div class="form-group">
                             <input type="text" class="form-control amt-vendor" readonly id="amt-vendor-1"
-                                autocomplete="off" data-type='currency' name="amt_vendor[]">
+                                autocomplete="off" data-type='currency' name="amt_vendor[1]">
                         </div>
                     </td>
 
                     <td style="background-color: cadetblue;">
                         <div class="form-group">
                             <input type="text" class="form-control cost" readonly id="cost-1"
-                                autocomplete="off" data-type='currency' name="cost[]" data-total_vendor="1">
+                                autocomplete="off" data-type='currency' name="cost[1]" data-total_vendor="1">
                         </div>
                     </td>
 
@@ -600,6 +601,7 @@
 </div>
 @section('sub_script_6')
     <script>
+        let id_key = ".id-key";
         let buttonAddSub = $("#add-button-1");
         let buttonRemoveSub = $("#remove-button-1");
         let classNameSub = ".dynamic-field";
@@ -855,8 +857,8 @@
                 field.find(".select2-container").empty();
                 field.find(code_select).empty();
                 field.find(cust_code_sales).empty();
-                field.find(code_vendor).empty();
                 field.find(uom_sales).empty();
+                field.find(code_vendor).empty();
                 field.find(curr_sales).empty();
                 field.find(curr_vendor).empty();
                 field.find(vat_sales).empty();
@@ -1071,6 +1073,32 @@
                         cache: false
                     }
                 });
+
+                // CHANGE NAME ARRAY BY INDEX
+                field.find(code_select).attr("name", `code[${countSub}]`);
+                field.find(desc).attr("name", `description[${countSub}]`);
+                field.find(qty_sales).attr("name", `qty_sales[${countSub}]`);
+                field.find(pc_sales).attr("name", `pc_sales[${countSub}]`);
+                field.find(cust_code_sales).attr("name", `cust_code_sales[${countSub}]`);
+                field.find(cust_name_sales).attr("name", `cust_name_sales[${countSub}]`);
+                field.find(vat_sales).attr("name", `vat_sales[${countSub}]`);
+                field.find(curr_sales).attr("name", `curr_sales[${countSub}]`);
+                field.find(rate_sales).attr("name", `rate_sales[${countSub}]`);
+                field.find(unit_rate_sales).attr("name", `unit_rate_sales[${countSub}]`);
+                field.find(amt_sales).attr("name", `amt_sales[${countSub}]`);
+                field.find(sales).attr("name", `sales[${countSub}]`);
+                field.find(qty_vendor).attr("name", `qty_vendor[${countSub}]`);
+                field.find(pc_vendor).attr("name", `pc_vendor[${countSub}]`);
+                field.find(code_vendor).attr("name", `code_vendor[${countSub}]`);
+                field.find(name_vendor).attr("name", `name_vendor[${countSub}]`);
+                field.find(vat_vendor).attr("name", `vat_vendor[${countSub}]`);
+                field.find(curr_vendor).attr("name", `curr_vendor[${countSub}]`);
+                field.find(rate_vendor).attr("name", `rate_vendor[${countSub}]`);
+                field.find(unit_rate_vendor).attr("name", `unit_rate_vendor[${countSub}]`);
+                field.find(amt_vendor).attr("name", `amt_vendor[${countSub}]`);
+                field.find(cost).attr("name", `cost[${countSub}]`);
+                field.find(id_key).attr("id", `id-key-${countSub}`).val(countSub);
+
                 field.find(rate_vendor).attr("id", "rate-vendor-" + countSub);
 
                 field.find(amt_sales).attr("id", "amt-sales-" + countSub);
@@ -1141,26 +1169,6 @@
             } else {
                 alert("Minimum 1 line");
             }
-        }
-
-        function numberFormatter(num) {
-            if (!isNaN(num)) {
-                var wholeAndDecimal = String(num.toFixed(2)).split(".");
-                var reversedWholeNumber = Array.from(wholeAndDecimal[0]).reverse();
-                var formattedOutput = [];
-
-                reversedWholeNumber.forEach((digit, index) => {
-                    formattedOutput.push(digit);
-                    if ((index + 1) % 3 === 0 && index < reversedWholeNumber.length - 1) {
-                        formattedOutput.push(",");
-                    }
-                })
-
-                formattedOutput = formattedOutput.reverse().join('') + "." + wholeAndDecimal[1];
-
-                return formattedOutput;
-            }
-
         }
 
         function evtNoData(evt1 = null) {
